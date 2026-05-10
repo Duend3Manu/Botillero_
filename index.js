@@ -18,6 +18,7 @@ const { handleMessageCreate, handleMessageRevoke, handleMessageUpdate } = requir
 const commandHandler = require('./src/handlers/command.handler');
 const { incrementStats } = require('./src/handlers/system.handler');
 const messageBuffer = require('./src/services/message-buffer.service');
+const messageCounter = require('./src/services/message-counter.service');
 const botConfig = require('./config/bot.config');
 
 console.log("🚀 Iniciando Botillero v2.0...");
@@ -60,48 +61,70 @@ client.on('disconnected', (reason) => {
 // --- MANEJADOR DE MENSAJES ---
 client.on('message_create', async (message) => {
     const startTime = Date.now();
-    
-    if (!message.body) return;
+
+    const hasBody = message.body && message.body.trim().length > 0;
+    const hasMedia = message.hasMedia;
+
+    // Si no tiene ni texto ni media, ignorar (mensajes de sistema, etc.)
+    if (!hasBody && !hasMedia) return;
 
     // Evitar auto-respuestas infinitas a frases normales, pero permitir probar comandos (!)
-    if (message.fromMe && !message.body.startsWith('!')) return;
+    if (message.fromMe && !(hasBody && message.body.startsWith('!'))) return;
 
-    // Ejecutar handleMessageCreate para logging/analytics
-    handleMessageCreate(client, message).catch(err => {
-        console.error('Error en handleMessageCreate:', err.message);
-    });
-    
+    // Ejecutar handleMessageCreate para logging/analytics (solo mensajes con texto)
+    if (hasBody) {
+        handleMessageCreate(client, message).catch(err => {
+            console.error('Error en handleMessageCreate:', err.message);
+        });
+    }
+
     // Procesar mensajes (incluyendo los del bot para pruebas si empieza con !)
     incrementStats('message', message.from);
-    
-    // Guardar mensaje en buffer para !recap
-    if (!message.body.startsWith('!')) {
+
+    // Registrar en buffer (!recap) y en contador de mensajes (!contador / !actividad)
+    const isCommand = hasBody && message.body.startsWith('!');
+    if (!isCommand) {
         try {
             const chat = await message.getChat();
             if (chat.isGroup) {
                 const contact = await message.getContact();
-                messageBuffer.addMessage(message.from, {
-                    user: contact.pushname || contact.name || contact.number || 'Usuario',
-                    userId: message.author || message.from,
-                    message: message.body,
-                    timestamp: message.timestamp * 1000
-                });
+                const userName = contact.pushname || contact.name || contact.number || 'Usuario';
+                const userId = message.author || message.from;
+                const groupId = message.from;
+
+                // Buffer para !recap (solo mensajes de texto)
+                if (hasBody) {
+                    messageBuffer.addMessage(groupId, {
+                        user: userName,
+                        userId,
+                        message: message.body,
+                        timestamp: message.timestamp * 1000
+                    });
+                }
+
+                // Contador de actividad: cuenta texto, audio, multimedia, links
+                const msgType = hasMedia ? (message.type || 'media') : 'chat';
+                messageCounter.recordMessage(groupId, userId, userName, msgType);
             }
-        } catch (e) {}
+        } catch (e) {
+            // No bloquear el flujo principal si falla el registro
+        }
     }
-    
-    // Procesar comandos y frases (Ester eggs, etc.)
+
+    // Procesar comandos y frases (solo si tiene texto)
+    if (!hasBody) return;
+
     try {
-        if (message.body.startsWith('!')) {
+        if (isCommand) {
             incrementStats('command', message.from);
         }
         await commandHandler(client, message);
     } catch (error) {
         console.error(`❌ Error procesando mensaje:`, error.message);
     }
-    
+
     const processingTime = Date.now() - startTime;
-    if (message.body.startsWith('!')) {
+    if (isCommand) {
         console.log(`⏱️  Comando procesado en ${processingTime}ms`);
     }
 });

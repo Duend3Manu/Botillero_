@@ -27,7 +27,8 @@ const services = {
     get fap() { return require('./fap.handler'); },
     get group() { return require('./group.handler'); },
     get poringa() { return require('./poringa.handler'); },
-    get ppost() { return require('./ppost.handler'); }
+    get ppost() { return require('./ppost.handler'); },
+    get counter() { return require('./counter.handler'); }
 };
 
 // --- Cooldowns para comandos específicos ---
@@ -225,7 +226,11 @@ const commandMap = {
         console.log('ID de este chat:', msg.from);
         msg.reply(`ℹ️ El ID de este chat es:\n${msg.from}`);
         return null;
-    }
+    },
+
+    // Contador de mensajes y actividad
+    'contador': (client, msg) => services.counter.handleContador(client, msg),
+    'actividad': (client, msg) => services.counter.handleActividad(client, msg)
 };
 
 // --- Lista de comandos válidos ---

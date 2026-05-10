@@ -338,6 +338,8 @@ function handleMenu() {
 💳 \`!transbank\` → Estado servicios Transbank
 🏦 \`!bancos\` → Estado sitios web bancarios
 📝 \`!recap\` → Resumir últimos mensajes del grupo
+📊 \`!contador\` → Ranking de mensajes por usuario
+👀 \`!actividad [@user]\` → Última actividad de un usuario
 🔧 \`!ping\` → Estado del sistema/bot
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━

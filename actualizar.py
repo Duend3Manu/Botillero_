@@ -3,6 +3,9 @@ import sys
 import os
 import shutil
 
+# � Define la ruta de git (para Windows) - Consistente con subir_a_github.py
+GIT = r"C:\Program Files\Git\bin\git.exe"
+
 def limpiar_bloqueo():
     """Si existe un archivo de bloqueo de git, lo elimina."""
     lock_path = '.git/index.lock'
@@ -63,35 +66,56 @@ def ejecutar(comando, verificar=True):
 
 limpiar_bloqueo()
 
+# 🧠 Detecta la rama actual para no asumir 'main'
+try:
+    branch_name = subprocess.check_output([GIT, "rev-parse", "--abbrev-ref", "HEAD"]).decode().strip()
+    print(f"📍 Rama actual detectada: {branch_name}")
+except subprocess.CalledProcessError:
+    print("❌ No pude determinar la rama actual.")
+    sys.exit(1)
+
 # Verificar si el remoto 'origin' está configurado
-remotos_check = subprocess.run(["git", "remote"], capture_output=True, text=True)
+remotos_check = subprocess.run([GIT, "remote"], capture_output=True, text=True)
 if "origin" not in remotos_check.stdout.splitlines():
     print("❌ No se encontró el remoto 'origin'. Por favor, configúralo con:")
     print("   git remote add origin https://github.com/Duend3Manu/Botillero.git")
     sys.exit(1)
 
 # Si messages.db está siendo rastreado por Git, lo eliminamos del seguimiento.
-is_tracked_check = subprocess.run(["git", "ls-files", "--error-unmatch", db_file], capture_output=True)
+is_tracked_check = subprocess.run([GIT, "ls-files", "--error-unmatch", db_file], capture_output=True)
 if is_tracked_check.returncode == 0:
     print(f"☝️ El archivo '{db_file}' está siendo rastreado por Git. Se eliminará del seguimiento (el archivo físico no se borrará).")
-    if not ejecutar(["git", "rm", "--cached", db_file]):
+    if not ejecutar([GIT, "rm", "--cached", db_file]):
         sys.exit(1)
     # Es buena práctica hacer un commit de este cambio para que no vuelva a pasar
-    ejecutar(["git", "commit", "-m", f"chore: Dejar de rastrear {db_file}"], verificar=False) # No verificar por si no hay nada que commitear
+    ejecutar([GIT, "commit", "-m", f"chore: Dejar de rastrear {db_file}"], verificar=False) # No verificar por si no hay nada que commitear
 
 # 1. Stash temporal de todo lo actual
 print("📦 Guardando todo en stash (por si luego hay arrepentimientos)...")
-if not ejecutar(["git", "stash", "save", "--include-untracked", "AutoStash antes del reset brutal"]):
+if not ejecutar([GIT, "stash", "save", "--include-untracked", "AutoStash antes del reset brutal"]):
     sys.exit(1)
 
 # 2. Hard reset al contenido de GitHub
-print("🔁 Aplicando hard reset desde GitHub...")
-if not ejecutar(["git", "fetch", "origin"]) or not ejecutar(["git", "reset", "--hard", "origin/main"]):
+print(f"🔁 Aplicando hard reset desde GitHub (rama: {branch_name})...")
+if not ejecutar([GIT, "fetch", "origin"]) or not ejecutar([GIT, "reset", "--hard", f"origin/{branch_name}"]):
     sys.exit(1)
 
 # 3. Limpieza selectiva — se conservan tus reliquias
 print("🧼 Limpiando lo ignorado... excepto tus carpetas importantes.")
-ejecutar(["git", "clean", "-fdx", "-e", "node_modules/", "-e", ".wwebjs_auth/", "-e", ".env", "-e", "messages.db"])
+ejecutar([GIT, "clean", "-fdx", "-e", "node_modules/", "-e", ".wwebjs_auth/", "-e", ".env", "-e", "messages.db"])
+
+# 4. Opción para recuperar el stash si el usuario lo desea
+stash_list = subprocess.run([GIT, "stash", "list"], capture_output=True, text=True)
+if stash_list.returncode == 0 and "AutoStash antes del reset brutal" in stash_list.stdout:
+    respuesta = input("🔄 ¿Quieres recuperar los cambios locales que estaban en stash? (s/n): ").strip().lower()
+    if respuesta in ['s', 'si', 'sí', 'y', 'yes']:
+        print("🔄 Recuperando cambios del stash...")
+        if ejecutar([GIT, "stash", "pop"]):
+            print("✅ Cambios locales recuperados.")
+        else:
+            print("⚠️ Hubo un conflicto al recuperar el stash. Revisa manualmente con 'git stash pop'.")
+    else:
+        print("ℹ️ Los cambios locales permanecen en stash. Puedes recuperarlos luego con 'git stash pop'.")
 
 mensaje_final = "✅ Proyecto renovado, bibliotecas intactas, sesión protegida 🐾✨"
 print(mensaje_final)
