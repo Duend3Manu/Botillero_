@@ -188,6 +188,7 @@ const commandMap = {
     'g': (_, msg) => services.search.handleGoogleSearch(msg),
     'oferta': (_, msg) => services.search.handleDealsSearch(msg),
     'streaming': (_, msg) => services.utility.handleStreaming(msg),
+    'analiza': (client, msg) => services.fun.handleUrlAnalysis(client, msg),
     'pat': (_, msg) => services.personalSearch.handlePatenteSearch(msg),
     'audios': () => services.fun.handleAudioList(),
     
@@ -203,6 +204,7 @@ const commandMap = {
     
     // IA y ayuda
     'ayuda': (_, msg) => services.ai.handleAiHelp(msg),
+    'ia': (_, msg) => services.ai.handleLocalIA(msg),
     'resumen': (_, msg) => services.ai.handleSummary(msg),
     
     // Búsquedas personales

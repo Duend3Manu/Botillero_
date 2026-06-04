@@ -6,6 +6,7 @@ const path = require('path');
 const moment = require('moment-timezone');
 const ffmpeg = require('fluent-ffmpeg');
 const { MessageMedia } = require('whatsapp-web.js');
+const securityService = require('../utils/securityService');
 
 // --- Sistema de Caché de Medias ---
 const mediaCache = [];
@@ -113,7 +114,7 @@ async function handleSticker(client, message) {
         const tempFilePath = path.join(tempDir, `sticker_in_${timestamp}.${ext}`);
         const outputFilePath = path.join(tempDir, `sticker_out_${timestamp}.webp`);
 
-        fs.writeFileSync(tempFilePath, media.data, 'base64');
+        await fs.promises.writeFile(tempFilePath, media.data, 'base64');
 
         const isAnimated = media.mimetype.includes('video') || media.mimetype.includes('gif');
 
@@ -124,7 +125,7 @@ async function handleSticker(client, message) {
                 console.log(`(Sticker) -> Video duración: ${duration.toFixed(2)} segundos`);
                 
                 if (duration > MAX_VIDEO_DURATION) {
-                    fs.unlinkSync(tempFilePath);
+                    if (fs.existsSync(tempFilePath)) await fs.promises.unlink(tempFilePath);
                     return message.reply(`❌ El video es muy largo (${duration.toFixed(1)}s). Máximo ${MAX_VIDEO_DURATION} segundos para stickers.`);
                 }
             } catch (probeErr) {
@@ -179,20 +180,20 @@ async function handleSticker(client, message) {
 
         // Validar tamaño (WhatsApp tiene límite de ~500KB para stickers)
         if (stats.size > 500 * 1024) {
-            fs.unlinkSync(tempFilePath);
-            fs.unlinkSync(outputFilePath);
+            if (fs.existsSync(tempFilePath)) await fs.promises.unlink(tempFilePath);
+            if (fs.existsSync(outputFilePath)) await fs.promises.unlink(outputFilePath);
             return message.reply('❌ El sticker es muy grande (>500KB). Usa un video/gif más corto.');
         }
 
         const webpMedia = MessageMedia.fromFilePath(outputFilePath);
         await message.reply(webpMedia, undefined, { sendMediaAsSticker: true });
-        
+
         try { await message.react('✅'); } catch (e) {}
 
         // Limpieza
         try {
-            fs.unlinkSync(tempFilePath);
-            fs.unlinkSync(outputFilePath);
+            if (fs.existsSync(tempFilePath)) await fs.promises.unlink(tempFilePath);
+            if (fs.existsSync(outputFilePath)) await fs.promises.unlink(outputFilePath);
         } catch (e) {}
 
     } catch (err) {
@@ -447,6 +448,40 @@ async function handleOnce(client, message) {
     await reactAndReplyWithMention(message, 'Chupalo entonces', '😂', ' ');
 }
 
+async function handleUrlAnalysis(client, message) {
+    try {
+        // 1. Reaccionar al inicio para dar feedback de "procesando"
+        await message.react('🔍');
+
+        // 2. Extraer la URL de forma robusta
+        let urlAAnalizar = message.body.replace(/^[!/]analiza/i, '').trim();
+        
+        if (!urlAAnalizar) {
+            await message.react('❓');
+            return message.reply('🤖 Te faltó poner la página. Ejemplo: *!analiza starken.cl*');
+        }
+
+        // Tomar solo la primera palabra por si hay texto extra
+        urlAAnalizar = urlAAnalizar.split(/\s+/)[0];
+
+        // 3. Auto-Https: Si no trae protocolo, se lo agregamos
+        if (!urlAAnalizar.startsWith('http://') && !urlAAnalizar.startsWith('https://')) {
+            urlAAnalizar = 'https://' + urlAAnalizar;
+        }
+
+        // 4. Ejecutar el análisis con await estricto
+        const reporte = await securityService.analizarPeligroUrlPro(urlAAnalizar);
+        await message.reply(reporte);
+        
+        // 5. Indicar éxito con reacción
+        await message.react('✅');
+
+    } catch (err) {
+        console.error("Error en handleUrlAnalysis:", err);
+        await message.react('⚠️');
+        await message.reply('❌ BoTillero tuvo un mareo procesando ese enlace. Intenta de nuevo.');
+    }
+}
 
 module.exports = {
     handleSticker,
@@ -457,5 +492,6 @@ module.exports = {
     handleCountdown,
     handleBotMention,
     handleOnce,
-    addToMediaCache
+    addToMediaCache,
+    handleUrlAnalysis
 };

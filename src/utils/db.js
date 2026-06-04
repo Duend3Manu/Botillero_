@@ -17,6 +17,34 @@ db.prepare("CREATE TABLE IF NOT EXISTS messages (id TEXT PRIMARY KEY, body TEXT,
 // Crear índice en timestamp para búsquedas más rápidas
 db.prepare("CREATE INDEX IF NOT EXISTS idx_timestamp ON messages(timestamp)").run();
 
+// Tabla para límites de API
+db.prepare(`
+    CREATE TABLE IF NOT EXISTS api_usage (
+        service TEXT PRIMARY KEY,
+        minute_count INTEGER DEFAULT 0,
+        minute_reset INTEGER DEFAULT 0,
+        day_count INTEGER DEFAULT 0,
+        day_reset INTEGER DEFAULT 0,
+        month_count INTEGER DEFAULT 0,
+        month_reset INTEGER DEFAULT 0
+    )
+`).run();
+
+const getApiUsageStmt = db.prepare("SELECT * FROM api_usage WHERE service = ?");
+const updateApiUsageStmt = db.prepare(`
+    INSERT OR REPLACE INTO api_usage 
+    (service, minute_count, minute_reset, day_count, day_reset, month_count, month_reset) 
+    VALUES (?, ?, ?, ?, ?, ?, ?)
+`);
+
+function getApiUsage(service) {
+    return getApiUsageStmt.get(service) || { service, minute_count: 0, minute_reset: 0, day_count: 0, day_reset: 0, month_count: 0, month_reset: 0 };
+}
+
+function updateApiUsage(data) {
+    updateApiUsageStmt.run(data.service, data.minute_count, data.minute_reset, data.day_count, data.day_reset, data.month_count, data.month_reset);
+}
+
 // Preparar statements para mejor rendimiento (CAMBIO: prepared statements)
 const insertStmt = db.prepare("INSERT OR REPLACE INTO messages (id, body, timestamp) VALUES (?, ?, ?)");
 const selectStmt = db.prepare("SELECT body FROM messages WHERE id = ?");
@@ -78,4 +106,4 @@ process.on('SIGINT', () => {
     process.exit(0);
 });
 
-module.exports = { storeMessage, getOriginalMessage };
+module.exports = { storeMessage, getOriginalMessage, getApiUsage, updateApiUsage };
