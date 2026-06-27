@@ -4,7 +4,14 @@
 const axios = require('axios');
 const cheerio = require('cheerio');
 const { MessageMedia } = require('../adapters/wwebjs-adapter');
-const aiService = require('../services/ai.service');
+const config = require('../config');
+const { GoogleGenerativeAI } = require('@google/generative-ai');
+const rateLimiter = require('../services/rate-limiter.service');
+
+// IA de producción
+const apiKey = process.env.GEMINI_API_KEY || config.geminiApiKey;
+const genAI = (apiKey && apiKey.length > 30) ? new GoogleGenerativeAI(apiKey) : null;
+const AI_MODEL = "gemini-1.5-flash";
 
 // User-Agent compartido para todas las peticiones
 const DEFAULT_UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36';
@@ -117,10 +124,23 @@ async function handleGoogleSearch(message) {
     try {
         await message.react('🔍');
         
-        // Usar Gemini con Grounding para búsqueda de alta calidad en español
-        const searchResponse = await aiService.performAiSearch(searchTerm);
+        if (!genAI) return "❌ No se puede realizar la búsqueda: API Key no configurada.";
 
-        if (!searchResponse || searchResponse.length < 10) {
+        // Verificar rate limit antes de consultar la IA
+        const limit = rateLimiter.tryAcquire();
+        if (!limit.success) {
+            await message.react('⏳');
+            return rateLimiter.getCooldownMessage(limit.timeLeft);
+        }
+
+        const model = genAI.getGenerativeModel({ model: AI_MODEL });
+        const prompt = `Actúa como un motor de búsqueda experto. Busca información actualizada sobre: "${searchTerm}". 
+        Proporciona un resumen claro, puntos clave y fuentes si es posible. Responde en español chileno informal.`;
+
+        const result = await model.generateContent(prompt);
+        const searchResponse = result.response.text();
+
+        if (!searchResponse) {
             await message.react('❌');
             return `No pude encontrar resultados útiles para *"${searchTerm}"*.`;
         }

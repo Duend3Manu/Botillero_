@@ -7,8 +7,10 @@ const moment = require('moment-timezone');
 const config = require('../config');
 const { generateWhatsAppMessage } = require('../utils/secService');
 const { getRandomInfo, getStreamingTrending } = require('../services/utility.service');
-const { getFeriadosResponse } = require('../services/ai.service');
+const { getFeriadosResponse, generateConversationSummary } = require('../services/ai.service');
 const { getBanksStatus } = require('../services/bank.service');
+const messageBuffer = require('../services/message-buffer.service');
+const rateLimiter = require('../services/rate-limiter.service');
 
 // Variables para caché de farmacias (evita descargar la lista gigante en cada consulta)
 let farmaciasCache = null;
@@ -261,10 +263,6 @@ async function handleBancos(message) {
 
 // --- Lógica para !recap (Resumen de conversación) ---
 async function handleRecap(message) {
-    const { generateConversationSummary } = require('../services/ai.service');
-    const messageBuffer = require('../services/message-buffer.service');
-    const rateLimiter = require('../services/rate-limiter.service');
-    
     try {
         const groupId = message.from;
         
@@ -295,10 +293,10 @@ async function handleRecap(message) {
         
         await message.react('✅');
         
-        // Extraer IDs únicos de usuarios mencionados en los mensajes
-        const uniqueUserIds = [...new Set(messages.map(m => m.userId).filter(Boolean))];
+        // Reconstruir los JIDs correctos (numero@c.us) para que las menciones funcionen
+        const uniqueUserIds = [...new Set(messages.map(m => `${m.userId}@c.us`).filter(Boolean))];
         
-        const recapMessage = `📝 *Resumen de los últimos ${messages.length} mensajes:*\n\n${summary}\n\n_Generado por Gemini 2.5 Flash_`;
+        const recapMessage = `📝 *Resumen de los últimos ${messages.length} mensajes:*\n\n${summary}\n\n_Generado por Gemini 1.5 Flash_`;
         
         // Enviar con menciones si hay usuarios
         if (uniqueUserIds.length > 0) {

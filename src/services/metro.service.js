@@ -6,11 +6,13 @@
 
 const pythonService = require('./python.service');
 const { GoogleGenerativeAI } = require('@google/generative-ai');
+const config = require('../config');
 const rateLimiter = require('./rate-limiter.service');
 
 const METRO_SCRIPT_NAME = 'metro.py';
 // Inicializamos solo si hay key, para evitar errores si no está configurada
-const genAI = process.env.GEMINI_API_KEY ? new GoogleGenerativeAI(process.env.GEMINI_API_KEY) : null;
+const apiKey = process.env.GEMINI_API_KEY || config.geminiApiKey;
+const genAI = (apiKey && apiKey.length > 30) ? new GoogleGenerativeAI(apiKey) : null;
 
 // Variables para caché (evita ejecutar Python/IA innecesariamente)
 let metroCache = null;
@@ -49,7 +51,7 @@ async function generateMetroAdvice(metroStatus) {
     }
 
     try {
-        const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
         const prompt = `
 Eres "Botillero", un asistente inteligente de Metro. Analiza el siguiente estado del Metro de Santiago y da CONSEJO CORTO y PRÁCTICO.

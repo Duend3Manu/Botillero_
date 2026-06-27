@@ -84,31 +84,8 @@ client.on('message_create', async (message) => {
     // Registrar en buffer (!recap) y en contador de mensajes (!contador / !actividad)
     const isCommand = hasBody && message.body.startsWith('!');
     if (!isCommand) {
-        try {
-            const chat = await message.getChat();
-            if (chat.isGroup) {
-                const contact = await message.getContact();
-                const userName = contact.pushname || contact.name || contact.number || 'Usuario';
-                const userId = message.author || message.from;
-                const groupId = message.from;
-
-                // Buffer para !recap (solo mensajes de texto)
-                if (hasBody) {
-                    messageBuffer.addMessage(groupId, {
-                        user: userName,
-                        userId,
-                        message: message.body,
-                        timestamp: message.timestamp * 1000
-                    });
-                }
-
-                // Contador de actividad: cuenta texto, audio, multimedia, links
-                const msgType = hasMedia ? (message.type || 'media') : 'chat';
-                messageCounter.recordMessage(groupId, userId, userName, msgType);
-            }
-        } catch (e) {
-            // No bloquear el flujo principal si falla el registro
-        }
+        // El registro en buffer y contador ya se maneja dentro de handleMessageCreate
+        // para evitar duplicidad y asegurar limpieza de IDs.
     }
 
     // Procesar comandos y frases (solo si tiene texto)

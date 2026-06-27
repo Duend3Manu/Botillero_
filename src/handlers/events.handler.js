@@ -2,15 +2,50 @@
 "use strict";
 
 const { storeMessage, getOriginalMessage } = require('../utils/db.js');
+const messageCounter = require('../services/message-counter.service');
+const messageBuffer = require('../services/message-buffer.service');
+const { incrementStats } = require('./system.handler');
 
 /**
  * handleMessageCreate — Guarda el mensaje en DB para registrar historial
- * Esto permite detectar ediciones e intent de borrado si el bot lo soporta.
  */
 async function handleMessageCreate(client, message) {
-    if (!message.fromMe && message.body) {
-        const msgKey = message.id._serialized;
-        storeMessage(msgKey, message.body);
+    // Ignorar mensajes enviados por el propio bot
+    if (message.fromMe) return;
+
+    const msgKey = message.id._serialized;
+    const body = message.body || "";
+
+    // 1. Incrementar estadísticas globales para el comando !ping
+    incrementStats('message', message.author || message.from);
+
+    // 2. Guardar en Base de Datos para el log de ediciones/eliminaciones
+    if (body) {
+        storeMessage(msgKey, body);
+    }
+
+    // 3. Si el mensaje es en un grupo, alimentar servicios de tracking
+    if (message.from.endsWith('@g.us')) {
+        const groupId = message.from;
+        const userId = message.author || message.from;
+        const pushname = message._data?.notifyName || message.pushname || 'Usuario';
+
+        // Registrar en el contador (!contador)
+        const msgType = message.hasMedia ? (message.type || 'media') : 'chat';
+        messageCounter.recordMessage(groupId, userId, pushname, msgType);
+
+        // Guardar en el buffer para el resumen (!recap)
+        if (body && body.trim().length > 0) {
+            // Limpiamos el ID del remitente para que Gemini reciba solo el número (sin @c.us ni signos)
+            const numeroLimpio = userId.replace(/\D/g, '');
+
+            messageBuffer.addMessage(groupId, {
+                userId: numeroLimpio,
+                pushname,
+                body: body,
+                timestamp: Date.now()
+            });
+        }
     }
 }
 

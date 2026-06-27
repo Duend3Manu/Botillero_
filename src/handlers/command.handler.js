@@ -150,6 +150,10 @@ const commandMap = {
     'partidos': () => services.league.getMatchDaySummary(),
     'tclasi': () => services.nationalTeam.getQualifiersTable(),
     'clasi': () => services.nationalTeam.getQualifiersMatches(),
+    'mundial': async (client, msg) => {
+        await msg.reply('🏆 Buscando partidos del Mundial, dame unos segundos...');
+        return services.nationalTeam.getMundialMatches();
+    },
     'liga': async (client, msg) => {
         await msg.reply('⚽ Consultando el VAR de la Copa de la Liga, dame un segundito...');
         return services.league.getCopaLigaMatches();

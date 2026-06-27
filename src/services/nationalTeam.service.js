@@ -5,9 +5,12 @@ let tableCache = null;
 let lastTableUpdate = 0;
 let matchesCache = null;
 let lastMatchesUpdate = 0;
+let mundialCache = null;
+let lastMundialUpdate = 0;
 
 const TABLE_CACHE_TTL = 60 * 1000; // 1 minuto: La tabla cambia en vivo si hay goles
 const MATCHES_CACHE_TTL = 60 * 60 * 1000; // 1 hora: El calendario es estable
+const MUNDIAL_CACHE_TTL = 60 * 1000; // 1 minuto
 
 async function getQualifiersTable() {
   // 1. Revisar caché
@@ -63,7 +66,36 @@ async function getQualifiersMatches() {
   }
 }
 
+async function getMundialMatches() {
+  // 1. Revisar caché
+  if (mundialCache && (Date.now() - lastMundialUpdate < MUNDIAL_CACHE_TTL)) {
+      return mundialCache;
+  }
+
+  try {
+    console.log(`(Servicio Selección) -> Ejecutando mundial_fifa.py...`);
+    const result = await pythonService.executeScript('mundial_fifa.py', [], { timeout: 120000 });
+    if (result.code !== 0) {
+      throw new Error(result.stderr || 'Error al ejecutar mundial_fifa.py');
+    }
+    if (!result.stdout || result.stdout.trim() === '') {
+        return "Actualmente no hay información del mundial.";
+    }
+    
+    const response = result.stdout;
+    mundialCache = response;
+    lastMundialUpdate = Date.now();
+    
+    return response;
+  } catch (error) {
+    console.error("Error en getMundialMatches:", error.message);
+    if (mundialCache) return `${mundialCache}\n\n_(⚠️ Datos antiguos, error al actualizar)_`;
+    return "No pude obtener los partidos del mundial.";
+  }
+}
+
 module.exports = {
   getQualifiersTable,
   getQualifiersMatches,
+  getMundialMatches,
 };
