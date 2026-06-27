@@ -49,6 +49,26 @@ async function getPatenteDataFormatted(patente) {
         const info = apiResponse.info.Respuesta;
         const formatear = (valor, fallback = 'No disponible') => (valor && String(valor).trim() !== '') ? String(valor).trim() : fallback;
 
+        let roboMsg = '';
+        if (info.ROBO_IG && info.ROBO_IG.tiene_activa) {
+            roboMsg = `\n\n🚨 *ALERTA: VEHÍCULO CON ENCARGO POR ROBO* 🚨`;
+            if (info.ROBO_IG.publicaciones && info.ROBO_IG.publicaciones.length > 0) {
+                roboMsg += `\n🔗 *Fuente:* ${info.ROBO_IG.publicaciones[0].url}`;
+            }
+        } else if (info.ROBO_IG && info.ROBO_IG.ok) {
+            roboMsg = `\n\n✅ *Sin encargo por robo en redes sociales*`;
+        }
+
+        let prtMsg = '';
+        if (info.PRT_FECHA) {
+            prtMsg = `\n\n🛠️ *Revisión Técnica (PRT)*\n` +
+                     `📅 *Fecha PRT:* ${formatear(info.PRT_FECHA)}\n` +
+                     `🏢 *Planta:* ${formatear(info.PRT_PLANTA)}\n` +
+                     `⛽ *Combustible:* ${formatear(info.PRT_COMBUSTIBLE)}\n` +
+                     `🛣️ *Kilometraje:* ${formatear(info.PRT_KILOMETRO)}\n` +
+                     `📋 *Servicio:* ${formatear(info.PRT_SERVICIO)}`;
+        }
+
         const mensaje =
 `🚗 *Información de la Patente*
 🔍 *Patente:* ${formatear(info.plate, patente.toUpperCase())}
@@ -61,9 +81,9 @@ async function getPatenteDataFormatted(patente) {
 🔧 *Tipo:* ${formatear(info.typeDescription)}
 👤 *Nombre:* ${formatear(info.name?.replace(/\s+/g, ' '))}
 🪪 *RUT:* ${formatear(info.numberOfIdentification && info.verifierDigit ? `${info.numberOfIdentification}-${info.verifierDigit}` : '')}
-📍 *Dirección:* ${formatear(info.DIRECCION)}`;
+📍 *Dirección:* ${formatear(info.DIRECCION)}\n` + prtMsg + roboMsg;
 
-        return { error: false, data: mensaje };
+        return { error: false, data: mensaje.trim() };
     } else {
         // Loguear la respuesta real para facilitar el diagnóstico
         const mensajeApi = apiResponse.mensaje || apiResponse.message || '';
