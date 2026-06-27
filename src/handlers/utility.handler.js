@@ -154,51 +154,6 @@ async function handleSismos() {
     }
 }
 
-async function handleBus(message, client) {
-    const paradero = message.body.replace(/^([!/])bus\s*/i, '').trim().toUpperCase();
-    if (!paradero) {
-        return client.sendMessage(message.from, "Debes indicar el código del paradero. Ejemplo: `!bus PA433`");
-    }
-
-    try {
-        await message.react('⏳');
-        
-        // MEJORA: Usamos API pública (JSON) en lugar de Puppeteer.
-        // Es mucho más rápido, estable y no consume RAM del servidor.
-        const { data } = await axios.get(`https://api.xor.cl/red/bus-stop/${paradero}`);
-        
-        let reply = `🚏 *Paradero ${data.id}*\n_${data.status_description}_\n\n`;
-
-        if (!data.services || data.services.length === 0) {
-            await message.react('❌');
-            return client.sendMessage(message.from, `No hay próximos servicios para el paradero *${paradero}*.`);
-        }
-
-        data.services.forEach(s => {
-            const buses = s.buses || [];
-            if (buses.length > 0) {
-                reply += `🚌 *${s.id}*: ${s.status_description}\n`;
-                buses.forEach(bus => {
-                    const dist = bus.meters_distance;
-                    const min = bus.min_arrival_time;
-                    const max = bus.max_arrival_time;
-                    reply += `   • ${min}-${max} min (${dist}m) - ${bus.id}\n`;
-                });
-                reply += '\n';
-            } else {
-                reply += `🚌 *${s.id}*: ${s.status_description}\n`;
-            }
-        });
-        
-        await message.react('🚌');
-        return client.sendMessage(message.from, reply.trim());
-
-    } catch (error) {
-        console.error("Error en !bus:", error.message);
-        await message.react('❌');
-        return client.sendMessage(message.from, `No se pudo obtener la información para el paradero *${paradero}*.`);
-    }
-}
 
 // --- Lógica para !sec (CORREGIDA Y SIMPLIFICADA) ---
 async function handleSec(message) {
@@ -230,10 +185,6 @@ async function handleStreaming(message) {
     }
 }
 
-async function handleBancos(message) {
-    await message.react('⏳');
-    return await getBanksStatus();
-}
 
 // --- Lógica para !recap (Resumen de conversación) ---
 async function handleRecap(message) {
@@ -305,10 +256,8 @@ function handleMenu() {
 💊 \`!far [comuna]\` → Farmacias de turno
 🚇 \`!metro\` → Estado del Metro de Santiago
 🌋 \`!sismos\` → Últimos sismos reportados
-🚌 \`!bus [paradero]\` → Llegada de micros RED
 ⚡ \`!sec\` / \`!secrm\` → Cortes de luz (nacional/RM)
 💳 \`!transbank\` → Estado servicios Transbank
-🏦 \`!bancos\` → Estado sitios web bancarios
 📝 \`!recap\` → Resumir últimos mensajes del grupo
 📊 \`!contador\` → Ranking de mensajes por usuario
 👀 \`!actividad [@user]\` → Última actividad de un usuario
@@ -317,8 +266,6 @@ function handleMenu() {
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 🔍 *BÚSQUEDAS E INFORMACIÓN*
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-📚 \`!wiki [texto]\` → Buscar en Wikipedia
-🔎 \`!g [texto]\` → Buscar en Google
 📰 \`!noticias\` → Titulares de última hora
 🚗 \`!pat [patente]\` → Info de vehículo
 📱 \`!num [teléfono]\` → Info de número
@@ -330,6 +277,7 @@ function handleMenu() {
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ⚽ *FÚTBOL Y DEPORTES*
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🌍 \`!mundial\` → Partidos del Mundial
 🏆 \`!tabla\` → Tabla liga chilena
 📅 \`!partidos\` → Resumen de la fecha
 📆 \`!prox\` → Próximos partidos liga
@@ -373,11 +321,9 @@ module.exports = {
     handleFarmacias,
     handleClima,
     handleSismos,
-    handleBus,
     handleSec,
     handleMenu,
     handleRandom,
-    handleBancos,
     handleRecap,
     handleStreaming
 };

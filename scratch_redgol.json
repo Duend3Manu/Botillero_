@@ -1,0 +1,1394 @@
+{
+  "_sentryTraceData": "72beb8d66782624968fd42fb84d52517-052b37149a1c17e0-0",
+  "_sentryBaggage": "sentry-environment=production,sentry-release=9f067cbc0ff255dd0a419b4efd7cec81151297dd,sentry-public_key=fd95304cbc1d037fa508d5347e3a5a32,sentry-trace_id=72beb8d66782624968fd42fb84d52517,sentry-sampled=false",
+  "slug": "liga-de-primera",
+  "tournamentTitle": "LIGA DE PRIMERA",
+  "tournamentImage": "https://cms.futbolsites.net/storage/uploads/2019/10/04/5d97807c93109primera-chile.png",
+  "schedule": {
+    "matchday": {
+      "title": "FECHA 16",
+      "groups": [
+        {
+          "date": "Viernes 24/07",
+          "stage": "",
+          "tournamentTitle": "",
+          "tournamentId": "",
+          "matches": [
+            {
+              "id": "2b6753a0-1eb5-44f9-895e-27f816fe3c17",
+              "home_team": {
+                "id": "1c27d55a-2088-44db-85f9-5ae14f7e55c4",
+                "name": "Unión La Calera",
+                "short_name": "La Calera",
+                "code": "UCL",
+                "image": "https://secure.omo.akamai.opta.net/image.php?secure=true&h=secure.omo.akamai.opta.net&sport=football&entity=team&description=badges&dimensions=65&id=hfu6x1260h62zj7xl6cn95hx",
+                "stats": [],
+                "lineup": {
+                  "formation_used": "",
+                  "players": [],
+                  "officials": []
+                }
+              },
+              "away_team": {
+                "id": "c30d0a9b-eb87-4873-974b-24084bdd282b",
+                "name": "Everton",
+                "short_name": "Everton",
+                "code": "EVE",
+                "image": "https://secure.omo.akamai.opta.net/image.php?secure=true&h=secure.omo.akamai.opta.net&sport=football&entity=team&description=badges&dimensions=65&id=9dqkgu00tn42928lrrxlis95a",
+                "stats": [],
+                "lineup": {
+                  "formation_used": "",
+                  "players": [],
+                  "officials": []
+                }
+              },
+              "total_scores_home": 0,
+              "total_scores_away": 0,
+              "total_penalties_home": 0,
+              "total_penalties_away": 0,
+              "minute": null,
+              "hour": "18:00",
+              "state": "",
+              "mode": "HOUR",
+              "description": "Unión La Calera vs Everton",
+              "venue_name": "Estadio Municipal Nicolás Chahuán Nazar",
+              "date": "2026-07-24T18:00:00-0400",
+              "period": "",
+              "priority": 2,
+              "tournament": {
+                "id": "c8b5e107-50d8-445c-99b0-57c3b5989ec1",
+                "name": "Primera División"
+              },
+              "matchDetailUrl": ""
+            },
+            {
+              "id": "614b9655-4a48-4495-be6f-85e520c6b4e0",
+              "home_team": {
+                "id": "afe7ee27-acd5-4700-a4cb-ca71b6b16456",
+                "name": "Colo Colo",
+                "short_name": "Colo Colo",
+                "code": "COL",
+                "image": "https://secure.omo.akamai.opta.net/image.php?secure=true&h=secure.omo.akamai.opta.net&sport=football&entity=team&description=badges&dimensions=65&id=ehsvy9m92bp6ktgoy6pwv8rdm",
+                "stats": [],
+                "lineup": {
+                  "formation_used": "",
+                  "players": [],
+                  "officials": []
+                }
+              },
+              "away_team": {
+                "id": "30beb21d-2d0d-4f05-b269-c5092411d7c8",
+                "name": "Deportes Limache",
+                "short_name": "Limache",
+                "code": "LIM",
+                "image": "https://secure.omo.akamai.opta.net/image.php?secure=true&h=secure.omo.akamai.opta.net&sport=football&entity=team&description=badges&dimensions=65&id=1llzbzquaazm6ptflv88v48ut",
+                "stats": [],
+                "lineup": {
+                  "formation_used": "",
+                  "players": [],
+                  "officials": []
+                }
+              },
+              "total_scores_home": 0,
+              "total_scores_away": 0,
+              "total_penalties_home": 0,
+              "total_penalties_away": 0,
+              "minute": null,
+              "hour": "20:30",
+              "state": "",
+              "mode": "HOUR",
+              "description": "Colo Colo vs Deportes Limache",
+              "venue_name": "Estadio Monumental David Arellano",
+              "date": "2026-07-24T20:30:00-0400",
+              "period": "",
+              "priority": 2,
+              "tournament": {
+                "id": "c8b5e107-50d8-445c-99b0-57c3b5989ec1",
+                "name": "Primera División"
+              },
+              "matchDetailUrl": ""
+            }
+          ]
+        },
+        {
+          "date": "Sábado 25/07",
+          "stage": "",
+          "tournamentTitle": "",
+          "tournamentId": "",
+          "matches": [
+            {
+              "id": "e1ed9328-ee7b-49a5-9963-485fe6df245f",
+              "home_team": {
+                "id": "c4683d7b-802f-4e5d-b615-82039d1c5043",
+                "name": "Coquimbo Unido",
+                "short_name": "Coquimbo",
+                "code": "COQ",
+                "image": "https://secure.omo.akamai.opta.net/image.php?secure=true&h=secure.omo.akamai.opta.net&sport=football&entity=team&description=badges&dimensions=65&id=bw2py3aiws1rq61pokete3kv2",
+                "stats": [],
+                "lineup": {
+                  "formation_used": "",
+                  "players": [],
+                  "officials": []
+                }
+              },
+              "away_team": {
+                "id": "af5ebe8c-2273-4633-b5a6-1d484011e541",
+                "name": "Universidad Concepción",
+                "short_name": "U. Concepción",
+                "code": "UDC",
+                "image": "https://secure.omo.akamai.opta.net/image.php?secure=true&h=secure.omo.akamai.opta.net&sport=football&entity=team&description=badges&dimensions=65&id=4y5xl8r1nkg1n9hnjzo53v8xk",
+                "stats": [],
+                "lineup": {
+                  "formation_used": "",
+                  "players": [],
+                  "officials": []
+                }
+              },
+              "total_scores_home": 0,
+              "total_scores_away": 0,
+              "total_penalties_home": 0,
+              "total_penalties_away": 0,
+              "minute": null,
+              "hour": "15:00",
+              "state": "",
+              "mode": "HOUR",
+              "description": "Coquimbo Unido vs Universidad Concepción",
+              "venue_name": "Estadio Municipal Francisco Sánchez Rumoroso",
+              "date": "2026-07-25T15:00:00-0400",
+              "period": "",
+              "priority": 2,
+              "tournament": {
+                "id": "c8b5e107-50d8-445c-99b0-57c3b5989ec1",
+                "name": "Primera División"
+              },
+              "matchDetailUrl": ""
+            },
+            {
+              "id": "6797618e-8c34-4f06-8cb1-cd71732856d3",
+              "home_team": {
+                "id": "f60e6214-99e8-4ac1-b37e-492fa03b4de6",
+                "name": "Huachipato",
+                "short_name": "Huachipato",
+                "code": "HUA",
+                "image": "https://secure.omo.akamai.opta.net/image.php?secure=true&h=secure.omo.akamai.opta.net&sport=football&entity=team&description=badges&dimensions=65&id=cpqaizhc99tbsqm6h2cgampio",
+                "stats": [],
+                "lineup": {
+                  "formation_used": "",
+                  "players": [],
+                  "officials": []
+                }
+              },
+              "away_team": {
+                "id": "4ab76aad-f353-4f85-acae-ba39e1e5cce1",
+                "name": "Cobresal",
+                "short_name": "Cobresal",
+                "code": "CBR",
+                "image": "https://secure.omo.akamai.opta.net/image.php?secure=true&h=secure.omo.akamai.opta.net&sport=football&entity=team&description=badges&dimensions=65&id=eizgmllil1zrzpk6zbue0hl7m",
+                "stats": [],
+                "lineup": {
+                  "formation_used": "",
+                  "players": [],
+                  "officials": []
+                }
+              },
+              "total_scores_home": 0,
+              "total_scores_away": 0,
+              "total_penalties_home": 0,
+              "total_penalties_away": 0,
+              "minute": null,
+              "hour": "17:30",
+              "state": "",
+              "mode": "HOUR",
+              "description": "Huachipato vs Cobresal",
+              "venue_name": "Estadio Huachipato-CAP Acero",
+              "date": "2026-07-25T17:30:00-0400",
+              "period": "",
+              "priority": 2,
+              "tournament": {
+                "id": "c8b5e107-50d8-445c-99b0-57c3b5989ec1",
+                "name": "Primera División"
+              },
+              "matchDetailUrl": ""
+            },
+            {
+              "id": "16980f49-821b-4fe7-8bcd-66228af5a98f",
+              "home_team": {
+                "id": "c3b04cfe-6fd3-48dd-aa77-6a25f4588644",
+                "name": "Universidad Católica",
+                "short_name": "Univ Católica",
+                "code": "CAT",
+                "image": "https://secure.omo.akamai.opta.net/image.php?secure=true&h=secure.omo.akamai.opta.net&sport=football&entity=team&description=badges&dimensions=65&id=7gkwmrw0cjz0m168ouw00z4gy",
+                "stats": [],
+                "lineup": {
+                  "formation_used": "",
+                  "players": [],
+                  "officials": []
+                }
+              },
+              "away_team": {
+                "id": "14b0bacb-bb56-473e-8ae4-688ab23c3fa2",
+                "name": "La Serena",
+                "short_name": "La Serena",
+                "code": "LAS",
+                "image": "https://secure.omo.akamai.opta.net/image.php?secure=true&h=secure.omo.akamai.opta.net&sport=football&entity=team&description=badges&dimensions=65&id=2nxp7ufclxwbtaozvx5zj1zym",
+                "stats": [],
+                "lineup": {
+                  "formation_used": "",
+                  "players": [],
+                  "officials": []
+                }
+              },
+              "total_scores_home": 0,
+              "total_scores_away": 0,
+              "total_penalties_home": 0,
+              "total_penalties_away": 0,
+              "minute": null,
+              "hour": "20:00",
+              "state": "",
+              "mode": "HOUR",
+              "description": "Universidad Católica vs La Serena",
+              "venue_name": "Claro Arena",
+              "date": "2026-07-25T20:00:00-0400",
+              "period": "",
+              "priority": 2,
+              "tournament": {
+                "id": "c8b5e107-50d8-445c-99b0-57c3b5989ec1",
+                "name": "Primera División"
+              },
+              "matchDetailUrl": ""
+            }
+          ]
+        },
+        {
+          "date": "Domingo 26/07",
+          "stage": "",
+          "tournamentTitle": "",
+          "tournamentId": "",
+          "matches": [
+            {
+              "id": "0327e89b-ef74-45a7-adcb-b0dfd7886a77",
+              "home_team": {
+                "id": "db70f90f-c46e-4f08-8fe9-52c279a81919",
+                "name": "Ñublense",
+                "short_name": "Ñublense",
+                "code": "NUB",
+                "image": "https://secure.omo.akamai.opta.net/image.php?secure=true&h=secure.omo.akamai.opta.net&sport=football&entity=team&description=badges&dimensions=65&id=da47iiy2m3jqh3ra1343t14h",
+                "stats": [],
+                "lineup": {
+                  "formation_used": "",
+                  "players": [],
+                  "officials": []
+                }
+              },
+              "away_team": {
+                "id": "d3d0b92c-d876-4592-b568-ccd2fa90cab7",
+                "name": "Palestino",
+                "short_name": "Palestino",
+                "code": "CDP",
+                "image": "https://secure.omo.akamai.opta.net/image.php?secure=true&h=secure.omo.akamai.opta.net&sport=football&entity=team&description=badges&dimensions=65&id=8puc16dm0ut6bvv6u6ivpe2ch",
+                "stats": [],
+                "lineup": {
+                  "formation_used": "",
+                  "players": [],
+                  "officials": []
+                }
+              },
+              "total_scores_home": 0,
+              "total_scores_away": 0,
+              "total_penalties_home": 0,
+              "total_penalties_away": 0,
+              "minute": null,
+              "hour": "15:00",
+              "state": "",
+              "mode": "HOUR",
+              "description": "Ñublense vs Palestino",
+              "venue_name": "Estadio Bicentenario Municipal Nelson Oyarzún",
+              "date": "2026-07-26T15:00:00-0400",
+              "period": "",
+              "priority": 2,
+              "tournament": {
+                "id": "c8b5e107-50d8-445c-99b0-57c3b5989ec1",
+                "name": "Primera División"
+              },
+              "matchDetailUrl": ""
+            },
+            {
+              "id": "3f8894d5-8bd1-481e-8ddd-b3507fd7df22",
+              "home_team": {
+                "id": "982165ae-e792-4d24-8a83-6b54a3ba2a1c",
+                "name": "Audax Italiano",
+                "short_name": "Audax",
+                "code": "AUD",
+                "image": "https://secure.omo.akamai.opta.net/image.php?secure=true&h=secure.omo.akamai.opta.net&sport=football&entity=team&description=badges&dimensions=65&id=59d4d2m78t2lqabd1m7o90std",
+                "stats": [],
+                "lineup": {
+                  "formation_used": "",
+                  "players": [],
+                  "officials": []
+                }
+              },
+              "away_team": {
+                "id": "d651018c-6b09-4f5d-908a-7866cd3ac49d",
+                "name": "Universidad de Chile",
+                "short_name": "U. de Chile",
+                "code": "UCH",
+                "image": "https://secure.omo.akamai.opta.net/image.php?secure=true&h=secure.omo.akamai.opta.net&sport=football&entity=team&description=badges&dimensions=65&id=cdj7tqbsake4a0ks5pwm23t23",
+                "stats": [],
+                "lineup": {
+                  "formation_used": "",
+                  "players": [],
+                  "officials": []
+                }
+              },
+              "total_scores_home": 0,
+              "total_scores_away": 0,
+              "total_penalties_home": 0,
+              "total_penalties_away": 0,
+              "minute": null,
+              "hour": "17:30",
+              "state": "",
+              "mode": "HOUR",
+              "description": "Audax Italiano vs Universidad de Chile",
+              "venue_name": "Estadio Bicentenario Municipal de La Florida",
+              "date": "2026-07-26T17:30:00-0400",
+              "period": "",
+              "priority": 2,
+              "tournament": {
+                "id": "c8b5e107-50d8-445c-99b0-57c3b5989ec1",
+                "name": "Primera División"
+              },
+              "matchDetailUrl": ""
+            },
+            {
+              "id": "3b2e077f-e5f1-4317-879b-051e35401aef",
+              "home_team": {
+                "id": "22614770-4f30-47b6-b6a8-e1a949a3bd45",
+                "name": "Concepción",
+                "short_name": "Concepción",
+                "code": "CON",
+                "image": "https://secure.omo.akamai.opta.net/image.php?secure=true&h=secure.omo.akamai.opta.net&sport=football&entity=team&description=badges&dimensions=65&id=6ll06558vic6q1e2usid7f2bs",
+                "stats": [],
+                "lineup": {
+                  "formation_used": "",
+                  "players": [],
+                  "officials": []
+                }
+              },
+              "away_team": {
+                "id": "a16a06cc-5d18-4dee-b8d2-119dd78e9752",
+                "name": "O'Higgins",
+                "short_name": "O'Higgins",
+                "code": "OHI",
+                "image": "https://secure.omo.akamai.opta.net/image.php?secure=true&h=secure.omo.akamai.opta.net&sport=football&entity=team&description=badges&dimensions=65&id=8rpjhpm2j1q7p40zfmlqpj8am",
+                "stats": [],
+                "lineup": {
+                  "formation_used": "",
+                  "players": [],
+                  "officials": []
+                }
+              },
+              "total_scores_home": 0,
+              "total_scores_away": 0,
+              "total_penalties_home": 0,
+              "total_penalties_away": 0,
+              "minute": null,
+              "hour": "20:30",
+              "state": "",
+              "mode": "HOUR",
+              "description": "Deportes Concepción vs O'Higgins",
+              "venue_name": "Estadio Municipal Alcaldesa Ester Roa Rebolledo",
+              "date": "2026-07-26T20:30:00-0400",
+              "period": "",
+              "priority": 2,
+              "tournament": {
+                "id": "c8b5e107-50d8-445c-99b0-57c3b5989ec1",
+                "name": "Primera División"
+              },
+              "matchDetailUrl": ""
+            }
+          ]
+        }
+      ]
+    },
+    "stages": [],
+    "activeStage": {
+      "id": "af2d629a-8fa1-465d-8430-c946e715e373",
+      "weeks": [
+        {
+          "link": "/resultados/futbol/competencias/liga-de-primera/c8b5e107-50d8-445c-99b0-57c3b5989ec1/calendario?stage_id=af2d629a-8fa1-465d-8430-c946e715e373&week=1",
+          "week": 1
+        },
+        {
+          "link": "/resultados/futbol/competencias/liga-de-primera/c8b5e107-50d8-445c-99b0-57c3b5989ec1/calendario?stage_id=af2d629a-8fa1-465d-8430-c946e715e373&week=2",
+          "week": 2
+        },
+        {
+          "link": "/resultados/futbol/competencias/liga-de-primera/c8b5e107-50d8-445c-99b0-57c3b5989ec1/calendario?stage_id=af2d629a-8fa1-465d-8430-c946e715e373&week=3",
+          "week": 3
+        },
+        {
+          "link": "/resultados/futbol/competencias/liga-de-primera/c8b5e107-50d8-445c-99b0-57c3b5989ec1/calendario?stage_id=af2d629a-8fa1-465d-8430-c946e715e373&week=4",
+          "week": 4
+        },
+        {
+          "link": "/resultados/futbol/competencias/liga-de-primera/c8b5e107-50d8-445c-99b0-57c3b5989ec1/calendario?stage_id=af2d629a-8fa1-465d-8430-c946e715e373&week=5",
+          "week": 5
+        },
+        {
+          "link": "/resultados/futbol/competencias/liga-de-primera/c8b5e107-50d8-445c-99b0-57c3b5989ec1/calendario?stage_id=af2d629a-8fa1-465d-8430-c946e715e373&week=6",
+          "week": 6
+        },
+        {
+          "link": "/resultados/futbol/competencias/liga-de-primera/c8b5e107-50d8-445c-99b0-57c3b5989ec1/calendario?stage_id=af2d629a-8fa1-465d-8430-c946e715e373&week=7",
+          "week": 7
+        },
+        {
+          "link": "/resultados/futbol/competencias/liga-de-primera/c8b5e107-50d8-445c-99b0-57c3b5989ec1/calendario?stage_id=af2d629a-8fa1-465d-8430-c946e715e373&week=8",
+          "week": 8
+        },
+        {
+          "link": "/resultados/futbol/competencias/liga-de-primera/c8b5e107-50d8-445c-99b0-57c3b5989ec1/calendario?stage_id=af2d629a-8fa1-465d-8430-c946e715e373&week=9",
+          "week": 9
+        },
+        {
+          "link": "/resultados/futbol/competencias/liga-de-primera/c8b5e107-50d8-445c-99b0-57c3b5989ec1/calendario?stage_id=af2d629a-8fa1-465d-8430-c946e715e373&week=10",
+          "week": 10
+        },
+        {
+          "link": "/resultados/futbol/competencias/liga-de-primera/c8b5e107-50d8-445c-99b0-57c3b5989ec1/calendario?stage_id=af2d629a-8fa1-465d-8430-c946e715e373&week=11",
+          "week": 11
+        },
+        {
+          "link": "/resultados/futbol/competencias/liga-de-primera/c8b5e107-50d8-445c-99b0-57c3b5989ec1/calendario?stage_id=af2d629a-8fa1-465d-8430-c946e715e373&week=12",
+          "week": 12
+        },
+        {
+          "link": "/resultados/futbol/competencias/liga-de-primera/c8b5e107-50d8-445c-99b0-57c3b5989ec1/calendario?stage_id=af2d629a-8fa1-465d-8430-c946e715e373&week=13",
+          "week": 13
+        },
+        {
+          "link": "/resultados/futbol/competencias/liga-de-primera/c8b5e107-50d8-445c-99b0-57c3b5989ec1/calendario?stage_id=af2d629a-8fa1-465d-8430-c946e715e373&week=14",
+          "week": 14
+        },
+        {
+          "link": "/resultados/futbol/competencias/liga-de-primera/c8b5e107-50d8-445c-99b0-57c3b5989ec1/calendario?stage_id=af2d629a-8fa1-465d-8430-c946e715e373&week=15",
+          "week": 15
+        },
+        {
+          "link": "/resultados/futbol/competencias/liga-de-primera/c8b5e107-50d8-445c-99b0-57c3b5989ec1/calendario?stage_id=af2d629a-8fa1-465d-8430-c946e715e373&week=16",
+          "week": 16
+        },
+        {
+          "link": "/resultados/futbol/competencias/liga-de-primera/c8b5e107-50d8-445c-99b0-57c3b5989ec1/calendario?stage_id=af2d629a-8fa1-465d-8430-c946e715e373&week=17",
+          "week": 17
+        },
+        {
+          "link": "/resultados/futbol/competencias/liga-de-primera/c8b5e107-50d8-445c-99b0-57c3b5989ec1/calendario?stage_id=af2d629a-8fa1-465d-8430-c946e715e373&week=18",
+          "week": 18
+        },
+        {
+          "link": "/resultados/futbol/competencias/liga-de-primera/c8b5e107-50d8-445c-99b0-57c3b5989ec1/calendario?stage_id=af2d629a-8fa1-465d-8430-c946e715e373&week=19",
+          "week": 19
+        },
+        {
+          "link": "/resultados/futbol/competencias/liga-de-primera/c8b5e107-50d8-445c-99b0-57c3b5989ec1/calendario?stage_id=af2d629a-8fa1-465d-8430-c946e715e373&week=20",
+          "week": 20
+        },
+        {
+          "link": "/resultados/futbol/competencias/liga-de-primera/c8b5e107-50d8-445c-99b0-57c3b5989ec1/calendario?stage_id=af2d629a-8fa1-465d-8430-c946e715e373&week=21",
+          "week": 21
+        },
+        {
+          "link": "/resultados/futbol/competencias/liga-de-primera/c8b5e107-50d8-445c-99b0-57c3b5989ec1/calendario?stage_id=af2d629a-8fa1-465d-8430-c946e715e373&week=22",
+          "week": 22
+        },
+        {
+          "link": "/resultados/futbol/competencias/liga-de-primera/c8b5e107-50d8-445c-99b0-57c3b5989ec1/calendario?stage_id=af2d629a-8fa1-465d-8430-c946e715e373&week=23",
+          "week": 23
+        },
+        {
+          "link": "/resultados/futbol/competencias/liga-de-primera/c8b5e107-50d8-445c-99b0-57c3b5989ec1/calendario?stage_id=af2d629a-8fa1-465d-8430-c946e715e373&week=24",
+          "week": 24
+        },
+        {
+          "link": "/resultados/futbol/competencias/liga-de-primera/c8b5e107-50d8-445c-99b0-57c3b5989ec1/calendario?stage_id=af2d629a-8fa1-465d-8430-c946e715e373&week=25",
+          "week": 25
+        },
+        {
+          "link": "/resultados/futbol/competencias/liga-de-primera/c8b5e107-50d8-445c-99b0-57c3b5989ec1/calendario?stage_id=af2d629a-8fa1-465d-8430-c946e715e373&week=26",
+          "week": 26
+        },
+        {
+          "link": "/resultados/futbol/competencias/liga-de-primera/c8b5e107-50d8-445c-99b0-57c3b5989ec1/calendario?stage_id=af2d629a-8fa1-465d-8430-c946e715e373&week=27",
+          "week": 27
+        },
+        {
+          "link": "/resultados/futbol/competencias/liga-de-primera/c8b5e107-50d8-445c-99b0-57c3b5989ec1/calendario?stage_id=af2d629a-8fa1-465d-8430-c946e715e373&week=28",
+          "week": 28
+        },
+        {
+          "link": "/resultados/futbol/competencias/liga-de-primera/c8b5e107-50d8-445c-99b0-57c3b5989ec1/calendario?stage_id=af2d629a-8fa1-465d-8430-c946e715e373&week=29",
+          "week": 29
+        },
+        {
+          "link": "/resultados/futbol/competencias/liga-de-primera/c8b5e107-50d8-445c-99b0-57c3b5989ec1/calendario?stage_id=af2d629a-8fa1-465d-8430-c946e715e373&week=30",
+          "week": 30
+        }
+      ],
+      "name": "Temporada Regular",
+      "activeWeek": "16",
+      "prevWeek": "/resultados/futbol/competencias/liga-de-primera/c8b5e107-50d8-445c-99b0-57c3b5989ec1/calendario?stage_id=af2d629a-8fa1-465d-8430-c946e715e373&week=15",
+      "nextWeek": "/resultados/futbol/competencias/liga-de-primera/c8b5e107-50d8-445c-99b0-57c3b5989ec1/calendario?stage_id=af2d629a-8fa1-465d-8430-c946e715e373&week=17"
+    }
+  },
+  "matchDays": [
+    {
+      "title": "FECHA 16",
+      "groups": [
+        {
+          "date": "Viernes 24/07",
+          "stage": "",
+          "tournamentTitle": "",
+          "tournamentId": "",
+          "matches": [
+            {
+              "id": "2b6753a0-1eb5-44f9-895e-27f816fe3c17",
+              "home_team": {
+                "id": "1c27d55a-2088-44db-85f9-5ae14f7e55c4",
+                "name": "Unión La Calera",
+                "short_name": "La Calera",
+                "code": "UCL",
+                "image": "https://secure.omo.akamai.opta.net/image.php?secure=true&h=secure.omo.akamai.opta.net&sport=football&entity=team&description=badges&dimensions=65&id=hfu6x1260h62zj7xl6cn95hx",
+                "stats": [],
+                "lineup": {
+                  "formation_used": "",
+                  "players": [],
+                  "officials": []
+                }
+              },
+              "away_team": {
+                "id": "c30d0a9b-eb87-4873-974b-24084bdd282b",
+                "name": "Everton",
+                "short_name": "Everton",
+                "code": "EVE",
+                "image": "https://secure.omo.akamai.opta.net/image.php?secure=true&h=secure.omo.akamai.opta.net&sport=football&entity=team&description=badges&dimensions=65&id=9dqkgu00tn42928lrrxlis95a",
+                "stats": [],
+                "lineup": {
+                  "formation_used": "",
+                  "players": [],
+                  "officials": []
+                }
+              },
+              "total_scores_home": 0,
+              "total_scores_away": 0,
+              "total_penalties_home": 0,
+              "total_penalties_away": 0,
+              "minute": null,
+              "hour": "18:00",
+              "state": "",
+              "mode": "HOUR",
+              "description": "Unión La Calera vs Everton",
+              "venue_name": "Estadio Municipal Nicolás Chahuán Nazar",
+              "date": "2026-07-24T18:00:00-0400",
+              "period": "",
+              "priority": 2,
+              "tournament": {
+                "id": "c8b5e107-50d8-445c-99b0-57c3b5989ec1",
+                "name": "Primera División"
+              },
+              "matchDetailUrl": ""
+            },
+            {
+              "id": "614b9655-4a48-4495-be6f-85e520c6b4e0",
+              "home_team": {
+                "id": "afe7ee27-acd5-4700-a4cb-ca71b6b16456",
+                "name": "Colo Colo",
+                "short_name": "Colo Colo",
+                "code": "COL",
+                "image": "https://secure.omo.akamai.opta.net/image.php?secure=true&h=secure.omo.akamai.opta.net&sport=football&entity=team&description=badges&dimensions=65&id=ehsvy9m92bp6ktgoy6pwv8rdm",
+                "stats": [],
+                "lineup": {
+                  "formation_used": "",
+                  "players": [],
+                  "officials": []
+                }
+              },
+              "away_team": {
+                "id": "30beb21d-2d0d-4f05-b269-c5092411d7c8",
+                "name": "Deportes Limache",
+                "short_name": "Limache",
+                "code": "LIM",
+                "image": "https://secure.omo.akamai.opta.net/image.php?secure=true&h=secure.omo.akamai.opta.net&sport=football&entity=team&description=badges&dimensions=65&id=1llzbzquaazm6ptflv88v48ut",
+                "stats": [],
+                "lineup": {
+                  "formation_used": "",
+                  "players": [],
+                  "officials": []
+                }
+              },
+              "total_scores_home": 0,
+              "total_scores_away": 0,
+              "total_penalties_home": 0,
+              "total_penalties_away": 0,
+              "minute": null,
+              "hour": "20:30",
+              "state": "",
+              "mode": "HOUR",
+              "description": "Colo Colo vs Deportes Limache",
+              "venue_name": "Estadio Monumental David Arellano",
+              "date": "2026-07-24T20:30:00-0400",
+              "period": "",
+              "priority": 2,
+              "tournament": {
+                "id": "c8b5e107-50d8-445c-99b0-57c3b5989ec1",
+                "name": "Primera División"
+              },
+              "matchDetailUrl": ""
+            }
+          ]
+        },
+        {
+          "date": "Sábado 25/07",
+          "stage": "",
+          "tournamentTitle": "",
+          "tournamentId": "",
+          "matches": [
+            {
+              "id": "e1ed9328-ee7b-49a5-9963-485fe6df245f",
+              "home_team": {
+                "id": "c4683d7b-802f-4e5d-b615-82039d1c5043",
+                "name": "Coquimbo Unido",
+                "short_name": "Coquimbo",
+                "code": "COQ",
+                "image": "https://secure.omo.akamai.opta.net/image.php?secure=true&h=secure.omo.akamai.opta.net&sport=football&entity=team&description=badges&dimensions=65&id=bw2py3aiws1rq61pokete3kv2",
+                "stats": [],
+                "lineup": {
+                  "formation_used": "",
+                  "players": [],
+                  "officials": []
+                }
+              },
+              "away_team": {
+                "id": "af5ebe8c-2273-4633-b5a6-1d484011e541",
+                "name": "Universidad Concepción",
+                "short_name": "U. Concepción",
+                "code": "UDC",
+                "image": "https://secure.omo.akamai.opta.net/image.php?secure=true&h=secure.omo.akamai.opta.net&sport=football&entity=team&description=badges&dimensions=65&id=4y5xl8r1nkg1n9hnjzo53v8xk",
+                "stats": [],
+                "lineup": {
+                  "formation_used": "",
+                  "players": [],
+                  "officials": []
+                }
+              },
+              "total_scores_home": 0,
+              "total_scores_away": 0,
+              "total_penalties_home": 0,
+              "total_penalties_away": 0,
+              "minute": null,
+              "hour": "15:00",
+              "state": "",
+              "mode": "HOUR",
+              "description": "Coquimbo Unido vs Universidad Concepción",
+              "venue_name": "Estadio Municipal Francisco Sánchez Rumoroso",
+              "date": "2026-07-25T15:00:00-0400",
+              "period": "",
+              "priority": 2,
+              "tournament": {
+                "id": "c8b5e107-50d8-445c-99b0-57c3b5989ec1",
+                "name": "Primera División"
+              },
+              "matchDetailUrl": ""
+            },
+            {
+              "id": "6797618e-8c34-4f06-8cb1-cd71732856d3",
+              "home_team": {
+                "id": "f60e6214-99e8-4ac1-b37e-492fa03b4de6",
+                "name": "Huachipato",
+                "short_name": "Huachipato",
+                "code": "HUA",
+                "image": "https://secure.omo.akamai.opta.net/image.php?secure=true&h=secure.omo.akamai.opta.net&sport=football&entity=team&description=badges&dimensions=65&id=cpqaizhc99tbsqm6h2cgampio",
+                "stats": [],
+                "lineup": {
+                  "formation_used": "",
+                  "players": [],
+                  "officials": []
+                }
+              },
+              "away_team": {
+                "id": "4ab76aad-f353-4f85-acae-ba39e1e5cce1",
+                "name": "Cobresal",
+                "short_name": "Cobresal",
+                "code": "CBR",
+                "image": "https://secure.omo.akamai.opta.net/image.php?secure=true&h=secure.omo.akamai.opta.net&sport=football&entity=team&description=badges&dimensions=65&id=eizgmllil1zrzpk6zbue0hl7m",
+                "stats": [],
+                "lineup": {
+                  "formation_used": "",
+                  "players": [],
+                  "officials": []
+                }
+              },
+              "total_scores_home": 0,
+              "total_scores_away": 0,
+              "total_penalties_home": 0,
+              "total_penalties_away": 0,
+              "minute": null,
+              "hour": "17:30",
+              "state": "",
+              "mode": "HOUR",
+              "description": "Huachipato vs Cobresal",
+              "venue_name": "Estadio Huachipato-CAP Acero",
+              "date": "2026-07-25T17:30:00-0400",
+              "period": "",
+              "priority": 2,
+              "tournament": {
+                "id": "c8b5e107-50d8-445c-99b0-57c3b5989ec1",
+                "name": "Primera División"
+              },
+              "matchDetailUrl": ""
+            },
+            {
+              "id": "16980f49-821b-4fe7-8bcd-66228af5a98f",
+              "home_team": {
+                "id": "c3b04cfe-6fd3-48dd-aa77-6a25f4588644",
+                "name": "Universidad Católica",
+                "short_name": "Univ Católica",
+                "code": "CAT",
+                "image": "https://secure.omo.akamai.opta.net/image.php?secure=true&h=secure.omo.akamai.opta.net&sport=football&entity=team&description=badges&dimensions=65&id=7gkwmrw0cjz0m168ouw00z4gy",
+                "stats": [],
+                "lineup": {
+                  "formation_used": "",
+                  "players": [],
+                  "officials": []
+                }
+              },
+              "away_team": {
+                "id": "14b0bacb-bb56-473e-8ae4-688ab23c3fa2",
+                "name": "La Serena",
+                "short_name": "La Serena",
+                "code": "LAS",
+                "image": "https://secure.omo.akamai.opta.net/image.php?secure=true&h=secure.omo.akamai.opta.net&sport=football&entity=team&description=badges&dimensions=65&id=2nxp7ufclxwbtaozvx5zj1zym",
+                "stats": [],
+                "lineup": {
+                  "formation_used": "",
+                  "players": [],
+                  "officials": []
+                }
+              },
+              "total_scores_home": 0,
+              "total_scores_away": 0,
+              "total_penalties_home": 0,
+              "total_penalties_away": 0,
+              "minute": null,
+              "hour": "20:00",
+              "state": "",
+              "mode": "HOUR",
+              "description": "Universidad Católica vs La Serena",
+              "venue_name": "Claro Arena",
+              "date": "2026-07-25T20:00:00-0400",
+              "period": "",
+              "priority": 2,
+              "tournament": {
+                "id": "c8b5e107-50d8-445c-99b0-57c3b5989ec1",
+                "name": "Primera División"
+              },
+              "matchDetailUrl": ""
+            }
+          ]
+        },
+        {
+          "date": "Domingo 26/07",
+          "stage": "",
+          "tournamentTitle": "",
+          "tournamentId": "",
+          "matches": [
+            {
+              "id": "0327e89b-ef74-45a7-adcb-b0dfd7886a77",
+              "home_team": {
+                "id": "db70f90f-c46e-4f08-8fe9-52c279a81919",
+                "name": "Ñublense",
+                "short_name": "Ñublense",
+                "code": "NUB",
+                "image": "https://secure.omo.akamai.opta.net/image.php?secure=true&h=secure.omo.akamai.opta.net&sport=football&entity=team&description=badges&dimensions=65&id=da47iiy2m3jqh3ra1343t14h",
+                "stats": [],
+                "lineup": {
+                  "formation_used": "",
+                  "players": [],
+                  "officials": []
+                }
+              },
+              "away_team": {
+                "id": "d3d0b92c-d876-4592-b568-ccd2fa90cab7",
+                "name": "Palestino",
+                "short_name": "Palestino",
+                "code": "CDP",
+                "image": "https://secure.omo.akamai.opta.net/image.php?secure=true&h=secure.omo.akamai.opta.net&sport=football&entity=team&description=badges&dimensions=65&id=8puc16dm0ut6bvv6u6ivpe2ch",
+                "stats": [],
+                "lineup": {
+                  "formation_used": "",
+                  "players": [],
+                  "officials": []
+                }
+              },
+              "total_scores_home": 0,
+              "total_scores_away": 0,
+              "total_penalties_home": 0,
+              "total_penalties_away": 0,
+              "minute": null,
+              "hour": "15:00",
+              "state": "",
+              "mode": "HOUR",
+              "description": "Ñublense vs Palestino",
+              "venue_name": "Estadio Bicentenario Municipal Nelson Oyarzún",
+              "date": "2026-07-26T15:00:00-0400",
+              "period": "",
+              "priority": 2,
+              "tournament": {
+                "id": "c8b5e107-50d8-445c-99b0-57c3b5989ec1",
+                "name": "Primera División"
+              },
+              "matchDetailUrl": ""
+            },
+            {
+              "id": "3f8894d5-8bd1-481e-8ddd-b3507fd7df22",
+              "home_team": {
+                "id": "982165ae-e792-4d24-8a83-6b54a3ba2a1c",
+                "name": "Audax Italiano",
+                "short_name": "Audax",
+                "code": "AUD",
+                "image": "https://secure.omo.akamai.opta.net/image.php?secure=true&h=secure.omo.akamai.opta.net&sport=football&entity=team&description=badges&dimensions=65&id=59d4d2m78t2lqabd1m7o90std",
+                "stats": [],
+                "lineup": {
+                  "formation_used": "",
+                  "players": [],
+                  "officials": []
+                }
+              },
+              "away_team": {
+                "id": "d651018c-6b09-4f5d-908a-7866cd3ac49d",
+                "name": "Universidad de Chile",
+                "short_name": "U. de Chile",
+                "code": "UCH",
+                "image": "https://secure.omo.akamai.opta.net/image.php?secure=true&h=secure.omo.akamai.opta.net&sport=football&entity=team&description=badges&dimensions=65&id=cdj7tqbsake4a0ks5pwm23t23",
+                "stats": [],
+                "lineup": {
+                  "formation_used": "",
+                  "players": [],
+                  "officials": []
+                }
+              },
+              "total_scores_home": 0,
+              "total_scores_away": 0,
+              "total_penalties_home": 0,
+              "total_penalties_away": 0,
+              "minute": null,
+              "hour": "17:30",
+              "state": "",
+              "mode": "HOUR",
+              "description": "Audax Italiano vs Universidad de Chile",
+              "venue_name": "Estadio Bicentenario Municipal de La Florida",
+              "date": "2026-07-26T17:30:00-0400",
+              "period": "",
+              "priority": 2,
+              "tournament": {
+                "id": "c8b5e107-50d8-445c-99b0-57c3b5989ec1",
+                "name": "Primera División"
+              },
+              "matchDetailUrl": ""
+            },
+            {
+              "id": "3b2e077f-e5f1-4317-879b-051e35401aef",
+              "home_team": {
+                "id": "22614770-4f30-47b6-b6a8-e1a949a3bd45",
+                "name": "Concepción",
+                "short_name": "Concepción",
+                "code": "CON",
+                "image": "https://secure.omo.akamai.opta.net/image.php?secure=true&h=secure.omo.akamai.opta.net&sport=football&entity=team&description=badges&dimensions=65&id=6ll06558vic6q1e2usid7f2bs",
+                "stats": [],
+                "lineup": {
+                  "formation_used": "",
+                  "players": [],
+                  "officials": []
+                }
+              },
+              "away_team": {
+                "id": "a16a06cc-5d18-4dee-b8d2-119dd78e9752",
+                "name": "O'Higgins",
+                "short_name": "O'Higgins",
+                "code": "OHI",
+                "image": "https://secure.omo.akamai.opta.net/image.php?secure=true&h=secure.omo.akamai.opta.net&sport=football&entity=team&description=badges&dimensions=65&id=8rpjhpm2j1q7p40zfmlqpj8am",
+                "stats": [],
+                "lineup": {
+                  "formation_used": "",
+                  "players": [],
+                  "officials": []
+                }
+              },
+              "total_scores_home": 0,
+              "total_scores_away": 0,
+              "total_penalties_home": 0,
+              "total_penalties_away": 0,
+              "minute": null,
+              "hour": "20:30",
+              "state": "",
+              "mode": "HOUR",
+              "description": "Deportes Concepción vs O'Higgins",
+              "venue_name": "Estadio Municipal Alcaldesa Ester Roa Rebolledo",
+              "date": "2026-07-26T20:30:00-0400",
+              "period": "",
+              "priority": 2,
+              "tournament": {
+                "id": "c8b5e107-50d8-445c-99b0-57c3b5989ec1",
+                "name": "Primera División"
+              },
+              "matchDetailUrl": ""
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "competitionCategories": [
+    {
+      "id": "b7efb087-7fce-488d-9dc7-db8dfbe3f359",
+      "name": "Mundial",
+      "slug": "mundial",
+      "link": "/resultados/futbol/competencias/mundial/b7efb087-7fce-488d-9dc7-db8dfbe3f359",
+      "image": "https://cms.futbolsites.net/storage/uploads/2019/08/21/5d5d9c3f2e7f4fifa.png",
+      "news": null
+    },
+    {
+      "id": "c8b5e107-50d8-445c-99b0-57c3b5989ec1",
+      "name": "Liga de Primera",
+      "slug": "liga-de-primera",
+      "link": "/resultados/futbol/competencias/liga-de-primera/c8b5e107-50d8-445c-99b0-57c3b5989ec1",
+      "image": "https://cms.futbolsites.net/storage/uploads/2019/10/04/5d97807c93109primera-chile.png",
+      "news": null
+    },
+    {
+      "id": "f9a382d8-de48-43a9-9942-9096e395bb43",
+      "name": "Copa Libertadores",
+      "slug": "copa-libertadores",
+      "link": "/resultados/futbol/competencias/copa-libertadores/f9a382d8-de48-43a9-9942-9096e395bb43",
+      "image": "https://images.futbolsites.net/front/sports/libertadores.png",
+      "news": {
+        "content_type": "tag",
+        "content_value": "copa-libertadores"
+      }
+    },
+    {
+      "id": "c18505a7-57d7-4d2f-a927-3daf7103c773",
+      "name": "Champions League",
+      "slug": "champions-league",
+      "link": "/resultados/futbol/competencias/champions-league/c18505a7-57d7-4d2f-a927-3daf7103c773",
+      "image": "https://cms.futbolsites.net/storage/uploads/2019/08/21/5d5d9137c534cchampions-league.png",
+      "news": {
+        "content_type": "section",
+        "content_value": "championsleague"
+      }
+    },
+    {
+      "id": "f7001136-60ce-4bcf-890d-96825e599a9d",
+      "name": "Copa Sudamericana",
+      "slug": "copa-sudamericana",
+      "link": "/resultados/futbol/competencias/copa-sudamericana/f7001136-60ce-4bcf-890d-96825e599a9d",
+      "image": "https://images.futbolsites.net/front/sports/sudamericana.png",
+      "news": {
+        "content_type": "tag",
+        "content_value": "copa-sudamericana"
+      }
+    },
+    {
+      "id": "91a535e8-f5db-4f02-9c33-145e716d908e",
+      "name": "Primera B",
+      "slug": "primera-b",
+      "link": "/resultados/futbol/competencias/primera-b/91a535e8-f5db-4f02-9c33-145e716d908e",
+      "image": "",
+      "news": {
+        "content_type": "tag",
+        "content_value": "primera-b"
+      }
+    },
+    {
+      "id": "cc110d68-b7ee-42b2-84d3-028cca443b63",
+      "name": "Copa Chile",
+      "slug": "copa-chile",
+      "link": "/resultados/futbol/competencias/copa-chile/cc110d68-b7ee-42b2-84d3-028cca443b63",
+      "image": "https://cms.futbolsites.net/storage/uploads/2019/10/04/5d97818708fdbcopa-chile.png",
+      "news": {
+        "content_type": "tag",
+        "content_value": "copa-chile"
+      }
+    },
+    {
+      "id": "111701be-8f82-40dc-bb73-317d17b85ba1",
+      "name": "Copa América",
+      "slug": "copa-america",
+      "link": "/resultados/futbol/competencias/copa-america/111701be-8f82-40dc-bb73-317d17b85ba1",
+      "image": "https://cms.futbolsites.net/storage/uploads/2019/08/21/5d5d9a4db55ceconmebol.png",
+      "news": {
+        "content_type": "tag",
+        "content_value": "copa-america"
+      }
+    },
+    {
+      "id": "ec7aacdb-2af7-4939-b38c-2ff2e64cfb6e",
+      "name": "Eurocopa",
+      "slug": "eurocopa",
+      "link": "/resultados/futbol/competencias/eurocopa/ec7aacdb-2af7-4939-b38c-2ff2e64cfb6e",
+      "image": "No hay imagen aca",
+      "news": {
+        "content_type": "tag",
+        "content_value": "eurocopa"
+      }
+    },
+    {
+      "name": "Torneos Conmebol",
+      "submenu": [
+        {
+          "id": "71fa29d6-d8c3-47d1-bfe2-595cdb95896b",
+          "name": "Liga Argentina",
+          "slug": "liga-argentina",
+          "link": "/resultados/futbol/competencias/liga-argentina/71fa29d6-d8c3-47d1-bfe2-595cdb95896b",
+          "image": "https://cms.futbolsites.net/storage/uploads/2020/06/10/5ee14b7ad5c56LPF.png",
+          "news": {
+            "content_type": "tag",
+            "content_value": "liga-profesional-de-argentina"
+          }
+        },
+        {
+          "id": "14871555-0e0f-461f-aaed-e74a8adebb20",
+          "name": "Recopa Sudamericana",
+          "slug": "recopa-sudamericana",
+          "link": "/resultados/futbol/competencias/recopa-sudamericana/14871555-0e0f-461f-aaed-e74a8adebb20",
+          "image": "https://cms.futbolsites.net/storage/uploads/2019/08/21/5d5d99c2b46f7recopa.png",
+          "news": {
+            "content_type": "tag",
+            "content_value": "recopa-sudamericana"
+          }
+        },
+        {
+          "id": "f7f873da-cb22-4672-9076-7488dcdbc045",
+          "name": "Brasileirao",
+          "slug": "brasileirao",
+          "link": "/resultados/futbol/competencias/brasileirao/f7f873da-cb22-4672-9076-7488dcdbc045",
+          "image": "https://cms.futbolsites.net/storage/uploads/2019/12/17/5df918e26f428brasileirao.png",
+          "news": {
+            "content_type": "tag",
+            "content_value": "brasileirao"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Copas Europeas",
+      "submenu": [
+        {
+          "id": "e18a972c-c7ba-4380-a810-313644fca5ba",
+          "name": "Europa League",
+          "slug": "europa-league",
+          "link": "/resultados/futbol/competencias/europa-league/e18a972c-c7ba-4380-a810-313644fca5ba",
+          "image": "https://cms.futbolsites.net/storage/uploads/2019/08/21/5d5d91787fb7beuropa-league.png",
+          "news": {
+            "content_type": "tag",
+            "content_value": "europa-league"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Ligas Europeas",
+      "submenu": [
+        {
+          "id": "f5ef6052-a739-428b-9b06-60f6415142e0",
+          "name": "Serie A",
+          "slug": "serie-a",
+          "link": "/resultados/futbol/competencias/serie-a/f5ef6052-a739-428b-9b06-60f6415142e0",
+          "image": "https://cms.futbolsites.net/storage/uploads/2019/08/21/5d5d92f8394d9serie-a.png",
+          "news": {
+            "content_type": "tag",
+            "content_value": "serie-a"
+          }
+        },
+        {
+          "id": "8ca30e39-83bc-4708-93d1-6c1e60bd334f",
+          "name": "Premier League",
+          "slug": "premier-league",
+          "link": "/resultados/futbol/competencias/premier-league/8ca30e39-83bc-4708-93d1-6c1e60bd334f",
+          "image": "https://cms.futbolsites.net/storage/uploads/2019/08/21/5d5d90ff4c510premier-league.png",
+          "news": {
+            "content_type": "tag",
+            "content_value": "premier-league"
+          }
+        },
+        {
+          "id": "1b367cbf-fda8-41c2-b13f-7c82c15f8bec",
+          "name": "La Liga",
+          "slug": "la-liga",
+          "link": "/resultados/futbol/competencias/la-liga/1b367cbf-fda8-41c2-b13f-7c82c15f8bec",
+          "image": "https://cms.futbolsites.net/storage/uploads/2019/08/21/5d5d9af9d7813la-liga.png",
+          "news": {
+            "content_type": "tag",
+            "content_value": "laliga"
+          }
+        },
+        {
+          "id": "491638a5-ac1c-489f-95bc-09491d04bb9c",
+          "name": "Bundesliga",
+          "slug": "bundesliga",
+          "link": "/resultados/futbol/competencias/bundesliga/491638a5-ac1c-489f-95bc-09491d04bb9c",
+          "image": "https://cms.futbolsites.net/storage/uploads/2019/08/21/5d5d926710b32bundesliga.png",
+          "news": {
+            "content_type": "tag",
+            "content_value": "bundesliga"
+          }
+        },
+        {
+          "id": "799287af-2643-432f-8f5c-94247bcd03f7",
+          "name": "Ligue 1",
+          "slug": "ligue-1",
+          "link": "/resultados/futbol/competencias/ligue-1/799287af-2643-432f-8f5c-94247bcd03f7",
+          "image": "https://cms.futbolsites.net/storage/uploads/2019/08/21/5d5d922738d77copa-generica.png",
+          "news": {
+            "content_type": "tag",
+            "content_value": "ligue1"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Torneos FIFA",
+      "submenu": [
+        {
+          "id": "ecbe1236-73d1-4dd6-90fc-0cc2619f5385",
+          "name": "Eliminatorias Conmebol Sudamericanas",
+          "slug": "eliminatorias-conmebol-sudamericanas",
+          "link": "/resultados/futbol/competencias/eliminatorias-conmebol-sudamericanas/ecbe1236-73d1-4dd6-90fc-0cc2619f5385",
+          "image": "https://cms.futbolsites.net/storage/uploads/2019/08/21/5d5d9a804771aconmebol.png",
+          "news": {
+            "content_type": "tag",
+            "content_value": "eliminatorias"
+          }
+        },
+        {
+          "id": "c6f6d79e-b890-4008-9da0-ece0d22b9e46",
+          "name": "Copa Oro",
+          "slug": "copa-oro",
+          "link": "/resultados/futbol/competencias/copa-oro/c6f6d79e-b890-4008-9da0-ece0d22b9e46",
+          "image": "https://cms.futbolsites.net/storage/uploads/2021/07/08/60e75618d4409goldcup21.png",
+          "news": {
+            "content_type": "tag",
+            "content_value": "copa-oro"
+          }
+        },
+        {
+          "id": "5801b81b-a527-4ec9-9c08-0c2649b0754f",
+          "name": "Copa Mundial FIFA Sub-20",
+          "slug": "copa-mundial-fifa-sub-20",
+          "link": "/resultados/futbol/competencias/copa-mundial-fifa-sub-20/5801b81b-a527-4ec9-9c08-0c2649b0754f",
+          "image": "https://cms.futbolsites.net/storage/uploads/2019/08/21/5d5d9c3f2e7f4fifa.png",
+          "news": null
+        }
+      ]
+    }
+  ],
+  "seoArgs": {
+    "canonical": "https://redgol.cl/resultados/futbol/competencias/liga-de-primera/c8b5e107-50d8-445c-99b0-57c3b5989ec1/calendario?stage_id=af2d629a-8fa1-465d-8430-c946e715e373&week=16",
+    "title": "Liga de Primera | Calendario de Fútbol | RedGol",
+    "description": "Consulta los partidos de hoy, fecha y horarios actualizados para ver el fútbol EN VIVO. Calendario de todos los equipos de Liga de Primera",
+    "og": {
+      "locale": "es_LA",
+      "title": "Liga de Primera | Calendario de Fútbol | RedGol",
+      "description": "Consulta los partidos de hoy, fecha y horarios actualizados para ver el fútbol EN VIVO. Calendario de todos los equipos de Liga de Primera",
+      "url": "https://redgol.cl/resultados/futbol/competencias/liga-de-primera/c8b5e107-50d8-445c-99b0-57c3b5989ec1/calendario?stage_id=af2d629a-8fa1-465d-8430-c946e715e373&week=16",
+      "image": "https://statics.redgol.cl/img/stats-og.png",
+      "fb": {
+        "appId": "123210741058923",
+        "pageId": "88334274875"
+      }
+    },
+    "schemas": [
+      "{\"@context\":\"http://schema.org\",\"@type\":\"Organization\",\"name\":\"RedGol\",\"url\":\"https://redgol.cl\",\"logo\":\"https://statics.redgol.cl/img/logo_redgol.svg\",\"sameAs\":[\"https://www.facebook.com/redgol/\",\"https://www.instagram.com/redgol/\",\"https://twitter.com/redgol/\",\"https://www.youtube.com/c/redgoltv\",\"https://www.twitch.tv/redgoltv?lang=es\",\"https://redgol.cl/rss/feed\"]}",
+      "{\"@context\":\"https://schema.org\",\"@type\":\"WebPage\",\"description\":\"Consulta los partidos de hoy, fecha y horarios actualizados para ver el fútbol EN VIVO. Calendario de todos los equipos de Liga de Primera\",\"url\":\"https://redgol.cl/resultados/futbol/competencias/liga-de-primera/c8b5e107-50d8-445c-99b0-57c3b5989ec1/calendario?stage_id=af2d629a-8fa1-465d-8430-c946e715e373&week=16\",\"headline\":\"Liga de Primera | Calendario de Fútbol | RedGol\",\"datePublished\":\"2026-06-27T20:45:16+00:00\",\"dateModified\":\"2026-06-27T20:45:16+00:00\",\"publisher\":{\"@type\":\"Organization\",\"name\":\"RedGol\",\"logo\":{\"@type\":\"ImageObject\",\"url\":\"https://statics.redgol.cl/img/logo_redgol.svg\",\"width\":\"600\",\"height\":\"60\"}}}",
+      "[{\"@context\":\"https://schema.org\",\"@type\":\"BreadcrumbList\",\"itemListElement\":[{\"@type\":\"ListItem\",\"position\":1,\"name\":\"Liga Argentina\",\"item\":\"https://redgol.cl/resultados/futbol/competencias/liga-argentina/71fa29d6-d8c3-47d1-bfe2-595cdb95896b\"},{\"@type\":\"ListItem\",\"position\":2,\"name\":\"Liga Argentina - Calendario\",\"item\":\"https://redgol.cl/resultados/futbol/competencias/liga-argentina/71fa29d6-d8c3-47d1-bfe2-595cdb95896b/calendario\"},{\"@type\":\"ListItem\",\"position\":3,\"name\":\"Liga Argentina - Posiciones\",\"item\":\"https://redgol.cl/resultados/futbol/competencias/liga-argentina/71fa29d6-d8c3-47d1-bfe2-595cdb95896b/clasificacion\"},{\"@type\":\"ListItem\",\"position\":4,\"name\":\"Liga Argentina - Noticias\",\"item\":\"https://redgol.cl/resultados/futbol/competencias/liga-argentina/71fa29d6-d8c3-47d1-bfe2-595cdb95896b/noticias\"}]},{\"@context\":\"https://schema.org\",\"@type\":\"BreadcrumbList\",\"itemListElement\":[{\"@type\":\"ListItem\",\"position\":1,\"name\":\"Recopa Sudamericana\",\"item\":\"https://redgol.cl/resultados/futbol/competencias/recopa-sudamericana/14871555-0e0f-461f-aaed-e74a8adebb20\"},{\"@type\":\"ListItem\",\"position\":2,\"name\":\"Recopa Sudamericana - Calendario\",\"item\":\"https://redgol.cl/resultados/futbol/competencias/recopa-sudamericana/14871555-0e0f-461f-aaed-e74a8adebb20/calendario\"},{\"@type\":\"ListItem\",\"position\":3,\"name\":\"Recopa Sudamericana - Posiciones\",\"item\":\"https://redgol.cl/resultados/futbol/competencias/recopa-sudamericana/14871555-0e0f-461f-aaed-e74a8adebb20/clasificacion\"},{\"@type\":\"ListItem\",\"position\":4,\"name\":\"Recopa Sudamericana - Noticias\",\"item\":\"https://redgol.cl/resultados/futbol/competencias/recopa-sudamericana/14871555-0e0f-461f-aaed-e74a8adebb20/noticias\"}]},{\"@context\":\"https://schema.org\",\"@type\":\"BreadcrumbList\",\"itemListElement\":[{\"@type\":\"ListItem\",\"position\":1,\"name\":\"Brasileirao\",\"item\":\"https://redgol.cl/resultados/futbol/competencias/brasileirao/f7f873da-cb22-4672-9076-7488dcdbc045\"},{\"@type\":\"ListItem\",\"position\":2,\"name\":\"Brasileirao - Calendario\",\"item\":\"https://redgol.cl/resultados/futbol/competencias/brasileirao/f7f873da-cb22-4672-9076-7488dcdbc045/calendario\"},{\"@type\":\"ListItem\",\"position\":3,\"name\":\"Brasileirao - Posiciones\",\"item\":\"https://redgol.cl/resultados/futbol/competencias/brasileirao/f7f873da-cb22-4672-9076-7488dcdbc045/clasificacion\"},{\"@type\":\"ListItem\",\"position\":4,\"name\":\"Brasileirao - Noticias\",\"item\":\"https://redgol.cl/resultados/futbol/competencias/brasileirao/f7f873da-cb22-4672-9076-7488dcdbc045/noticias\"}]},{\"@context\":\"https://schema.org\",\"@type\":\"BreadcrumbList\",\"itemListElement\":[{\"@type\":\"ListItem\",\"position\":1,\"name\":\"Europa League\",\"item\":\"https://redgol.cl/resultados/futbol/competencias/europa-league/e18a972c-c7ba-4380-a810-313644fca5ba\"},{\"@type\":\"ListItem\",\"position\":2,\"name\":\"Europa League - Calendario\",\"item\":\"https://redgol.cl/resultados/futbol/competencias/europa-league/e18a972c-c7ba-4380-a810-313644fca5ba/calendario\"},{\"@type\":\"ListItem\",\"position\":3,\"name\":\"Europa League - Posiciones\",\"item\":\"https://redgol.cl/resultados/futbol/competencias/europa-league/e18a972c-c7ba-4380-a810-313644fca5ba/clasificacion\"},{\"@type\":\"ListItem\",\"position\":4,\"name\":\"Europa League - Noticias\",\"item\":\"https://redgol.cl/resultados/futbol/competencias/europa-league/e18a972c-c7ba-4380-a810-313644fca5ba/noticias\"}]},{\"@context\":\"https://schema.org\",\"@type\":\"BreadcrumbList\",\"itemListElement\":[{\"@type\":\"ListItem\",\"position\":1,\"name\":\"Serie A\",\"item\":\"https://redgol.cl/resultados/futbol/competencias/serie-a/f5ef6052-a739-428b-9b06-60f6415142e0\"},{\"@type\":\"ListItem\",\"position\":2,\"name\":\"Serie A - Calendario\",\"item\":\"https://redgol.cl/resultados/futbol/competencias/serie-a/f5ef6052-a739-428b-9b06-60f6415142e0/calendario\"},{\"@type\":\"ListItem\",\"position\":3,\"name\":\"Serie A - Posiciones\",\"item\":\"https://redgol.cl/resultados/futbol/competencias/serie-a/f5ef6052-a739-428b-9b06-60f6415142e0/clasificacion\"},{\"@type\":\"ListItem\",\"position\":4,\"name\":\"Serie A - Noticias\",\"item\":\"https://redgol.cl/resultados/futbol/competencias/serie-a/f5ef6052-a739-428b-9b06-60f6415142e0/noticias\"}]},{\"@context\":\"https://schema.org\",\"@type\":\"BreadcrumbList\",\"itemListElement\":[{\"@type\":\"ListItem\",\"position\":1,\"name\":\"Premier League\",\"item\":\"https://redgol.cl/resultados/futbol/competencias/premier-league/8ca30e39-83bc-4708-93d1-6c1e60bd334f\"},{\"@type\":\"ListItem\",\"position\":2,\"name\":\"Premier League - Calendario\",\"item\":\"https://redgol.cl/resultados/futbol/competencias/premier-league/8ca30e39-83bc-4708-93d1-6c1e60bd334f/calendario\"},{\"@type\":\"ListItem\",\"position\":3,\"name\":\"Premier League - Posiciones\",\"item\":\"https://redgol.cl/resultados/futbol/competencias/premier-league/8ca30e39-83bc-4708-93d1-6c1e60bd334f/clasificacion\"},{\"@type\":\"ListItem\",\"position\":4,\"name\":\"Premier League - Noticias\",\"item\":\"https://redgol.cl/resultados/futbol/competencias/premier-league/8ca30e39-83bc-4708-93d1-6c1e60bd334f/noticias\"}]},{\"@context\":\"https://schema.org\",\"@type\":\"BreadcrumbList\",\"itemListElement\":[{\"@type\":\"ListItem\",\"position\":1,\"name\":\"La Liga\",\"item\":\"https://redgol.cl/resultados/futbol/competencias/la-liga/1b367cbf-fda8-41c2-b13f-7c82c15f8bec\"},{\"@type\":\"ListItem\",\"position\":2,\"name\":\"La Liga - Calendario\",\"item\":\"https://redgol.cl/resultados/futbol/competencias/la-liga/1b367cbf-fda8-41c2-b13f-7c82c15f8bec/calendario\"},{\"@type\":\"ListItem\",\"position\":3,\"name\":\"La Liga - Posiciones\",\"item\":\"https://redgol.cl/resultados/futbol/competencias/la-liga/1b367cbf-fda8-41c2-b13f-7c82c15f8bec/clasificacion\"},{\"@type\":\"ListItem\",\"position\":4,\"name\":\"La Liga - Noticias\",\"item\":\"https://redgol.cl/resultados/futbol/competencias/la-liga/1b367cbf-fda8-41c2-b13f-7c82c15f8bec/noticias\"}]},{\"@context\":\"https://schema.org\",\"@type\":\"BreadcrumbList\",\"itemListElement\":[{\"@type\":\"ListItem\",\"position\":1,\"name\":\"Bundesliga\",\"item\":\"https://redgol.cl/resultados/futbol/competencias/bundesliga/491638a5-ac1c-489f-95bc-09491d04bb9c\"},{\"@type\":\"ListItem\",\"position\":2,\"name\":\"Bundesliga - Calendario\",\"item\":\"https://redgol.cl/resultados/futbol/competencias/bundesliga/491638a5-ac1c-489f-95bc-09491d04bb9c/calendario\"},{\"@type\":\"ListItem\",\"position\":3,\"name\":\"Bundesliga - Posiciones\",\"item\":\"https://redgol.cl/resultados/futbol/competencias/bundesliga/491638a5-ac1c-489f-95bc-09491d04bb9c/clasificacion\"},{\"@type\":\"ListItem\",\"position\":4,\"name\":\"Bundesliga - Noticias\",\"item\":\"https://redgol.cl/resultados/futbol/competencias/bundesliga/491638a5-ac1c-489f-95bc-09491d04bb9c/noticias\"}]},{\"@context\":\"https://schema.org\",\"@type\":\"BreadcrumbList\",\"itemListElement\":[{\"@type\":\"ListItem\",\"position\":1,\"name\":\"Ligue 1\",\"item\":\"https://redgol.cl/resultados/futbol/competencias/ligue-1/799287af-2643-432f-8f5c-94247bcd03f7\"},{\"@type\":\"ListItem\",\"position\":2,\"name\":\"Ligue 1 - Calendario\",\"item\":\"https://redgol.cl/resultados/futbol/competencias/ligue-1/799287af-2643-432f-8f5c-94247bcd03f7/calendario\"},{\"@type\":\"ListItem\",\"position\":3,\"name\":\"Ligue 1 - Posiciones\",\"item\":\"https://redgol.cl/resultados/futbol/competencias/ligue-1/799287af-2643-432f-8f5c-94247bcd03f7/clasificacion\"},{\"@type\":\"ListItem\",\"position\":4,\"name\":\"Ligue 1 - Noticias\",\"item\":\"https://redgol.cl/resultados/futbol/competencias/ligue-1/799287af-2643-432f-8f5c-94247bcd03f7/noticias\"}]},{\"@context\":\"https://schema.org\",\"@type\":\"BreadcrumbList\",\"itemListElement\":[{\"@type\":\"ListItem\",\"position\":1,\"name\":\"Eliminatorias Conmebol Sudamericanas\",\"item\":\"https://redgol.cl/resultados/futbol/competencias/eliminatorias-conmebol-sudamericanas/ecbe1236-73d1-4dd6-90fc-0cc2619f5385\"},{\"@type\":\"ListItem\",\"position\":2,\"name\":\"Eliminatorias Conmebol Sudamericanas - Calendario\",\"item\":\"https://redgol.cl/resultados/futbol/competencias/eliminatorias-conmebol-sudamericanas/ecbe1236-73d1-4dd6-90fc-0cc2619f5385/calendario\"},{\"@type\":\"ListItem\",\"position\":3,\"name\":\"Eliminatorias Conmebol Sudamericanas - Posiciones\",\"item\":\"https://redgol.cl/resultados/futbol/competencias/eliminatorias-conmebol-sudamericanas/ecbe1236-73d1-4dd6-90fc-0cc2619f5385/clasificacion\"},{\"@type\":\"ListItem\",\"position\":4,\"name\":\"Eliminatorias Conmebol Sudamericanas - Noticias\",\"item\":\"https://redgol.cl/resultados/futbol/competencias/eliminatorias-conmebol-sudamericanas/ecbe1236-73d1-4dd6-90fc-0cc2619f5385/noticias\"}]},{\"@context\":\"https://schema.org\",\"@type\":\"BreadcrumbList\",\"itemListElement\":[{\"@type\":\"ListItem\",\"position\":1,\"name\":\"Copa Oro\",\"item\":\"https://redgol.cl/resultados/futbol/competencias/copa-oro/c6f6d79e-b890-4008-9da0-ece0d22b9e46\"},{\"@type\":\"ListItem\",\"position\":2,\"name\":\"Copa Oro - Calendario\",\"item\":\"https://redgol.cl/resultados/futbol/competencias/copa-oro/c6f6d79e-b890-4008-9da0-ece0d22b9e46/calendario\"},{\"@type\":\"ListItem\",\"position\":3,\"name\":\"Copa Oro - Posiciones\",\"item\":\"https://redgol.cl/resultados/futbol/competencias/copa-oro/c6f6d79e-b890-4008-9da0-ece0d22b9e46/clasificacion\"},{\"@type\":\"ListItem\",\"position\":4,\"name\":\"Copa Oro - Noticias\",\"item\":\"https://redgol.cl/resultados/futbol/competencias/copa-oro/c6f6d79e-b890-4008-9da0-ece0d22b9e46/noticias\"}]},{\"@context\":\"https://schema.org\",\"@type\":\"BreadcrumbList\",\"itemListElement\":[{\"@type\":\"ListItem\",\"position\":1,\"name\":\"Copa Mundial FIFA Sub-20\",\"item\":\"https://redgol.cl/resultados/futbol/competencias/copa-mundial-fifa-sub-20/5801b81b-a527-4ec9-9c08-0c2649b0754f\"},{\"@type\":\"ListItem\",\"position\":2,\"name\":\"Copa Mundial FIFA Sub-20 - Calendario\",\"item\":\"https://redgol.cl/resultados/futbol/competencias/copa-mundial-fifa-sub-20/5801b81b-a527-4ec9-9c08-0c2649b0754f/calendario\"},{\"@type\":\"ListItem\",\"position\":3,\"name\":\"Copa Mundial FIFA Sub-20 - Posiciones\",\"item\":\"https://redgol.cl/resultados/futbol/competencias/copa-mundial-fifa-sub-20/5801b81b-a527-4ec9-9c08-0c2649b0754f/clasificacion\"},{\"@type\":\"ListItem\",\"position\":4,\"name\":\"Copa Mundial FIFA Sub-20 - Noticias\",\"item\":\"https://redgol.cl/resultados/futbol/competencias/copa-mundial-fifa-sub-20/5801b81b-a527-4ec9-9c08-0c2649b0754f/noticias\"}]},{\"@context\":\"https://schema.org\",\"@type\":\"BreadcrumbList\",\"itemListElement\":[{\"@type\":\"ListItem\",\"position\":1,\"name\":\"Mundial\",\"item\":\"https://redgol.cl/resultados/futbol/competencias/mundial/b7efb087-7fce-488d-9dc7-db8dfbe3f359\"},{\"@type\":\"ListItem\",\"position\":2,\"name\":\"Mundial - Calendario\",\"item\":\"https://redgol.cl/resultados/futbol/competencias/mundial/b7efb087-7fce-488d-9dc7-db8dfbe3f359/calendario\"},{\"@type\":\"ListItem\",\"position\":3,\"name\":\"Mundial - Posiciones\",\"item\":\"https://redgol.cl/resultados/futbol/competencias/mundial/b7efb087-7fce-488d-9dc7-db8dfbe3f359/clasificacion\"},{\"@type\":\"ListItem\",\"position\":4,\"name\":\"Mundial - Noticias\",\"item\":\"https://redgol.cl/resultados/futbol/competencias/mundial/b7efb087-7fce-488d-9dc7-db8dfbe3f359/noticias\"}]},{\"@context\":\"https://schema.org\",\"@type\":\"BreadcrumbList\",\"itemListElement\":[{\"@type\":\"ListItem\",\"position\":1,\"name\":\"Liga de Primera\",\"item\":\"https://redgol.cl/resultados/futbol/competencias/liga-de-primera/c8b5e107-50d8-445c-99b0-57c3b5989ec1\"},{\"@type\":\"ListItem\",\"position\":2,\"name\":\"Liga de Primera - Calendario\",\"item\":\"https://redgol.cl/resultados/futbol/competencias/liga-de-primera/c8b5e107-50d8-445c-99b0-57c3b5989ec1/calendario\"},{\"@type\":\"ListItem\",\"position\":3,\"name\":\"Liga de Primera - Posiciones\",\"item\":\"https://redgol.cl/resultados/futbol/competencias/liga-de-primera/c8b5e107-50d8-445c-99b0-57c3b5989ec1/clasificacion\"},{\"@type\":\"ListItem\",\"position\":4,\"name\":\"Liga de Primera - Noticias\",\"item\":\"https://redgol.cl/resultados/futbol/competencias/liga-de-primera/c8b5e107-50d8-445c-99b0-57c3b5989ec1/noticias\"}]},{\"@context\":\"https://schema.org\",\"@type\":\"BreadcrumbList\",\"itemListElement\":[{\"@type\":\"ListItem\",\"position\":1,\"name\":\"Copa Libertadores\",\"item\":\"https://redgol.cl/resultados/futbol/competencias/copa-libertadores/f9a382d8-de48-43a9-9942-9096e395bb43\"},{\"@type\":\"ListItem\",\"position\":2,\"name\":\"Copa Libertadores - Calendario\",\"item\":\"https://redgol.cl/resultados/futbol/competencias/copa-libertadores/f9a382d8-de48-43a9-9942-9096e395bb43/calendario\"},{\"@type\":\"ListItem\",\"position\":3,\"name\":\"Copa Libertadores - Posiciones\",\"item\":\"https://redgol.cl/resultados/futbol/competencias/copa-libertadores/f9a382d8-de48-43a9-9942-9096e395bb43/clasificacion\"},{\"@type\":\"ListItem\",\"position\":4,\"name\":\"Copa Libertadores - Noticias\",\"item\":\"https://redgol.cl/resultados/futbol/competencias/copa-libertadores/f9a382d8-de48-43a9-9942-9096e395bb43/noticias\"}]},{\"@context\":\"https://schema.org\",\"@type\":\"BreadcrumbList\",\"itemListElement\":[{\"@type\":\"ListItem\",\"position\":1,\"name\":\"Champions League\",\"item\":\"https://redgol.cl/resultados/futbol/competencias/champions-league/c18505a7-57d7-4d2f-a927-3daf7103c773\"},{\"@type\":\"ListItem\",\"position\":2,\"name\":\"Champions League - Calendario\",\"item\":\"https://redgol.cl/resultados/futbol/competencias/champions-league/c18505a7-57d7-4d2f-a927-3daf7103c773/calendario\"},{\"@type\":\"ListItem\",\"position\":3,\"name\":\"Champions League - Posiciones\",\"item\":\"https://redgol.cl/resultados/futbol/competencias/champions-league/c18505a7-57d7-4d2f-a927-3daf7103c773/clasificacion\"},{\"@type\":\"ListItem\",\"position\":4,\"name\":\"Champions League - Noticias\",\"item\":\"https://redgol.cl/resultados/futbol/competencias/champions-league/c18505a7-57d7-4d2f-a927-3daf7103c773/noticias\"}]},{\"@context\":\"https://schema.org\",\"@type\":\"BreadcrumbList\",\"itemListElement\":[{\"@type\":\"ListItem\",\"position\":1,\"name\":\"Copa Sudamericana\",\"item\":\"https://redgol.cl/resultados/futbol/competencias/copa-sudamericana/f7001136-60ce-4bcf-890d-96825e599a9d\"},{\"@type\":\"ListItem\",\"position\":2,\"name\":\"Copa Sudamericana - Calendario\",\"item\":\"https://redgol.cl/resultados/futbol/competencias/copa-sudamericana/f7001136-60ce-4bcf-890d-96825e599a9d/calendario\"},{\"@type\":\"ListItem\",\"position\":3,\"name\":\"Copa Sudamericana - Posiciones\",\"item\":\"https://redgol.cl/resultados/futbol/competencias/copa-sudamericana/f7001136-60ce-4bcf-890d-96825e599a9d/clasificacion\"},{\"@type\":\"ListItem\",\"position\":4,\"name\":\"Copa Sudamericana - Noticias\",\"item\":\"https://redgol.cl/resultados/futbol/competencias/copa-sudamericana/f7001136-60ce-4bcf-890d-96825e599a9d/noticias\"}]},{\"@context\":\"https://schema.org\",\"@type\":\"BreadcrumbList\",\"itemListElement\":[{\"@type\":\"ListItem\",\"position\":1,\"name\":\"Primera B\",\"item\":\"https://redgol.cl/resultados/futbol/competencias/primera-b/91a535e8-f5db-4f02-9c33-145e716d908e\"},{\"@type\":\"ListItem\",\"position\":2,\"name\":\"Primera B - Calendario\",\"item\":\"https://redgol.cl/resultados/futbol/competencias/primera-b/91a535e8-f5db-4f02-9c33-145e716d908e/calendario\"},{\"@type\":\"ListItem\",\"position\":3,\"name\":\"Primera B - Posiciones\",\"item\":\"https://redgol.cl/resultados/futbol/competencias/primera-b/91a535e8-f5db-4f02-9c33-145e716d908e/clasificacion\"},{\"@type\":\"ListItem\",\"position\":4,\"name\":\"Primera B - Noticias\",\"item\":\"https://redgol.cl/resultados/futbol/competencias/primera-b/91a535e8-f5db-4f02-9c33-145e716d908e/noticias\"}]},{\"@context\":\"https://schema.org\",\"@type\":\"BreadcrumbList\",\"itemListElement\":[{\"@type\":\"ListItem\",\"position\":1,\"name\":\"Copa Chile\",\"item\":\"https://redgol.cl/resultados/futbol/competencias/copa-chile/cc110d68-b7ee-42b2-84d3-028cca443b63\"},{\"@type\":\"ListItem\",\"position\":2,\"name\":\"Copa Chile - Calendario\",\"item\":\"https://redgol.cl/resultados/futbol/competencias/copa-chile/cc110d68-b7ee-42b2-84d3-028cca443b63/calendario\"},{\"@type\":\"ListItem\",\"position\":3,\"name\":\"Copa Chile - Posiciones\",\"item\":\"https://redgol.cl/resultados/futbol/competencias/copa-chile/cc110d68-b7ee-42b2-84d3-028cca443b63/clasificacion\"},{\"@type\":\"ListItem\",\"position\":4,\"name\":\"Copa Chile - Noticias\",\"item\":\"https://redgol.cl/resultados/futbol/competencias/copa-chile/cc110d68-b7ee-42b2-84d3-028cca443b63/noticias\"}]},{\"@context\":\"https://schema.org\",\"@type\":\"BreadcrumbList\",\"itemListElement\":[{\"@type\":\"ListItem\",\"position\":1,\"name\":\"Copa América\",\"item\":\"https://redgol.cl/resultados/futbol/competencias/copa-america/111701be-8f82-40dc-bb73-317d17b85ba1\"},{\"@type\":\"ListItem\",\"position\":2,\"name\":\"Copa América - Calendario\",\"item\":\"https://redgol.cl/resultados/futbol/competencias/copa-america/111701be-8f82-40dc-bb73-317d17b85ba1/calendario\"},{\"@type\":\"ListItem\",\"position\":3,\"name\":\"Copa América - Posiciones\",\"item\":\"https://redgol.cl/resultados/futbol/competencias/copa-america/111701be-8f82-40dc-bb73-317d17b85ba1/clasificacion\"},{\"@type\":\"ListItem\",\"position\":4,\"name\":\"Copa América - Noticias\",\"item\":\"https://redgol.cl/resultados/futbol/competencias/copa-america/111701be-8f82-40dc-bb73-317d17b85ba1/noticias\"}]},{\"@context\":\"https://schema.org\",\"@type\":\"BreadcrumbList\",\"itemListElement\":[{\"@type\":\"ListItem\",\"position\":1,\"name\":\"Eurocopa\",\"item\":\"https://redgol.cl/resultados/futbol/competencias/eurocopa/ec7aacdb-2af7-4939-b38c-2ff2e64cfb6e\"},{\"@type\":\"ListItem\",\"position\":2,\"name\":\"Eurocopa - Calendario\",\"item\":\"https://redgol.cl/resultados/futbol/competencias/eurocopa/ec7aacdb-2af7-4939-b38c-2ff2e64cfb6e/calendario\"},{\"@type\":\"ListItem\",\"position\":3,\"name\":\"Eurocopa - Posiciones\",\"item\":\"https://redgol.cl/resultados/futbol/competencias/eurocopa/ec7aacdb-2af7-4939-b38c-2ff2e64cfb6e/clasificacion\"},{\"@type\":\"ListItem\",\"position\":4,\"name\":\"Eurocopa - Noticias\",\"item\":\"https://redgol.cl/resultados/futbol/competencias/eurocopa/ec7aacdb-2af7-4939-b38c-2ff2e64cfb6e/noticias\"}]}]",
+      "[{\"@context\":\"https://schema.org\",\"eventAttendanceMode\":\"https://schema.org/OfflineEventAttendanceMode\",\"image\":[\"\",\"\"],\"endDate\":\"2026-07-24T19:30:00-0400\",\"@type\":\"SportsEvent\",\"name\":\" - Viernes 24/07\",\"description\":\"Unión La Calera vs Everton\",\"performer\":{\"@type\":\"PerformingGroup\",\"name\":\"\"},\"organizer\":{\"@type\":\"Organization\",\"name\":\"\",\"url\":\"\"},\"location\":{\"@type\":\"Place\",\"name\":\"Estadio Municipal Nicolás Chahuán Nazar\"},\"competitor\":[{\"@type\":\"SportsTeam\",\"name\":\"Unión La Calera\"},{\"@type\":\"SportsTeam\",\"name\":\"Everton\"}],\"startDate\":\"2026-07-24T18:00:00-0400\"},{\"@context\":\"https://schema.org\",\"eventAttendanceMode\":\"https://schema.org/OfflineEventAttendanceMode\",\"image\":[\"\",\"\"],\"endDate\":\"2026-07-24T22:00:00-0400\",\"@type\":\"SportsEvent\",\"name\":\" - Viernes 24/07\",\"description\":\"Colo Colo vs Deportes Limache\",\"performer\":{\"@type\":\"PerformingGroup\",\"name\":\"\"},\"organizer\":{\"@type\":\"Organization\",\"name\":\"\",\"url\":\"\"},\"location\":{\"@type\":\"Place\",\"name\":\"Estadio Monumental David Arellano\"},\"competitor\":[{\"@type\":\"SportsTeam\",\"name\":\"Colo Colo\"},{\"@type\":\"SportsTeam\",\"name\":\"Deportes Limache\"}],\"startDate\":\"2026-07-24T20:30:00-0400\"},{\"@context\":\"https://schema.org\",\"eventAttendanceMode\":\"https://schema.org/OfflineEventAttendanceMode\",\"image\":[\"\",\"\"],\"endDate\":\"2026-07-25T16:30:00-0400\",\"@type\":\"SportsEvent\",\"name\":\" - Sábado 25/07\",\"description\":\"Coquimbo Unido vs Universidad Concepción\",\"performer\":{\"@type\":\"PerformingGroup\",\"name\":\"\"},\"organizer\":{\"@type\":\"Organization\",\"name\":\"\",\"url\":\"\"},\"location\":{\"@type\":\"Place\",\"name\":\"Estadio Municipal Francisco Sánchez Rumoroso\"},\"competitor\":[{\"@type\":\"SportsTeam\",\"name\":\"Coquimbo Unido\"},{\"@type\":\"SportsTeam\",\"name\":\"Universidad Concepción\"}],\"startDate\":\"2026-07-25T15:00:00-0400\"},{\"@context\":\"https://schema.org\",\"eventAttendanceMode\":\"https://schema.org/OfflineEventAttendanceMode\",\"image\":[\"\",\"\"],\"endDate\":\"2026-07-25T19:00:00-0400\",\"@type\":\"SportsEvent\",\"name\":\" - Sábado 25/07\",\"description\":\"Huachipato vs Cobresal\",\"performer\":{\"@type\":\"PerformingGroup\",\"name\":\"\"},\"organizer\":{\"@type\":\"Organization\",\"name\":\"\",\"url\":\"\"},\"location\":{\"@type\":\"Place\",\"name\":\"Estadio Huachipato-CAP Acero\"},\"competitor\":[{\"@type\":\"SportsTeam\",\"name\":\"Huachipato\"},{\"@type\":\"SportsTeam\",\"name\":\"Cobresal\"}],\"startDate\":\"2026-07-25T17:30:00-0400\"},{\"@context\":\"https://schema.org\",\"eventAttendanceMode\":\"https://schema.org/OfflineEventAttendanceMode\",\"image\":[\"\",\"\"],\"endDate\":\"2026-07-25T21:30:00-0400\",\"@type\":\"SportsEvent\",\"name\":\" - Sábado 25/07\",\"description\":\"Universidad Católica vs La Serena\",\"performer\":{\"@type\":\"PerformingGroup\",\"name\":\"\"},\"organizer\":{\"@type\":\"Organization\",\"name\":\"\",\"url\":\"\"},\"location\":{\"@type\":\"Place\",\"name\":\"Claro Arena\"},\"competitor\":[{\"@type\":\"SportsTeam\",\"name\":\"Universidad Católica\"},{\"@type\":\"SportsTeam\",\"name\":\"La Serena\"}],\"startDate\":\"2026-07-25T20:00:00-0400\"},{\"@context\":\"https://schema.org\",\"eventAttendanceMode\":\"https://schema.org/OfflineEventAttendanceMode\",\"image\":[\"\",\"\"],\"endDate\":\"2026-07-26T16:30:00-0400\",\"@type\":\"SportsEvent\",\"name\":\" - Domingo 26/07\",\"description\":\"Ñublense vs Palestino\",\"performer\":{\"@type\":\"PerformingGroup\",\"name\":\"\"},\"organizer\":{\"@type\":\"Organization\",\"name\":\"\",\"url\":\"\"},\"location\":{\"@type\":\"Place\",\"name\":\"Estadio Bicentenario Municipal Nelson Oyarzún\"},\"competitor\":[{\"@type\":\"SportsTeam\",\"name\":\"Ñublense\"},{\"@type\":\"SportsTeam\",\"name\":\"Palestino\"}],\"startDate\":\"2026-07-26T15:00:00-0400\"},{\"@context\":\"https://schema.org\",\"eventAttendanceMode\":\"https://schema.org/OfflineEventAttendanceMode\",\"image\":[\"\",\"\"],\"endDate\":\"2026-07-26T19:00:00-0400\",\"@type\":\"SportsEvent\",\"name\":\" - Domingo 26/07\",\"description\":\"Audax Italiano vs Universidad de Chile\",\"performer\":{\"@type\":\"PerformingGroup\",\"name\":\"\"},\"organizer\":{\"@type\":\"Organization\",\"name\":\"\",\"url\":\"\"},\"location\":{\"@type\":\"Place\",\"name\":\"Estadio Bicentenario Municipal de La Florida\"},\"competitor\":[{\"@type\":\"SportsTeam\",\"name\":\"Audax Italiano\"},{\"@type\":\"SportsTeam\",\"name\":\"Universidad de Chile\"}],\"startDate\":\"2026-07-26T17:30:00-0400\"},{\"@context\":\"https://schema.org\",\"eventAttendanceMode\":\"https://schema.org/OfflineEventAttendanceMode\",\"image\":[\"\",\"\"],\"endDate\":\"2026-07-26T22:00:00-0400\",\"@type\":\"SportsEvent\",\"name\":\" - Domingo 26/07\",\"description\":\"Deportes Concepción vs O'Higgins\",\"performer\":{\"@type\":\"PerformingGroup\",\"name\":\"\"},\"organizer\":{\"@type\":\"Organization\",\"name\":\"\",\"url\":\"\"},\"location\":{\"@type\":\"Place\",\"name\":\"Estadio Municipal Alcaldesa Ester Roa Rebolledo\"},\"competitor\":[{\"@type\":\"SportsTeam\",\"name\":\"Concepción\"},{\"@type\":\"SportsTeam\",\"name\":\"O'Higgins\"}],\"startDate\":\"2026-07-26T20:30:00-0400\"}]",
+      "{\"@context\":\"http://schema.org\",\"@type\":\"ItemList\",\"itemListElement\":[{\"@type\":\"ListItem\",\"position\":1,\"url\":\"https://redgol.cl/seleccionchilena/pablo-milad-hace-anuncio-final-sobre-el-nuevo-dt-de-la-seleccion-chilena-un-contrato-por-cuatro-anos\"},{\"@type\":\"ListItem\",\"position\":2,\"url\":\"https://redgol.cl/chile/llego-como-delantero-estrella-limache-enfurece-a-sus-hinchas-al-anunciar-triste-adios-en-el-mercado-de-pases\"},{\"@type\":\"ListItem\",\"position\":3,\"url\":\"https://redgol.cl/mundial/marcelo-bielsa-desclasifica-la-insolita-razon-por-la-que-cambio-a-fernando-muslera-yo-no-la-tome\"},{\"@type\":\"ListItem\",\"position\":4,\"url\":\"https://redgol.cl/mundial/claudio-bravo-explica-lo-que-esta-pasando-con-marcelo-bielsa-en-uruguay-ruido-e-incomodidad\"}]}"
+    ]
+  },
+  "tabs": [
+    {
+      "name": "CALENDARIO",
+      "url": "/resultados/futbol/competencias/liga-de-primera/c8b5e107-50d8-445c-99b0-57c3b5989ec1/calendario"
+    },
+    {
+      "name": "POSICIONES",
+      "url": "/resultados/futbol/competencias/liga-de-primera/c8b5e107-50d8-445c-99b0-57c3b5989ec1/clasificacion"
+    }
+  ],
+  "mostReadNews": [
+    {
+      "id": "1439874",
+      "title": "Milad hace anuncio final por nuevo DT de Chile: \"Contrato por cuatro años\"",
+      "link": "/seleccionchilena/pablo-milad-hace-anuncio-final-sobre-el-nuevo-dt-de-la-seleccion-chilena-un-contrato-por-cuatro-anos",
+      "url": "https://redgol.cl/seleccionchilena/pablo-milad-hace-anuncio-final-sobre-el-nuevo-dt-de-la-seleccion-chilena-un-contrato-por-cuatro-anos",
+      "label": "Fútbol chileno",
+      "categories": [
+        {
+          "categoryId": "RDG11306",
+          "parentId": "",
+          "categoryName": "Selección Chilena",
+          "categorySlug": "seleccionchilena",
+          "categoryUrl": "/seleccionchilena",
+          "order": 0,
+          "categoryIcon": "",
+          "categoryDescription": "Últimas noticias de Selección Chilena. Entérate de todas las noticias relacionadas a Selección Chilena en redgol.cl",
+          "active": true
+        }
+      ],
+      "section": "Selección Chilena",
+      "picture": "https://media.redgol.cl/wp-content/uploads/sites/8/2026/06/26144705/PS_1013484-1-e1782499661900-200x200.webp",
+      "images": {
+        "wide": {
+          "big": "https://media.redgol.cl/wp-content/uploads/sites/8/2026/06/26144705/PS_1013484-1-e1782499661900-740x416.webp",
+          "medium": "https://media.redgol.cl/wp-content/uploads/sites/8/2026/06/26144705/PS_1013484-1-e1782499661900-490x275.webp",
+          "small": "https://media.redgol.cl/wp-content/uploads/sites/8/2026/06/26144705/PS_1013484-1-e1782499661900-250x140.webp"
+        },
+        "classic": {
+          "big": "https://media.redgol.cl/wp-content/uploads/sites/8/2026/06/26144705/PS_1013484-1-e1782499661900-714x535.webp",
+          "medium": "https://media.redgol.cl/wp-content/uploads/sites/8/2026/06/26144705/PS_1013484-1-e1782499661900-470x352.webp",
+          "small": "https://media.redgol.cl/wp-content/uploads/sites/8/2026/06/26144705/PS_1013484-1-e1782499661900-230x172.webp"
+        },
+        "square": {
+          "big": "https://media.redgol.cl/wp-content/uploads/sites/8/2026/06/26144705/PS_1013484-1-e1782499661900-800x800.webp",
+          "medium": "https://media.redgol.cl/wp-content/uploads/sites/8/2026/06/26144705/PS_1013484-1-e1782499661900-400x400.webp",
+          "small": "https://media.redgol.cl/wp-content/uploads/sites/8/2026/06/26144705/PS_1013484-1-e1782499661900-200x200.webp"
+        },
+        "full": "https://media.redgol.cl/wp-content/uploads/sites/8/2026/06/26144705/PS_1013484-1-e1782499661900-1200x740.webp",
+        "full_jpg": "https://media.redgol.cl/wp-content/uploads/sites/8/2026/06/26144705/PS_1013484-1-e1782499661900-1200x740.jpg"
+      }
+    },
+    {
+      "id": "1439980",
+      "title": "Limache enfurece a sus hinchas al anunciar adiós de delantero",
+      "link": "/chile/llego-como-delantero-estrella-limache-enfurece-a-sus-hinchas-al-anunciar-triste-adios-en-el-mercado-de-pases",
+      "url": "https://redgol.cl/chile/llego-como-delantero-estrella-limache-enfurece-a-sus-hinchas-al-anunciar-triste-adios-en-el-mercado-de-pases",
+      "label": "Liga de Primera",
+      "categories": [
+        {
+          "categoryId": "RDG11305",
+          "parentId": "",
+          "categoryName": "Chile",
+          "categorySlug": "chile",
+          "categoryUrl": "/chile",
+          "order": 0,
+          "categoryIcon": "",
+          "categoryDescription": "Últimas noticias de Chile. Entérate de todas las noticias relacionadas a Chile en redgol.cl",
+          "active": true
+        }
+      ],
+      "section": "Chile",
+      "picture": "https://media.redgol.cl/wp-content/uploads/sites/8/2026/06/26164225/PS_1145237-1-e1782506605791-200x200.webp",
+      "images": {
+        "wide": {
+          "big": "https://media.redgol.cl/wp-content/uploads/sites/8/2026/06/26164225/PS_1145237-1-e1782506605791-740x416.webp",
+          "medium": "https://media.redgol.cl/wp-content/uploads/sites/8/2026/06/26164225/PS_1145237-1-e1782506605791-490x275.webp",
+          "small": "https://media.redgol.cl/wp-content/uploads/sites/8/2026/06/26164225/PS_1145237-1-e1782506605791-250x140.webp"
+        },
+        "classic": {
+          "big": "https://media.redgol.cl/wp-content/uploads/sites/8/2026/06/26164225/PS_1145237-1-e1782506605791-714x535.webp",
+          "medium": "https://media.redgol.cl/wp-content/uploads/sites/8/2026/06/26164225/PS_1145237-1-e1782506605791-470x352.webp",
+          "small": "https://media.redgol.cl/wp-content/uploads/sites/8/2026/06/26164225/PS_1145237-1-e1782506605791-230x172.webp"
+        },
+        "square": {
+          "big": "https://media.redgol.cl/wp-content/uploads/sites/8/2026/06/26164225/PS_1145237-1-e1782506605791-800x800.webp",
+          "medium": "https://media.redgol.cl/wp-content/uploads/sites/8/2026/06/26164225/PS_1145237-1-e1782506605791-400x400.webp",
+          "small": "https://media.redgol.cl/wp-content/uploads/sites/8/2026/06/26164225/PS_1145237-1-e1782506605791-200x200.webp"
+        },
+        "full": "https://media.redgol.cl/wp-content/uploads/sites/8/2026/06/26164225/PS_1145237-1-e1782506605791-1200x740.webp",
+        "full_jpg": "https://media.redgol.cl/wp-content/uploads/sites/8/2026/06/26164225/PS_1145237-1-e1782506605791-1200x740.jpg"
+      }
+    },
+    {
+      "id": "1440245",
+      "title": "Bielsa desclasifica la insólita razón por la que cambió a Muslera",
+      "link": "/mundial/marcelo-bielsa-desclasifica-la-insolita-razon-por-la-que-cambio-a-fernando-muslera-yo-no-la-tome",
+      "url": "https://redgol.cl/mundial/marcelo-bielsa-desclasifica-la-insolita-razon-por-la-que-cambio-a-fernando-muslera-yo-no-la-tome",
+      "label": "Mundial 2026",
+      "categories": [
+        {
+          "categoryId": "RDG65678",
+          "parentId": "",
+          "categoryName": "Mundial 2026",
+          "categorySlug": "mundial",
+          "categoryUrl": "/mundial",
+          "order": 0,
+          "categoryIcon": "",
+          "categoryDescription": "Últimas noticias de Mundial 2026. Entérate de todas las noticias relacionadas a Mundial 2026 en redgol.cl",
+          "active": true
+        }
+      ],
+      "section": "Mundial 2026",
+      "picture": "https://media.redgol.cl/wp-content/uploads/sites/8/2026/06/27091101/Fernando-Muslera-Uruguay-e1782565895175-200x200.webp",
+      "images": {
+        "wide": {
+          "big": "https://media.redgol.cl/wp-content/uploads/sites/8/2026/06/27091101/Fernando-Muslera-Uruguay-e1782565895175-740x416.webp",
+          "medium": "https://media.redgol.cl/wp-content/uploads/sites/8/2026/06/27091101/Fernando-Muslera-Uruguay-e1782565895175-490x275.webp",
+          "small": "https://media.redgol.cl/wp-content/uploads/sites/8/2026/06/27091101/Fernando-Muslera-Uruguay-e1782565895175-250x140.webp"
+        },
+        "classic": {
+          "big": "https://media.redgol.cl/wp-content/uploads/sites/8/2026/06/27091101/Fernando-Muslera-Uruguay-e1782565895175-714x535.webp",
+          "medium": "https://media.redgol.cl/wp-content/uploads/sites/8/2026/06/27091101/Fernando-Muslera-Uruguay-e1782565895175-470x352.webp",
+          "small": "https://media.redgol.cl/wp-content/uploads/sites/8/2026/06/27091101/Fernando-Muslera-Uruguay-e1782565895175-230x172.webp"
+        },
+        "square": {
+          "big": "https://media.redgol.cl/wp-content/uploads/sites/8/2026/06/27091101/Fernando-Muslera-Uruguay-e1782565895175-800x800.webp",
+          "medium": "https://media.redgol.cl/wp-content/uploads/sites/8/2026/06/27091101/Fernando-Muslera-Uruguay-e1782565895175-400x400.webp",
+          "small": "https://media.redgol.cl/wp-content/uploads/sites/8/2026/06/27091101/Fernando-Muslera-Uruguay-e1782565895175-200x200.webp"
+        },
+        "full": "https://media.redgol.cl/wp-content/uploads/sites/8/2026/06/27091101/Fernando-Muslera-Uruguay-e1782565895175-1200x740.webp",
+        "full_jpg": "https://media.redgol.cl/wp-content/uploads/sites/8/2026/06/27091101/Fernando-Muslera-Uruguay-e1782565895175-1200x740.jpg"
+      }
+    },
+    {
+      "id": "1439674",
+      "title": "Claudio Bravo explica lo que está pasando con Bielsa en Uruguay",
+      "link": "/mundial/claudio-bravo-explica-lo-que-esta-pasando-con-marcelo-bielsa-en-uruguay-ruido-e-incomodidad",
+      "url": "https://redgol.cl/mundial/claudio-bravo-explica-lo-que-esta-pasando-con-marcelo-bielsa-en-uruguay-ruido-e-incomodidad",
+      "label": "Mundial 2026",
+      "categories": [
+        {
+          "categoryId": "RDG65678",
+          "parentId": "",
+          "categoryName": "Mundial 2026",
+          "categorySlug": "mundial",
+          "categoryUrl": "/mundial",
+          "order": 0,
+          "categoryIcon": "",
+          "categoryDescription": "Últimas noticias de Mundial 2026. Entérate de todas las noticias relacionadas a Mundial 2026 en redgol.cl",
+          "active": true
+        }
+      ],
+      "section": "Mundial 2026",
+      "picture": "https://media.redgol.cl/wp-content/uploads/sites/8/2026/06/26103650/claudio-bravo-marcelo-bielsa-uruguay-mundial-200x200.webp",
+      "images": {
+        "wide": {
+          "big": "https://media.redgol.cl/wp-content/uploads/sites/8/2026/06/26103650/claudio-bravo-marcelo-bielsa-uruguay-mundial-740x416.webp",
+          "medium": "https://media.redgol.cl/wp-content/uploads/sites/8/2026/06/26103650/claudio-bravo-marcelo-bielsa-uruguay-mundial-490x275.webp",
+          "small": "https://media.redgol.cl/wp-content/uploads/sites/8/2026/06/26103650/claudio-bravo-marcelo-bielsa-uruguay-mundial-250x140.webp"
+        },
+        "classic": {
+          "big": "https://media.redgol.cl/wp-content/uploads/sites/8/2026/06/26103650/claudio-bravo-marcelo-bielsa-uruguay-mundial-714x535.webp",
+          "medium": "https://media.redgol.cl/wp-content/uploads/sites/8/2026/06/26103650/claudio-bravo-marcelo-bielsa-uruguay-mundial-470x352.webp",
+          "small": "https://media.redgol.cl/wp-content/uploads/sites/8/2026/06/26103650/claudio-bravo-marcelo-bielsa-uruguay-mundial-230x172.webp"
+        },
+        "square": {
+          "big": "https://media.redgol.cl/wp-content/uploads/sites/8/2026/06/26103650/claudio-bravo-marcelo-bielsa-uruguay-mundial-800x800.webp",
+          "medium": "https://media.redgol.cl/wp-content/uploads/sites/8/2026/06/26103650/claudio-bravo-marcelo-bielsa-uruguay-mundial-400x400.webp",
+          "small": "https://media.redgol.cl/wp-content/uploads/sites/8/2026/06/26103650/claudio-bravo-marcelo-bielsa-uruguay-mundial-200x200.webp"
+        },
+        "full": "https://media.redgol.cl/wp-content/uploads/sites/8/2026/06/26103650/claudio-bravo-marcelo-bielsa-uruguay-mundial-1200x740.webp",
+        "full_jpg": "https://media.redgol.cl/wp-content/uploads/sites/8/2026/06/26103650/claudio-bravo-marcelo-bielsa-uruguay-mundial-1200x740.jpg"
+      }
+    }
+  ]
+}

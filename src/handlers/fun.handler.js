@@ -18,23 +18,23 @@ function addToMediaCache(messageId, media, mimetype, from) {
     try {
         // Solo guardar si es imagen, gif o video
         if (!mimetype.includes('image') && !mimetype.includes('video')) return;
-        
+
         // Evitar duplicados
         const exists = mediaCache.find(item => item.messageId === messageId);
         if (exists) return;
-        
-        mediaCache.unshift({ 
-            messageId, 
-            media, 
-            mimetype, 
-            from, 
-            timestamp: Date.now() 
+
+        mediaCache.unshift({
+            messageId,
+            media,
+            mimetype,
+            from,
+            timestamp: Date.now()
         });
-        
+
         if (mediaCache.length > MAX_CACHE_SIZE) {
             mediaCache.pop();
         }
-        
+
         console.log(`(MediaCache) -> Nueva media guardada: ${mimetype.split('/')[0]} de ${from.split('@')[0]}`);
     } catch (err) {
         console.error('(MediaCache) -> Error al guardar:', err);
@@ -56,7 +56,7 @@ async function getVideoDuration(filePath) {
 async function handleSticker(client, message) {
     try {
         // Feedback visual inmediato
-        try { await message.react('⏳'); } catch (e) {}
+        try { await message.react('⏳'); } catch (e) { }
 
         let mediaMessage = message;
         let media = null;
@@ -81,7 +81,7 @@ async function handleSticker(client, message) {
             try {
                 console.log(`(Sticker) -> Descargando desde ${downloadSource}...`);
                 media = await mediaMessage.downloadMedia();
-                
+
                 if (!media) {
                     console.log('(Sticker) -> downloadMedia() retornó null, intentando con caché...');
                 }
@@ -123,7 +123,7 @@ async function handleSticker(client, message) {
             try {
                 const duration = await getVideoDuration(tempFilePath);
                 console.log(`(Sticker) -> Video duración: ${duration.toFixed(2)} segundos`);
-                
+
                 if (duration > MAX_VIDEO_DURATION) {
                     if (fs.existsSync(tempFilePath)) await fs.promises.unlink(tempFilePath);
                     return message.reply(`❌ El video es muy largo (${duration.toFixed(1)}s). Máximo ${MAX_VIDEO_DURATION} segundos para stickers.`);
@@ -166,7 +166,7 @@ async function handleSticker(client, message) {
                     ])
                     .toFormat('webp');
             }
-            
+
             command.save(outputFilePath);
         });
 
@@ -188,66 +188,100 @@ async function handleSticker(client, message) {
         const webpMedia = MessageMedia.fromFilePath(outputFilePath);
         await message.reply(webpMedia, undefined, { sendMediaAsSticker: true });
 
-        try { await message.react('✅'); } catch (e) {}
+        try { await message.react('✅'); } catch (e) { }
 
         // Limpieza
         try {
             if (fs.existsSync(tempFilePath)) await fs.promises.unlink(tempFilePath);
             if (fs.existsSync(outputFilePath)) await fs.promises.unlink(outputFilePath);
-        } catch (e) {}
+        } catch (e) { }
 
     } catch (err) {
         console.error('(Sticker) -> Error:', err);
-        try { await message.react('❌'); } catch (e) {}
+        try { await message.react('❌'); } catch (e) { }
         message.reply('❌ Error al crear sticker. Intenta con una imagen, GIF o video más corto.');
     }
 }
 
 // --- Lógica para Sonidos ---
 const soundMap = {
-    'mataron': { file: 'mataron.mp3', reaction: '😂' }, 'muerte': { file: 'muerte.mp3', reaction: '😂' },
-    'muerte2': { file: 'muerte2.mp3', reaction: '😂' }, 'muerte3': { file: 'muerte3.mp3', reaction: '😂' },
-    'muerte4': { file: 'muerte4.mp3', reaction: '😂' }, 'neme': { file: 'neme.mp3', reaction: '🏳️‍🌈' },
-    'risa': { file: 'merio.mp3', reaction: '😂' }, 'watona': { file: 'watona.mp3', reaction: '😂' },
-    'himno': { file: 'urss.mp3', reaction: '🇷🇺' }, 'aweonao': { file: 'aweonao.mp3', reaction: '😂' },
-    'mpenca': { file: 'muypenca.mp3', reaction: '😂' }, 'penca': { file: 'penca.mp3', reaction: '😂' },
-    'yamete': { file: 'Yamete.mp3', reaction: '😂' }, 'doler': { file: 'doler.mp3', reaction: '😂' },
-    'dolor': { file: 'doler.mp3', reaction: '🏳️‍🌈' }, 'tigre': { file: 'Tigre.mp3', reaction: '🐯' },
-    'promo': { file: 'Promo.mp3', reaction: '😂' }, 'rata': { file: 'Rata.mp3', reaction: '🐁' },
-    'rata2': { file: 'rata2.mp3', reaction: '🐁' }, 'caballo': { file: 'caballo.mp3', reaction: '🏳️‍🌈' },
-    'romeo': { file: 'romeo.mp3', reaction: '😂' }, 'idea': { file: 'idea.mp3', reaction: '😂' },
-    'chamba': { file: 'chamba.mp3', reaction: '😂' }, 'where': { file: 'where.mp3', reaction: '😂' },
-    'shesaid': { file: 'shesaid.mp3', reaction: '😂' }, 'viernes': { file: 'viernes.mp3', reaction: '😂' },
-    'lunes': { file: 'lunes.mp3', reaction: '😂' }, 'yque': { file: 'yqm.mp3', reaction: '😂' },
-    'rico': { file: 'rico.mp3', reaction: '😂' }, '11': { file: '11.mp3', reaction: '😂' },
-    'callate': { file: 'callate.mp3', reaction: '😂' }, 'callense': { file: 'callense.mp3', reaction: '😂' },
-    'cell': { file: 'cell.mp3', reaction: '😂' }, 'chaoctm': { file: 'chaoctm.mp3', reaction: '😂' },
-    'chipi': { file: 'chipi.mp3', reaction: '😂' }, 'aonde': { file: 'donde.mp3', reaction: '😂' },
-    'grillo': { file: 'grillo.mp3', reaction: '😂' }, 'material': { file: 'material.mp3', reaction: '😂' },
-    'miguel': { file: 'miguel.mp3', reaction: '😂' }, 'miraesawea': { file: 'miraesawea.mp3', reaction: '😂' },
-    'nohayplata': { file: 'nohayplata.mp3', reaction: '😂' }, 'oniichan': { file: 'onishan.mp3', reaction: '😂' },
-    'pago': { file: 'pago.mp3', reaction: '😂' }, 'pedro': { file: 'pedro.mp3', reaction: '😂' },
-    'protegeme': { file: 'protegeme.mp3', reaction: '😂' }, 'queeseso': { file: 'queeseso.mp3', reaction: '😂' },
-    'chistoso': { file: 'risakeso.mp3', reaction: '😂' }, 'marcho': { file: 'semarcho.mp3', reaction: '😂' },
-    'spiderman': { file: 'spiderman.mp3', reaction: '😂' }, 'suceso': { file: 'suceso.mp3', reaction: '😂' },
-    'tpillamos': { file: 'tepillamos.mp3', reaction: '😂' }, 'tranquilo': { file: 'tranquilo.mp3', reaction: '😂' },
-    'vamosc': { file: 'vamoschilenos.mp3', reaction: '😂' }, 'voluntad': { file: 'voluntad.mp3', reaction: '😂' },
-    'wenak': { file: 'wenacabros.mp3', reaction: '😂' }, 'whisper': { file: 'whisper.mp3', reaction: '😂' },
-    'whololo': { file: 'whololo.mp3', reaction: '😂' }, 'noinsultes': { file: 'noinsultes.mp3', reaction: '😂' },
-    'falso': { file: 'falso.mp3', reaction: '😂' }, 'frio': { file: 'frio.mp3', reaction: '😂' },
-    'yfuera': { file: 'yfuera.mp3', reaction: '😂' }, 'nocreo': { file: 'nocreo.mp3', reaction: '😂' },
-    'yabasta': { file: 'BUENO BASTA.mp3', reaction: '😂' }, 'quepaso': { file: 'quepaso.mp3', reaction: '😂' },
-    'nada': { file: 'nada.mp3', reaction: '😂' }, 'idea2': { file: 'idea2.mp3', reaction: '😂' },
-    'papito': { file: 'papito.mp3', reaction: '😂' }, 'jose': { file: 'jose.mp3', reaction: '😂' },
-    'ctm': { file: 'ctm.mp3', reaction: '😂' }, 'precio': { file: 'precio.mp3', reaction: '😂' },
-    'hermosilla': { file: 'Hermosilla.mp3', reaction: '😂' }, 'marino': { file: 'marino.mp3', reaction: '😂' },
-    'manualdeuso': { file: 'manualdeuso.mp3', reaction: '😂' }, 'estoy': { file: 'estoy.mp3', reaction: '😂' },
-    'pela': { file: 'pela.mp3', reaction: '😂' }, 'chao': { file: 'chao.mp3', reaction: '😂' },
-    'aurora': { file: 'aurora.mp3', reaction: '😂' }, 'rivera': { file: 'Rivera.mp3', reaction: '😂' },
-    'tomar': { file: 'Tomar.mp3', reaction: '😂' }, 'macabeo': { file: 'Macabeo.mp3', reaction: '😂' },
-    'piscola': { file: 'Piscola.mp3', reaction: '😂' }, 'tomar2': { file: 'Notomar.mp3', reaction: '😂' },
-    'venganza': { file: 'Venganza.mp3', reaction: '😂' }, 'weko': { file: 'weko.mp3', reaction: '🏳️‍🌈' },
-    'himnoe': { file: 'urssespañol.mp3', reaction: '🇷🇺' } ,  'onichan': { file: 'onishan.mp3', reaction: '😂' }
+    '11': { file: '11.mp3', reaction: '😂' },
+    'aonde': { file: 'donde.mp3', reaction: '😂' },
+    'aurora': { file: 'aurora.mp3', reaction: '😂' },
+    'aweonao': { file: 'aweonao.mp3', reaction: '😂' },
+    'caballo': { file: 'caballo.mp3', reaction: '🏳️‍🌈' },
+    'callate': { file: 'callate.mp3', reaction: '😂' },
+    'callense': { file: 'callense.mp3', reaction: '😂' },
+    'cell': { file: 'cell.mp3', reaction: '😂' },
+    'chao': { file: 'chao.mp3', reaction: '😂' },
+    'chaoctm': { file: 'chaoctm.mp3', reaction: '😂' },
+    'chipi': { file: 'chipi.mp3', reaction: '😂' },
+    'comunista1': { file: 'comunista1.mp3', reaction: '😂' },
+    'comunista2': { file: 'comunista2.mp3', reaction: '😂' },
+    'ctm': { file: 'ctm.mp3', reaction: '😂' },
+    'doler': { file: 'doler.mp3', reaction: '😂' },
+    'dolor': { file: 'doler.mp3', reaction: '🏳️‍🌈' },
+    'estoy': { file: 'estoy.mp3', reaction: '😂' },
+    'falso': { file: 'falso.mp3', reaction: '😂' },
+    'frio': { file: 'frio.mp3', reaction: '😂' },
+    'hermosilla': { file: 'Hermosilla.mp3', reaction: '😂' },
+    'himno': { file: 'urss.mp3', reaction: '🇷🇺' },
+    'himnoe': { file: 'urssespañol.mp3', reaction: '🇷🇺' },
+    'idea': { file: 'idea.mp3', reaction: '😂' },
+    'idea2': { file: 'idea2.mp3', reaction: '😂' },
+    'jose': { file: 'jose.mp3', reaction: '😂' },
+    'jueves': { file: 'jueves.mp3', reaction: '😂' },
+    'lunes': { file: 'lunes.mp3', reaction: '😂' },
+    'macabeo': { file: 'Macabeo.mp3', reaction: '😂' },
+    'manualdeuso': { file: 'manualdeuso.mp3', reaction: '😂' },
+    'marino': { file: 'marino.mp3', reaction: '😂' },
+    'martes': { file: ['Martes.mp3', 'Martes1.mp3'], reaction: '😂' },
+    'mataron': { file: 'mataron.mp3', reaction: '😂' },
+    'material': { file: 'material.mp3', reaction: '😂' },
+    'miercoles': { file: 'miercoles.mp3', reaction: '😂' },
+    'mpenca': { file: 'muypenca.mp3', reaction: '😂' },
+    'muerte': { file: 'muerte.mp3', reaction: '😂' },
+    'muerte2': { file: 'muerte2.mp3', reaction: '😂' },
+    'muerte3': { file: 'muerte3.mp3', reaction: '😂' },
+    'muerte4': { file: 'muerte4.mp3', reaction: '😂' },
+    'muerte5': { file: 'Muerte5.mp3', reaction: '😂' },
+    'nada': { file: 'nada.mp3', reaction: '😂' },
+    'neme': { file: 'neme.mp3', reaction: '🏳️‍🌈' },
+    'nocreo': { file: 'nocreo.mp3', reaction: '😂' },
+    'nohayplata': { file: 'nohayplata.mp3', reaction: '😂' },
+    'noinsultes': { file: 'noinsultes.mp3', reaction: '😂' },
+    'onichan': { file: 'onishan.mp3', reaction: '😂' },
+    'oniichan': { file: 'onishan.mp3', reaction: '😂' },
+    'pago': { file: 'pago.mp3', reaction: '😂' },
+    'papito': { file: 'papito.mp3', reaction: '😂' },
+    'pedro': { file: 'pedro.mp3', reaction: '😂' },
+    'pela': { file: 'pela.mp3', reaction: '😂' },
+    'piscola': { file: 'Piscola.mp3', reaction: '😂' },
+    'precio': { file: 'precio.mp3', reaction: '😂' },
+    'promo': { file: 'Promo.mp3', reaction: '😂' },
+    'queeseso': { file: 'queeseso.mp3', reaction: '😂' },
+    'quepaso': { file: 'quepaso.mp3', reaction: '😂' },
+    'rata': { file: 'Rata.mp3', reaction: '🐁' },
+    'rata2': { file: 'rata2.mp3', reaction: '🐁' },
+    'rico': { file: 'rico.mp3', reaction: '😂' },
+    'rivera': { file: 'Rivera.mp3', reaction: '😂' },
+    'romeo': { file: 'romeo.mp3', reaction: '😂' },
+    'shesaid': { file: 'shesaid.mp3', reaction: '😂' },
+    'suceso': { file: 'suceso.mp3', reaction: '😂' },
+    'tigre': { file: 'Tigre.mp3', reaction: '🐯' },
+    'tomar': { file: 'Tomar.mp3', reaction: '😂' },
+    'tomar2': { file: 'Notomar.mp3', reaction: '😂' },
+    'venganza': { file: 'Venganza.mp3', reaction: '😂' },
+    'viernes': { file: 'viernes.mp3', reaction: '😂' },
+    'viernes2': { file: 'viernes2.mp3', reaction: '😂' },
+    'watona': { file: 'watona.mp3', reaction: '😂' },
+    'weko': { file: 'weko.mp3', reaction: '🏳️‍🌈' },
+    'vaquero': { file: 'weko_malo.mp3', reaction: '🏳️‍🌈' },
+    'where': { file: 'where.mp3', reaction: '😂' },
+    'whisper': { file: 'whisper.mp3', reaction: '😂' },
+    'whololo': { file: 'whololo.mp3', reaction: '😂' },
+    'yamete': { file: 'Yamete.mp3', reaction: '😂' },
+    'yque': { file: 'yqm.mp3', reaction: '😂' }
 };
 
 const soundList = Object.keys(soundMap);
@@ -262,27 +296,28 @@ async function handleSound(client, message, command) {
     const soundInfo = soundMap[command];
     if (!soundInfo) return;
 
-    const audioPath = path.join(__dirname, '..', '..', 'mp3', soundInfo.file);
+    const files = Array.isArray(soundInfo.file) ? soundInfo.file : [soundInfo.file];
 
     try {
-        // Verificar existencia de forma asíncrona (no bloqueante)
-        await fs.promises.access(audioPath);
+        await new Promise(resolve => setTimeout(resolve, 500)); // Pausa de 0.5s
+        await message.react(soundInfo.reaction);
+    } catch (reactionError) {
+        // Ignoramos el error cosmético
+    }
 
-        // Intentar reaccionar, pero ignorar si falla
+    for (const file of files) {
+        const audioPath = path.join(__dirname, '..', '..', 'mp3', file);
         try {
-            await new Promise(resolve => setTimeout(resolve, 500)); // Pausa de 0.5s
-            await message.react(soundInfo.reaction);
-        } catch (reactionError) {
-            // Ignoramos el error cosmético
-        }
-        const media = MessageMedia.fromFilePath(audioPath);
-        await message.reply(media);
-    } catch (error) {
-        if (error.code === 'ENOENT') {
-            message.reply(`No se encontró el archivo de audio para "!${command}".`);
-            console.error(`Archivo no encontrado: ${audioPath}`);
-        } else {
-            console.error(`Error en handleSound:`, error);
+            await fs.promises.access(audioPath);
+            const media = MessageMedia.fromFilePath(audioPath);
+            await message.reply(media);
+        } catch (error) {
+            if (error.code === 'ENOENT') {
+                message.reply(`No se encontró el archivo de audio para "!${command}".`);
+                console.error(`Archivo no encontrado: ${audioPath}`);
+            } else {
+                console.error(`Error en handleSound:`, error);
+            }
         }
     }
 }
@@ -293,16 +328,16 @@ function getSoundCommands() {
 
 async function handleJoke(client, message) {
     const folderPath = path.join(__dirname, '..', '..', 'chistes');
-    
+
     try {
         // Leer directorio de forma asíncrona
         const files = await fs.promises.readdir(folderPath);
-        
+
         if (files.length === 0) return message.reply("No hay chistes para contar.");
-        
+
         const randomIndex = Math.floor(Math.random() * files.length);
         const audioPath = path.join(folderPath, files[randomIndex]);
-        
+
         const media = MessageMedia.fromFilePath(audioPath);
         await message.reply(media);
     } catch (error) {
@@ -393,7 +428,7 @@ let usedPhrases = [];
 
 function obtenerFraseAleatoria() {
     let randomIndex = Math.floor(Math.random() * frases.length);
-    
+
     while (usedPhrases.includes(randomIndex) && usedPhrases.length < frases.length) {
         randomIndex = Math.floor(Math.random() * frases.length);
     }
@@ -408,12 +443,12 @@ async function reactAndReplyWithMention(message, text, reaction, separator = ', 
     try {
         // Obtener el ID del usuario de manera más directa
         const userId = message.author || message.from;
-        
+
         if (!userId) {
             console.error("No se pudo obtener el ID del usuario");
             return message.reply(text);
         }
-        
+
         // Intentar reaccionar, pero ignorar si falla
         try {
             await new Promise(resolve => setTimeout(resolve, 500));
@@ -421,10 +456,10 @@ async function reactAndReplyWithMention(message, text, reaction, separator = ', 
         } catch (reactionError) {
             // Ignoramos el error cosmético
         }
-        
+
         // Extraer solo el número de usuario (antes del @)
         const userNumber = userId.split('@')[0];
-        
+
         await message.reply(`${text}${separator}@${userNumber}`, undefined, {
             mentions: [userId]
         });
@@ -455,7 +490,7 @@ async function handleUrlAnalysis(client, message) {
 
         // 2. Extraer la URL de forma robusta
         let urlAAnalizar = message.body.replace(/^[!/]analiza/i, '').trim();
-        
+
         if (!urlAAnalizar) {
             await message.react('❓');
             return message.reply('🤖 Te faltó poner la página. Ejemplo: *!analiza starken.cl*');
@@ -472,7 +507,7 @@ async function handleUrlAnalysis(client, message) {
         // 4. Ejecutar el análisis con await estricto
         const reporte = await securityService.analizarPeligroUrlPro(urlAAnalizar);
         await message.reply(reporte);
-        
+
         // 5. Indicar éxito con reacción
         await message.react('✅');
 

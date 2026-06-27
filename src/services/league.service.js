@@ -30,10 +30,10 @@ async function getLeagueTable() {
     }
 
     try {
-        console.log(`(Servicio Liga) -> Ejecutando tabla.py...`);
-        const result = await pythonService.executeScript('tabla.py');
+        console.log(`(Servicio Liga) -> Ejecutando table.py...`);
+        const result = await pythonService.executeScript('table.py');
         if (result.code !== 0) {
-            throw new Error(result.stderr || 'Error al ejecutar tabla.py');
+            throw new Error(result.stderr || 'Error al ejecutar table.py');
         }
         tableCache = result.stdout;
         lastTableUpdate = Date.now();
@@ -51,11 +51,11 @@ async function getLeagueUpcomingMatches() {
     }
 
     try {
-        console.log(`(Servicio Liga) -> Ejecutando proxpar.py...`);
-        // Aumentamos el timeout a 60s porque Selenium puede ser lento
-        const result = await pythonService.executeScript('proxpar.py', [], { timeout: 60000 });
+        console.log(`(Servicio Liga) -> Ejecutando redgol_partidos.py...`);
+        // Reducimos timeout ya que usamos requests y no selenium
+        const result = await pythonService.executeScript('redgol_partidos.py', [], { timeout: 30000 });
         if (result.code !== 0) {
-            throw new Error(result.stderr || 'Error al ejecutar proxpar.py');
+            throw new Error(result.stderr || 'Error al ejecutar redgol_partidos.py');
         }
         upcomingCache = result.stdout;
         lastUpcomingUpdate = Date.now();

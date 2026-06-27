@@ -40,6 +40,8 @@ client.on('qr', qr => {
 
 client.on('ready', () => {
     console.log('✅ ¡Bot conectado y listo!');
+    const { startLunesVideoScheduler } = require('./src/services/schedule.service');
+    startLunesVideoScheduler(client);
 });
 
 client.on('auth_failure', msg => {

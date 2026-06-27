@@ -16,82 +16,6 @@ const AI_MODEL = "gemini-1.5-flash";
 // User-Agent compartido para todas las peticiones
 const DEFAULT_UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36';
 
-async function handleWikiSearch(message) {
-    // 1. Extracción robusta con Regex
-    const searchTerm = message.body.replace(/^([!/])wiki\s*/i, '').trim();
-
-    if (!searchTerm) {
-        return "Por favor, escribe un término para buscar en Wikipedia. Ejemplo: `!wiki Chile`";
-    }
-
-    try {
-        await message.react('⏳');
-        const wikiHeaders = { 'User-Agent': 'Botillero/2.0 (WhatsApp Bot; contacto@botillero.cl)' };
-        const response = await axios.get('https://es.wikipedia.org/w/api.php', {
-            params: {
-                action: 'query',
-                format: 'json',
-                list: 'search',
-                srsearch: searchTerm,
-                utf8: 1,
-                srlimit: 3,
-            },
-            headers: wikiHeaders,
-            timeout: 10000
-        });
-
-        if (response.data.query.search.length === 0) {
-            await message.react('❌');
-            return `No se encontraron resultados en Wikipedia para "${searchTerm}".`;
-        }
-
-        let replyMessage = `Resultados de Wikipedia para *"${searchTerm}"*:\n\n`;
-        for (const result of response.data.query.search) {
-            const articleLink = `https://es.wikipedia.org/wiki/${encodeURIComponent(result.title)}`;
-            const cleanSnippet = result.snippet.replace(/<span class="searchmatch">/g, '*').replace(/<\/span>/g, '*');
-            
-            replyMessage += `*${result.title}*\n`;
-            replyMessage += `_${cleanSnippet}..._\n`;
-            replyMessage += `${articleLink}\n\n`;
-        }
-        
-        // Intentar obtener la imagen del primer resultado para enviarla con el texto
-        try {
-            const firstTitle = response.data.query.search[0].title;
-            const imageResponse = await axios.get('https://es.wikipedia.org/w/api.php', {
-                params: {
-                    action: 'query',
-                    prop: 'pageimages',
-                    titles: firstTitle,
-                    pithumbsize: 600,
-                    format: 'json'
-                },
-                headers: wikiHeaders,
-                timeout: 10000
-            });
-
-            const pages = imageResponse.data.query.pages;
-            const pageId = Object.keys(pages)[0];
-            
-            if (pages[pageId].thumbnail && pages[pageId].thumbnail.source) {
-                const media = await MessageMedia.fromUrl(pages[pageId].thumbnail.source);
-                await message.reply(media, undefined, { caption: replyMessage });
-                await message.react('✅');
-                return null; // Retornamos null para que command.handler no envíe el texto duplicado
-            }
-        } catch (imgError) {
-            console.error('Error al obtener imagen de Wikipedia:', imgError);
-        }
-
-        await message.react('✅');
-        return replyMessage;
-
-    } catch (error) {
-        console.error('Error en la búsqueda de Wikipedia:', error);
-        await message.react('❌');
-        return 'Ocurrió un error al buscar en Wikipedia.';
-    }
-}
 
 async function handleNews(message) {
     try {
@@ -113,46 +37,6 @@ async function handleNews(message) {
     }
 }
 
-async function handleGoogleSearch(message) {
-    // 1. Extracción robusta con Regex
-    const searchTerm = message.body.replace(/^([!/])g\s*/i, '').trim();
-
-    if (!searchTerm) {
-        return "Escribe algo para buscar. Ejemplo: `!g gatitos`";
-    }
-    
-    try {
-        await message.react('🔍');
-        
-        if (!genAI) return "❌ No se puede realizar la búsqueda: API Key no configurada.";
-
-        // Verificar rate limit antes de consultar la IA
-        const limit = rateLimiter.tryAcquire();
-        if (!limit.success) {
-            await message.react('⏳');
-            return rateLimiter.getCooldownMessage(limit.timeLeft);
-        }
-
-        const model = genAI.getGenerativeModel({ model: AI_MODEL });
-        const prompt = `Actúa como un motor de búsqueda experto. Busca información actualizada sobre: "${searchTerm}". 
-        Proporciona un resumen claro, puntos clave y fuentes si es posible. Responde en español chileno informal.`;
-
-        const result = await model.generateContent(prompt);
-        const searchResponse = result.response.text();
-
-        if (!searchResponse) {
-            await message.react('❌');
-            return `No pude encontrar resultados útiles para *"${searchTerm}"*.`;
-        }
-
-        await message.react('✅');
-        return searchResponse;
-    } catch (error) {
-        console.error("Error en búsqueda IA:", error.message);
-        await message.react('❌');
-        return "Hubo un error al realizar la búsqueda. Intenta de nuevo.";
-    }
-}
 
 // ─────────────────────────────────────────────
 // BÚSQUEDA DE OFERTAS (SoloTodo + Knasta + Descuentos Rata)
@@ -205,8 +89,6 @@ async function handleDealsSearch(message) {
 }
 
 module.exports = {
-    handleWikiSearch,
     handleNews,
-    handleGoogleSearch,
     handleDealsSearch
 };

@@ -20,18 +20,14 @@ function getMainMenu() {
 💊 \`!far [comuna]\` → Farmacias de turno
 🚇 \`!metro\` → Estado del Metro de Santiago
 🌋 \`!sismos\` → Últimos sismos reportados
-🚌 \`!bus [paradero]\` → Llegada de micros RED
 ⚡ \`!sec\` / \`!secrm\` → Cortes de luz (nacional/RM)
 💳 \`!transbank\` → Estado servicios Transbank
-🏦 \`!bancos\` → Estado sitios web bancarios
 📝 \`!recap\` → Resumir últimos mensajes del grupo
 🔧 \`!ping\` → Estado del sistema/bot
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 🔍 *BÚSQUEDAS E INFORMACIÓN*
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-📚 \`!wiki [texto]\` → Buscar en Wikipedia
-🔎 \`!g [texto]\` → Buscar en Google
 📰 \`!noticias\` → Titulares de última hora
 🚗 \`!pat [patente]\` → Info de vehículo
 📱 \`!num [teléfono]\` → Info de número
@@ -43,6 +39,7 @@ function getMainMenu() {
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ⚽ *FÚTBOL Y DEPORTES*
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🌍 \`!mundial\` → Partidos del Mundial
 🏆 \`!tabla\` → Tabla liga chilena
 📅 \`!partidos\` → Resumen de la fecha
 📆 \`!prox\` → Próximos partidos liga

@@ -139,8 +139,8 @@ const commandAliases = {
 const commandMap = {
     // Liga/Deportes
     'tabla': async (client, msg) => {
-        await msg.reply('📊 Buscando la tabla de posiciones en la ANFP, dame un segundo...');
-        return services.league.getCopaLigaGroups();
+        await msg.reply('📊 Buscando la tabla de posiciones, dame un segundo...');
+        return services.league.getLeagueTable();
     },
     'grupos': async (client, msg) => {
         await msg.reply('📊 Buscando la tabla de posiciones en la ANFP, dame un segundo...');
@@ -170,7 +170,6 @@ const commandMap = {
     'chino': (client, msg) => handleHoroscopeCommand(client, msg, services.horoscope.getChineseHoroscope.bind(services.horoscope)),
     'trstatus': () => services.transbank.getTransbankStatus(),
     'transbank': () => handleTransbankWithCooldown(),
-    'bancos': (_, msg) => services.utility.handleBancos(msg),
     
     // Sistema y utilidades
     'ping': (_, msg) => services.system.handlePing(msg),
@@ -178,7 +177,6 @@ const commandMap = {
     'far': (_, msg) => services.utility.handleFarmacias(msg),
     'clima': (_, msg) => services.utility.handleClima(msg),
     'sismos': () => services.utility.handleSismos(),
-    'bus': (client, msg) => services.utility.handleBus(msg, client),
     'sec': (_, msg) => services.utility.handleSec(msg),
     'menu': async (_, msg) => {
         const { getMainMenu } = require('./menu.handler');
@@ -187,9 +185,7 @@ const commandMap = {
     'recap': (_, msg) => services.utility.handleRecap(msg),
     
     // Búsquedas
-    'wiki': (_, msg) => services.search.handleWikiSearch(msg),
     'noticias': (_, msg) => services.search.handleNews(msg),
-    'g': (_, msg) => services.search.handleGoogleSearch(msg),
     'oferta': (_, msg) => services.search.handleDealsSearch(msg),
     'streaming': (_, msg) => services.utility.handleStreaming(msg),
     'analiza': (client, msg) => services.fun.handleUrlAnalysis(client, msg),
