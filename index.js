@@ -29,7 +29,8 @@ const client = new Client({
         clientId: botConfig.authStrategy.clientId,
         dataPath: botConfig.authStrategy.dataPath
     }),
-    puppeteer: botConfig.puppeteer
+    puppeteer: botConfig.puppeteer,
+    ffmpegPath: 'C:\\FFmpeg\\bin\\ffmpeg.exe'
 });
 
 // --- EVENTOS DE CONEXIÓN ---

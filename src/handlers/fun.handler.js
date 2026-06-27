@@ -5,6 +5,8 @@ const fs = require('fs');
 const path = require('path');
 const moment = require('moment-timezone');
 const ffmpeg = require('fluent-ffmpeg');
+ffmpeg.setFfmpegPath('C:\\FFmpeg\\bin\\ffmpeg.exe');
+ffmpeg.setFfprobePath('C:\\FFmpeg\\bin\\ffprobe.exe');
 const { MessageMedia } = require('whatsapp-web.js');
 const securityService = require('../utils/securityService');
 
@@ -140,28 +142,27 @@ async function handleSticker(client, message) {
                 .on('end', () => resolve());
 
             if (isAnimated) {
-                // Configuración optimizada para animados (evita superposición de frames)
+                // Configuración optimizada para animados
                 command
                     .inputOptions(['-t 6'])  // Máximo 6 segundos
                     .outputOptions([
                         '-vcodec libwebp',
-                        // CORRECCIÓN: Scale con pad para centrar y evitar artefactos
-                        '-vf scale=512:512:force_original_aspect_ratio=decrease,pad=512:512:(ow-iw)/2:(oh-ih)/2:color=0x00000000,fps=10,setsar=1',
+                        '-vf scale=512:512:force_original_aspect_ratio=decrease,format=rgba,pad=512:512:(ow-iw)/2:(oh-ih)/2:color=\'#00000000\',fps=10',
                         '-loop 0',
                         '-preset default',
-                        '-lossless 0',  // No usar lossless (muy pesado)
-                        '-quality 75',  // Calidad balanceada
-                        '-compression_level 4',  // Compresión media
-                        '-an',  // Sin audio
-                        '-metadata:s:v:0 alpha_mode="1"'  // Soporte de transparencia
+                        '-lossless 0',
+                        '-quality 75',
+                        '-compression_level 4',
+                        '-an',
+                        '-vsync 0'
                     ])
                     .toFormat('webp');
             } else {
-                // Configuración SIMPLE para estáticos
+                // Configuración para estáticos
                 command
                     .outputOptions([
                         '-vcodec libwebp',
-                        '-vf scale=512:512:force_original_aspect_ratio=decrease,pad=512:512:(ow-iw)/2:(oh-ih)/2:color=0x00000000',
+                        '-vf scale=512:512:force_original_aspect_ratio=decrease,format=rgba,pad=512:512:(ow-iw)/2:(oh-ih)/2:color=\'#00000000\'',
                         '-qscale 75'
                     ])
                     .toFormat('webp');
