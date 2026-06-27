@@ -51,7 +51,7 @@ async function generateMetroAdvice(metroStatus) {
     }
 
     try {
-        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+        const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
         const prompt = `
 Eres "Botillero", un asistente inteligente de Metro. Analiza el siguiente estado del Metro de Santiago y da CONSEJO CORTO y PRÁCTICO.

@@ -7,7 +7,7 @@ const moment = require('moment-timezone');
 const config = require('../config');
 const { generateWhatsAppMessage } = require('../utils/secService');
 const { getRandomInfo, getStreamingTrending } = require('../services/utility.service');
-const { getFeriadosResponse, generateConversationSummary } = require('../services/ai.service');
+const { generateConversationSummary } = require('../services/ai.service');
 const { getBanksStatus } = require('../services/bank.service');
 const messageBuffer = require('../services/message-buffer.service');
 const rateLimiter = require('../services/rate-limiter.service');
@@ -19,44 +19,18 @@ const FARMACIAS_CACHE_TTL = 60 * 60 * 1000; // 1 hora de caché
 
 async function handleFeriados(message) {
     try {
-        const userQuery = message ? message.body.replace(/^([!/])feriados\s*/i, '').trim() : '';
         if (message) await message.react('🇨🇱');
-
-        // Volvemos a scrapear feriados.cl ya que la API del gobierno está inestable
-        const { data } = await axios.get('https://www.feriados.cl', {
-            headers: { 
-                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36' 
-            }
-        });
-
-        const $ = cheerio.load(data);
-        const feriadosData = [];
-
-        // Extraemos la tabla de feriados.cl
-        // Estructura usual: Fecha | Nombre | Tipo/Irrenunciable
-        $('table tbody tr').each((i, el) => {
-            const cols = $(el).find('td');
-            if (cols.length > 1) {
-                const fechaRaw = $(cols[0]).text().trim(); // Ej: "18 de Septiembre (Miércoles)"
-                const nombre = $(cols[1]).text().trim();
-                const tipo = $(cols[2]).text().trim();
-                
-                if (fechaRaw && nombre) {
-                    feriadosData.push({
-                        fecha: fechaRaw,
-                        nombre: nombre,
-                        irrenunciable: tipo.toLowerCase().includes('irrenunciable') ? "1" : "0"
-                    });
-                }
-            }
-        });
-
-        // Delegamos el razonamiento y formato a Gemini
-        return await getFeriadosResponse(userQuery, feriadosData);
-
+        const pythonService = require('../services/python.service');
+        const result = await pythonService.executeScript('feriados.py');
+        
+        if (result.code !== 0) {
+            console.error('Error al ejecutar feriados.py:', result.stderr);
+            return 'Ocurrió un error al obtener los feriados.';
+        }
+        return result.stdout;
     } catch (error) {
         console.error('Error al obtener los feriados:', error.message);
-        return 'Ocurrió un error al leer feriados.cl. Intenta más tarde.';
+        return 'Ocurrió un error al obtener los feriados. Intenta más tarde.';
     }
 }
 
