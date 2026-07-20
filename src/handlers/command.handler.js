@@ -98,9 +98,15 @@ async function handleStickerToImage(client, message) {
 
     try {
         const stickerMedia = await quotedMsg.downloadMedia();
-        // Enviamos con sendAsPhoto:true para que llegue como imagen visible, no como sticker
-        await message.reply(stickerMedia, undefined, {
-            sendAsPhoto: true,
+
+        // Convertir WebP a PNG usando sharp para que llegue como imagen visible
+        const sharp = require('sharp');
+        const webpBuffer = Buffer.from(stickerMedia.data, 'base64');
+        const pngBuffer = await sharp(webpBuffer).png().toBuffer();
+        const pngBase64 = pngBuffer.toString('base64');
+
+        const imageMedia = new MessageMedia('image/png', pngBase64, 'sticker.png');
+        await client.sendMessage(message.from, imageMedia, {
             caption: '🖼️ ¡Aquí tienes tu sticker como imagen!'
         });
         return null;
@@ -150,10 +156,6 @@ const commandMap = {
     'partidos': () => services.league.getMatchDaySummary(),
     'tclasi': () => services.nationalTeam.getQualifiersTable(),
     'clasi': () => services.nationalTeam.getQualifiersMatches(),
-    'mundial': async (client, msg) => {
-        await msg.reply('🏆 Buscando partidos del Mundial, dame unos segundos...');
-        return services.nationalTeam.getMundialMatches();
-    },
     'liga': async (client, msg) => {
         await msg.reply('⚽ Consultando el VAR de la Copa de la Liga, dame un segundito...');
         return services.league.getCopaLigaMatches();
@@ -183,6 +185,7 @@ const commandMap = {
         return getMainMenu();
     },
     'recap': (_, msg) => services.utility.handleRecap(msg),
+    'resumen': (_, msg) => services.utility.handleRecap(msg),
     
     // Búsquedas
     'noticias': (_, msg) => services.search.handleNews(msg),
@@ -205,7 +208,6 @@ const commandMap = {
     // IA y ayuda
     'ayuda': (_, msg) => services.ai.handleAiHelp(msg),
     'ia': (_, msg) => services.ai.handleLocalIA(msg),
-    'resumen': (_, msg) => services.ai.handleSummary(msg),
     
     // Búsquedas personales
     'num': (client, msg) => services.personalSearch.handlePhoneSearch(client, msg),

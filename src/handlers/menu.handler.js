@@ -31,7 +31,6 @@ function getMainMenu() {
 📰 \`!noticias\` → Titulares de última hora
 🚗 \`!pat [patente]\` → Info de vehículo
 📱 \`!num [teléfono]\` → Info de número
-📝 \`!resumen [url]\` → Resumir web con IA
 🎲 \`!random\` → Dato curioso aleatorio
 🍿 \`!streaming\` → Trending en Netflix, Disney+, HBO
 🤝 \`!ayuda [duda]\` → Asistente IA
@@ -39,7 +38,6 @@ function getMainMenu() {
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ⚽ *FÚTBOL Y DEPORTES*
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-🌍 \`!mundial\` → Partidos del Mundial
 🏆 \`!tabla\` → Tabla liga chilena
 📅 \`!partidos\` → Resumen de la fecha
 📆 \`!prox\` → Próximos partidos liga

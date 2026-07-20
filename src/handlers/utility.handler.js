@@ -186,6 +186,10 @@ async function handleStreaming(message) {
 }
 
 
+// --- Cooldown propio para !recap (separado del rate limiter global de IA) ---
+let lastRecapTimestamp = 0;
+const RECAP_COOLDOWN_SECONDS = 15;
+
 // --- Lógica para !recap (Resumen de conversación) ---
 async function handleRecap(message) {
     try {
@@ -204,38 +208,56 @@ async function handleRecap(message) {
             return `⚠️ Necesito al menos 5 mensajes para hacer un resumen. Por ahora solo tengo ${messages.length}.`;
         }
         
-        // Verificar rate limit de Gemini
-        const limit = rateLimiter.tryAcquire();
-        if (!limit.success) {
+        // Cooldown propio para recap (no compartido con !ia)
+        const now = Date.now();
+        const timeSinceLastRecap = (now - lastRecapTimestamp) / 1000;
+        if (timeSinceLastRecap < RECAP_COOLDOWN_SECONDS) {
+            const timeLeft = Math.ceil(RECAP_COOLDOWN_SECONDS - timeSinceLastRecap);
             await message.react('⏳');
-            return rateLimiter.getCooldownMessage(limit.timeLeft);
+            return `⏳ El resumen está en cooldown. Espera ${timeLeft} segundo${timeLeft > 1 ? 's' : ''}.`;
         }
+        lastRecapTimestamp = now;
         
         await message.react('🤖');
         
         // Generar resumen con IA
+        console.log(`(Recap) -> Generando resumen para ${groupId} con ${messages.length} mensajes...`);
         const summary = await generateConversationSummary(messages);
+        
+        if (!summary || summary.trim().length === 0) {
+            console.error('(Recap) -> El servicio de IA retornó un resumen vacío');
+            await message.react('❌');
+            return '❌ La IA no pudo generar un resumen. Intenta de nuevo.';
+        }
         
         await message.react('✅');
         
         // Reconstruir los JIDs correctos (numero@c.us) para que las menciones funcionen
         const uniqueUserIds = [...new Set(messages.map(m => `${m.userId}@c.us`).filter(Boolean))];
         
-        const recapMessage = `📝 *Resumen de los últimos ${messages.length} mensajes:*\n\n${summary}\n\n_Generado por Gemini 1.5 Flash_`;
+        const recapMessage = `📝 *Resumen de los últimos ${messages.length} mensajes:*\n\n${summary}\n\n_Generado por Gemini 2.5 Flash_`;
         
         // Enviar con menciones si hay usuarios
         if (uniqueUserIds.length > 0) {
             await message.reply(recapMessage, undefined, {
                 mentions: uniqueUserIds
             });
-            return; // No retornar string, ya enviamos el mensaje
+            return null; // Ya enviamos el mensaje
         } else {
             return recapMessage;
         }
         
     } catch (error) {
-        console.error('Error en handleRecap:', error);
-        await message.react('❌');
+        console.error('(Recap) -> Error:', error.message || error);
+        try { await message.react('❌'); } catch (e) { }
+        
+        // Mensajes de error más descriptivos
+        if (error.message?.includes('API Key')) {
+            return '❌ La API Key de Gemini no está configurada. Contacta al admin.';
+        }
+        if (error.message?.includes('404') || error.message?.includes('not found')) {
+            return '❌ El modelo de IA no está disponible. Contacta al admin.';
+        }
         return '❌ Hubo un error al generar el resumen. Intenta de nuevo.';
     }
 }
@@ -269,7 +291,7 @@ function handleMenu() {
 📰 \`!noticias\` → Titulares de última hora
 🚗 \`!pat [patente]\` → Info de vehículo
 📱 \`!num [teléfono]\` → Info de número
-📝 \`!resumen [url]\` → Resumir web con IA
+📝 \`!resumen\` → Resumen de la conversación del grupo
 🎲 \`!random\` → Dato curioso aleatorio
 🍿 \`!streaming\` → Trending en Netflix, Disney+, HBO
 🤝 \`!ayuda [duda]\` → Asistente IA
@@ -277,7 +299,6 @@ function handleMenu() {
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ⚽ *FÚTBOL Y DEPORTES*
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-🌍 \`!mundial\` → Partidos del Mundial
 🏆 \`!tabla\` → Tabla liga chilena
 📅 \`!partidos\` → Resumen de la fecha
 📆 \`!prox\` → Próximos partidos liga

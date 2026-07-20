@@ -94,6 +94,7 @@ async function generateWhatsAppMessage(regionFilter = null, highImpactThreshold 
 function generateMessageFromData(data, regionFilter, highImpactThreshold) {
     const regionData = {};
     let totalAffected = 0;
+    const watermark = '*Enviado por BoTillero*\n\n';
 
     data.forEach(entry => {
         const { NOMBRE_REGION, NOMBRE_COMUNA, CLIENTES_AFECTADOS } = entry;
@@ -111,11 +112,11 @@ function generateMessageFromData(data, regionFilter, highImpactThreshold) {
     });
 
     const reportTime = new Date().toLocaleString('es-CL', { timeZone: 'America/Santiago' });
-    let message = `💡🇨🇱 *Clientes Sin Suministro Eléctrico*\nTotal Nacional: *${totalAffected.toLocaleString('es-CL')}* afectados.\n_${reportTime}_\n\n`;
+    let message = `${watermark}💡🇨🇱 *Clientes Sin Suministro Eléctrico*\nTotal Nacional: *${totalAffected.toLocaleString('es-CL')}* afectados.\n_${reportTime}_\n\n`;
 
     if (regionFilter && regionData[Object.keys(regionData)[0]]) {
         const regionName = Object.keys(regionData)[0];
-        message = `💡 *Detalle para la Región ${regionName}*\nTotal Regional: *${regionData[regionName].total_clients.toLocaleString('es-CL')}* afectados.\n\n`;
+        message = `${watermark}💡 *Detalle para la Región ${regionName}*\nTotal Regional: *${regionData[regionName].total_clients.toLocaleString('es-CL')}* afectados.\n\n`;
         const comunas = Object.entries(regionData[regionName].comunas).sort((a, b) => b[1] - a[1]);
         
         comunas.forEach(([comuna, clients]) => {
