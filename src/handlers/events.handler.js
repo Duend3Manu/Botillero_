@@ -59,7 +59,6 @@ async function handleMessageUpdate(client, message) {
     const originalBody = await getOriginalMessage(msgKey);
 
     if (originalBody && originalBody !== message.body) {
-        const chat = await message.getChat();
         const contact = await message.getContact();
         const senderName = contact.pushname || contact.name || contact.number || "Usuario";
 
@@ -85,7 +84,6 @@ async function handleMessageRevoke(client, after, before) {
     const originalBody = await getOriginalMessage(msgKey);
 
     if (originalBody) {
-        const chat = await before.getChat();
         const contact = await before.getContact();
         const senderName = contact.pushname || contact.name || contact.number || "Usuario";
 

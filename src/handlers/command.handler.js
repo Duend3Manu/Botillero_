@@ -219,7 +219,6 @@ const commandMap = {
     
     // FAP y grupos
     'fap': (client, msg) => services.fap.handleFapSearch(client, msg),
-    'todos': (client, msg) => services.group.handleTagAll(client, msg),
     
     // Poringa / Scraper de imágenes
     'poringa': (client, msg) => services.poringa.handlePoringaSearch(client, msg),

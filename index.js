@@ -30,6 +30,7 @@ const client = new Client({
         dataPath: botConfig.authStrategy.dataPath
     }),
     puppeteer: botConfig.puppeteer,
+    webVersionCache: botConfig.webVersionCache,
     ffmpegPath: 'C:\\FFmpeg\\bin\\ffmpeg.exe'
 });
 

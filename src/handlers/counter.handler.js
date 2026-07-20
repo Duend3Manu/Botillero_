@@ -70,12 +70,10 @@ function getMedal(pos) {
 // -----------------------------------------------------------------------
 async function handleContador(client, message) {
     try {
-        const chat = await message.getChat();
-        if (!chat.isGroup) {
+        const groupId = message.from;
+        if (!groupId || !groupId.endsWith('@g.us')) {
             return '⚠️ Este comando solo funciona en grupos.';
         }
-
-        const groupId = message.from;
         const counters = messageCounter.getCounters(groupId);
 
         if (counters.length === 0) {
@@ -98,8 +96,7 @@ async function handleContador(client, message) {
             lines += `${medal} ${pos}. @${numero} — *${user.count}* msgs _(${pct}%)_\n`;
         });
 
-        const groupName = chat.name || 'este grupo';
-        const response = `📊 *Contador de mensajes — ${groupName}*\n\n${lines.trim()}\n\n_Total: ${totalMsgs} mensajes contabilizados_`;
+        const response = `📊 *Contador de mensajes*\n\n${lines.trim()}\n\n_Total: ${totalMsgs} mensajes contabilizados_`;
 
         await message.reply(response, undefined, { mentions });
         return null;
@@ -116,12 +113,10 @@ async function handleContador(client, message) {
 // -----------------------------------------------------------------------
 async function handleActividad(client, message) {
     try {
-        const chat = await message.getChat();
-        if (!chat.isGroup) {
+        const groupId = message.from;
+        if (!groupId || !groupId.endsWith('@g.us')) {
             return '⚠️ Este comando solo funciona en grupos.';
         }
-
-        const groupId = message.from;
 
         // Obtener ID del solicitante
         const requesterId = message.author || message.from;

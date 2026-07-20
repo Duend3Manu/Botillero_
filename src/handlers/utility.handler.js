@@ -196,8 +196,7 @@ async function handleRecap(message) {
         const groupId = message.from;
         
         // Verificar que sea grupo
-        const chat = await message.getChat();
-        if (!chat.isGroup) {
+        if (!groupId || !groupId.endsWith('@g.us')) {
             return '⚠️ Este comando solo funciona en grupos';
         }
         
