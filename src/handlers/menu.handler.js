@@ -34,18 +34,6 @@ function getMainMenu() {
 🎲 \`!random\` → Dato curioso aleatorio
 🍿 \`!streaming\` → Trending en Netflix, Disney+, HBO
 🤝 \`!ayuda [duda]\` → Asistente IA
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-⚽ *FÚTBOL Y DEPORTES*
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-🏆 \`!tabla\` → Tabla liga chilena
-📅 \`!partidos\` → Resumen de la fecha
-📆 \`!prox\` → Próximos partidos liga
-🇨🇱 \`!clasi\` → Partidos clasificatorias
-🏅 \`!tclasi\` → Tabla clasificatorias
-🏆 \`!cliga\` → Grupos Copa de la Liga
-📅 \`!liga\` → Partidos Copa de la Liga
-
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 📡 *REDES Y DOMINIOS*
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
