@@ -26,6 +26,7 @@ const services = {
     get network() { return require('./network.handler'); },
     get fap() { return require('./fap.handler'); },
     get group() { return require('./group.handler'); },
+    get admin() { return require('./admin.handler'); },
     get counter() { return require('./counter.handler'); }
 };
 
@@ -218,7 +219,11 @@ const commandMap = {
     // FAP y grupos
     'fap': (client, msg) => services.fap.handleFapSearch(client, msg),
     
-
+    // Admin
+    'agregar': (client, msg) => {
+        const args = msg.body.trim().split(' ').slice(1);
+        return services.admin.handleAgregar(client, msg, args);
+    },
     
     // ID del chat
     'id': (_, msg) => {

@@ -97,8 +97,34 @@ async function handleMessageRevoke(client, after, before) {
     }
 }
 
+/**
+ * handleGroupJoin — Da la bienvenida a nuevos miembros
+ */
+async function handleGroupJoin(client, notification) {
+    if (notification.action !== 'add' && notification.action !== 'invite') return;
+
+    try {
+        const chat = await client.getChatById(notification.chatId);
+        if (!chat.isGroup) return;
+
+        const description = chat.description || "Bienvenido(a) a nuestro grupo.";
+
+        for (const participant of notification.recipientIds) {
+            const mention = `@${participant.split('@')[0]}`;
+            const welcomeMsg = `¡Hola ${mention}, bienvenido al grupo *${chat.name}*! 👋\n\n📖 *Información / Reglas:*\n${description}`;
+            
+            await chat.sendMessage(welcomeMsg, {
+                mentions: [participant]
+            });
+        }
+    } catch (err) {
+        console.error('(EventsHandler) -> Error en bienvenida de grupo:', err.message);
+    }
+}
+
 module.exports = {
     handleMessageCreate,
     handleMessageUpdate,
-    handleMessageRevoke
+    handleMessageRevoke,
+    handleGroupJoin
 };

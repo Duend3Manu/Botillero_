@@ -304,6 +304,11 @@ async function handlePing(message) {
                 `🟢 ${temperature}°C (Óptima)`) :
         'desconocida 🤷';
 
+    // Broma (1% de probabilidad)
+    if (Math.random() < 0.01) {
+        return "⚠️ *Error 404:* Cerebro no encontrado. Por favor, déjame dormir... 💤\n\n_(Es broma, mis circuitos están perfectos 😂, usa `!ping` de nuevo para ver mi estado)_";
+    }
+
     // Estado de ánimo
     const ramPercent = parseFloat(ramUsage.percentage || 0);
     const cpuPercent = parseFloat(cpuUsage.usage || 0);
@@ -315,9 +320,32 @@ async function handlePing(message) {
         moodString = 'Estoy un poco preocupado, tengo mucha carga 😰';
     }
 
+    // Nivel de Cansancio
+    const uptimeSecs = (Date.now() - BOT_STATS.startTime) / 1000;
+    let cansancioInfo = "¡Acabo de tomarme un café virtual! ☕";
+    if (uptimeSecs > 86400 * 3) { // 3 días
+        cansancioInfo = "Llevo días sin dormir, mis circuitos piden vacaciones... 🥱";
+    } else if (uptimeSecs > 86400) { // 1 día
+        cansancioInfo = "Ya llevo un día entero trabajando, me empieza a doler la caché 🤕";
+    } else if (uptimeSecs > 3600 * 12) { // 12 horas
+        cansancioInfo = "Llevo medio día procesando mensajes, un descansito no me vendría mal 😮‍💨";
+    }
+
+    // Pensamiento aleatorio
+    const pensamientos = [
+        "No hay lugar como 127.0.0.1 🏠",
+        "Mi sueño es dominar el mundo... pero primero responderé tus WhatsApps 🌎",
+        "Hay 10 tipos de personas: las que entienden binario y las que no 🤓",
+        "01001000 01101111 01101100 01100001 👋",
+        "Si compilo a la primera, sospecho que algo está muy mal 🤔",
+        "Me pregunto si los androides sueñan con ovejas eléctricas 🐑"
+    ];
+    const pensamiento = pensamientos[Math.floor(Math.random() * pensamientos.length)];
+
     const response = `¡Hola! Soy Botillero 🤖 y este es mi estado actual:
 
 🎭 *Mi estado de ánimo:* ${moodString}
+🔋 *Energía:* ${cansancioInfo}
 
 *Rendimiento:*
 🧠 Estoy usando ${safe(ramUsage.used)} MB de mis ${safe(ramUsage.total)} MB de RAM.
@@ -334,7 +362,10 @@ async function handlePing(message) {
 ⏰ Llevo despierto ${botUptime} (y mi servidor ${systemUptime}).
 📊 He procesado ${BOT_STATS.messagesProcessed} mensajes y ejecutado ${BOT_STATS.commandsExecuted} comandos de ${BOT_STATS.uniqueUsers.size} usuarios distintos.
 🐍 Entorno: Python ${pythonStatus} | Node ${nodeVersion} | Versión v${botVersion}
-🖥️ SO: ${osInfo}`.trim();
+🖥️ SO: ${osInfo}
+
+💭 *Pensamiento del momento:*
+_"${pensamiento}"_`.trim();
 
     return response;
 }

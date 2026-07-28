@@ -14,7 +14,7 @@ process.on('uncaughtException', (error) => {
 
 const { Client, LocalAuth } = require('whatsapp-web.js');
 const qrcode = require('qrcode-terminal');
-const { handleMessageCreate, handleMessageRevoke, handleMessageUpdate } = require('./src/handlers/events.handler');
+const { handleMessageCreate, handleMessageRevoke, handleMessageUpdate, handleGroupJoin } = require('./src/handlers/events.handler');
 const commandHandler = require('./src/handlers/command.handler');
 const { addToMediaCache } = require('./src/handlers/fun.handler');
 const { incrementStats } = require('./src/handlers/system.handler');
@@ -122,6 +122,7 @@ client.on('message_create', async (message) => {
 
 client.on('message_revoke_everyone', (after, before) => handleMessageRevoke(client, after, before));
 client.on('message_update', message => handleMessageUpdate(client, message));
+client.on('group_join', notification => handleGroupJoin(client, notification));
 
 // --- CIERRE ELEGANTE ---
 process.on('SIGINT', async () => {
