@@ -29,7 +29,7 @@ async function getNetworkInfo() {
     try {
         const networkInterfaces = os.networkInterfaces();
         let localIP = 'No disponible';
-        
+
         // Buscar la IP local (primera interfaz activa que no sea loopback)
         for (const [name, interfaces] of Object.entries(networkInterfaces)) {
             for (const iface of interfaces) {
@@ -40,7 +40,7 @@ async function getNetworkInfo() {
             }
             if (localIP !== 'No disponible') break;
         }
-        
+
         // Obtener IP pública (solo si no está bloqueando)
         let publicIP = 'Obteniendo...';
         try {
@@ -49,7 +49,7 @@ async function getNetworkInfo() {
         } catch {
             publicIP = 'No disponible';
         }
-        
+
         return { localIP, publicIP };
     } catch (error) {
         return { localIP: 'Error', publicIP: 'Error' };
@@ -61,12 +61,12 @@ function createProgressBar(percentage, length = 10) {
     const filled = Math.round((percentage / 100) * length);
     const empty = length - filled;
     const bar = '█'.repeat(filled) + '░'.repeat(empty);
-    
+
     // Emojis dinámicos según el porcentaje
     let emoji = '🟢';
     if (percentage >= 90) emoji = '🔴';
     else if (percentage >= 75) emoji = '🟡';
-    
+
     return `${emoji} ${bar} ${percentage}%`;
 }
 
@@ -89,7 +89,7 @@ async function checkCriticalServices() {
         internet: false,
         python: false
     };
-    
+
     try {
         // Ejecutar verificaciones en paralelo con timeout global
         await Promise.race([
@@ -101,7 +101,7 @@ async function checkCriticalServices() {
                 } catch {
                     services.internet = false;
                 }
-                
+
                 // Check Python (solo un intento rápido)
                 try {
                     const { execSync } = require('child_process');
@@ -116,7 +116,7 @@ async function checkCriticalServices() {
     } catch {
         // Si algo falla, devolver valores por defecto
     }
-    
+
     return services;
 }
 
@@ -164,7 +164,7 @@ async function refreshMetrics() {
         } else {
             METRICS_CACHE.ram = getRAMUsage();
         }
-        
+
         METRICS_CACHE.lastUpdated = Date.now();
     } catch (e) {
         // no fallamos si algo va mal
@@ -211,9 +211,9 @@ async function getDiskUsage() {
     try {
         const disks = await si.fsSize();
         if (!Array.isArray(disks) || disks.length === 0) return null;
-        
+
         const disk = disks.find(d => d.mount === '/' || d.mount === 'C:') || disks[0];
-        
+
         return {
             used: Number(disk.used / 1024 / 1024 / 1024).toFixed(2),
             total: Number(disk.size / 1024 / 1024 / 1024).toFixed(2),
@@ -249,7 +249,7 @@ function formatUptime(seconds) {
 
 async function handlePing(message) {
     const startCommandTime = Date.now();
-    
+
     // Refrescar métricas solo cuando se ejecuta el comando (sin background jobs)
     // Si el cache es muy viejo (>10s) o no existe, refrescar
     if (!METRICS_CACHE.lastUpdated || (Date.now() - METRICS_CACHE.lastUpdated) > 10000) {
@@ -272,7 +272,7 @@ async function handlePing(message) {
     const waStart = Date.now();
     try {
         await message.react('🏓');
-    } catch(e) {}
+    } catch (e) { }
     const waLatency = Date.now() - waStart;
 
     // Calcular latencia real del mensaje vs latencia de ejecución
@@ -293,51 +293,48 @@ async function handlePing(message) {
         return Number.isFinite(parsed) ? parsed.toFixed(decimals) : fallback;
     };
 
-    // Crear barras de progreso
-    const ramBar = ramUsage.percentage ? createProgressBar(parseFloat(ramUsage.percentage)) : 'N/A';
-    const cpuBar = cpuUsage.usage ? createProgressBar(parseFloat(cpuUsage.usage)) : 'N/A';
-    const diskBar = diskUsage?.percentage ? createProgressBar(parseFloat(diskUsage.percentage)) : 'N/A';
-
     // Servicios check
-    const internetStatus = services.internet ? '✅ Conectado' : '❌ Sin conexión';
-    const pythonStatus = services.python ? '✅ Disponible' : '⚠️ No detectado';
+    const internetStatus = services.internet ? 'conectado ✅' : 'sin conexión ❌';
+    const pythonStatus = services.python ? 'disponible ✅' : 'no detectado ⚠️';
 
     // Temperatura
-    const tempInfo = temperature ? 
-        (temperature > 80 ? `🔥 ${temperature}°C (Alto)` : 
-         temperature > 60 ? `🟡 ${temperature}°C (Normal)` : 
-         `🟢 ${temperature}°C (Óptimo)`) : 
-        'N/A';
+    const tempInfo = temperature ?
+        (temperature > 80 ? `🔥 ${temperature}°C (Alta)` :
+            temperature > 60 ? `🟡 ${temperature}°C (Normal)` :
+                `🟢 ${temperature}°C (Óptima)`) :
+        'desconocida 🤷';
 
-    const response = `
-*Estado del Sistema - Botillero* ⚙️
+    // Estado de ánimo
+    const ramPercent = parseFloat(ramUsage.percentage || 0);
+    const cpuPercent = parseFloat(cpuUsage.usage || 0);
+    let moodString = '¡Me siento genial y con mucha energía! 😄';
 
-📡 *RED*
- Internet: ${internetStatus}
+    if (cpuPercent > 85 || ramPercent > 85) {
+        moodString = '¡Estoy colapsando, necesito un respiro! 😵‍💫';
+    } else if (cpuPercent > 60 || ramPercent > 60) {
+        moodString = 'Estoy un poco preocupado, tengo mucha carga 😰';
+    }
 
-🖥️ *SISTEMA*
-💾 RAM: ${ramBar}
-   └ ${safe(ramUsage.used)} / ${safe(ramUsage.total)} MB
-⚡ CPU: ${cpuBar}
-   └ ${safe(cpuUsage.model)}
-💽 Disco: ${diskBar}
-   └ ${diskUsage ? `${safe(diskUsage.used)} / ${safe(diskUsage.total)} GB` : 'N/A'}
-🌡️ Temp CPU: ${tempInfo}
-⏱️ Uptime Sistema: ${systemUptime}
-🖥️ OS: ${osInfo}
+    const response = `¡Hola! Soy Botillero 🤖 y este es mi estado actual:
 
-🤖 *BOT*
-🏓 Ping Google: ${pingTime ? (pingTime / 1000).toFixed(3) + ' s' : 'N/A'}
-⏳ Latencia WA: ${(waLatency / 1000).toFixed(3)} s
-⏱️ Tiempo ejec.: ${(executeLag / 1000).toFixed(3)} s
-📊 Mensajes: ${BOT_STATS.messagesProcessed}
-⚡ Comandos: ${BOT_STATS.commandsExecuted}
-👥 Usuarios: ${BOT_STATS.uniqueUsers.size}
-🕐 Uptime Bot: ${botUptime}
-🟢 Node: ${nodeVersion}
-🔧 Versión: v${botVersion}
-🐍 Python: ${pythonStatus}
-`.trim();
+🎭 *Mi estado de ánimo:* ${moodString}
+
+*Rendimiento:*
+🧠 Estoy usando ${safe(ramUsage.used)} MB de mis ${safe(ramUsage.total)} MB de RAM.
+⚡ Mi cerebro (CPU) está al ${safeNumber(cpuUsage.usage, 1)}% de su capacidad.
+💽 En mi disco tengo ocupado ${diskUsage ? `${safe(diskUsage.used)} GB de ${safe(diskUsage.total)} GB` : 'N/A'}.
+🌡️ Mi temperatura es ${tempInfo}.
+
+*Conexión y Velocidad:*
+📡 Internet: ${internetStatus}
+🏓 Mi ping a Google es de ${pingTime ? (pingTime / 1000).toFixed(3) + ' s' : 'N/A'}
+⏳ Tardo unos ${(waLatency / 1000).toFixed(3)} s en responder a WhatsApp.
+
+*Mis Estadísticas:*
+⏰ Llevo despierto ${botUptime} (y mi servidor ${systemUptime}).
+📊 He procesado ${BOT_STATS.messagesProcessed} mensajes y ejecutado ${BOT_STATS.commandsExecuted} comandos de ${BOT_STATS.uniqueUsers.size} usuarios distintos.
+🐍 Entorno: Python ${pythonStatus} | Node ${nodeVersion} | Versión v${botVersion}
+🖥️ SO: ${osInfo}`.trim();
 
     return response;
 }

@@ -18,5 +18,85 @@
   {
     "termino": "Open Source",
     "definicion": "(Código Abierto) Se refiere al software cuyo código fuente está disponible para que cualquiera lo vea, modifique y distribuya. Fomenta la colaboración y la transparencia. ¡Tu bot es un proyecto de este tipo!"
+  },
+  {
+    "termino": "Bug",
+    "definicion": "Un error o fallo en un programa de computadora que produce un resultado inesperado o incorrecto. ¡Es el enemigo natural de todo programador!"
+  },
+  {
+    "termino": "Backend",
+    "definicion": "La parte 'trasera' de una aplicación o sitio web. Es donde viven los servidores, las bases de datos y la lógica compleja. Los usuarios nunca interactúan directamente con ella."
+  },
+  {
+    "termino": "Frontend",
+    "definicion": "La parte 'frontal' de una aplicación o sitio web con la que los usuarios interactúan. Todo lo que ves, tocas y haces clic en una pantalla es parte del frontend."
+  },
+  {
+    "termino": "Caché",
+    "definicion": "Una memoria temporal de acceso súper rápido que almacena datos para que no tengas que descargarlos o calcularlos de nuevo. Es como tener a mano los libros que más lees en lugar de ir a la biblioteca cada vez."
+  },
+  {
+    "termino": "Phishing",
+    "definicion": "Un método de engaño cibernético donde un atacante se hace pasar por una empresa o persona de confianza (por correo o mensaje) para robar contraseñas o datos bancarios."
+  },
+  {
+    "termino": "Ping",
+    "definicion": "Una herramienta para medir el tiempo (en milisegundos) que tarda un paquete de datos en ir de tu computadora a un servidor y volver. Si eres gamer, sabes que un ping alto es tu peor pesadilla."
+  },
+  {
+    "termino": "Dirección IP",
+    "definicion": "Un número único que identifica a un dispositivo en una red o en internet. Es como la dirección de tu casa, pero para que los datos sepan adónde llegar en la web."
+  },
+  {
+    "termino": "DNS",
+    "definicion": "(Domain Name System) Es como la agenda telefónica de internet. Traduce nombres fáciles de recordar (como google.com) a direcciones IP numéricas que las computadoras entienden."
+  },
+  {
+    "termino": "Framework",
+    "definicion": "Una estructura o plantilla de trabajo que los programadores usan como base para desarrollar software más rápido, en lugar de escribir todo el código desde cero."
+  },
+  {
+    "termino": "Deploy",
+    "definicion": "(Despliegue) Es el proceso de subir y configurar una aplicación o sitio web en un servidor real para que esté disponible para todo el mundo en internet."
+  },
+  {
+    "termino": "Docker",
+    "definicion": "Una herramienta que permite empaquetar una aplicación y todas sus dependencias en un 'contenedor'. Así te aseguras de que el programa funcione igual en cualquier computadora, sin excusas de 'en mi máquina sí funciona'."
+  },
+  {
+    "termino": "Root / Superusuario",
+    "definicion": "El usuario con los permisos máximos absolutos en un sistema (especialmente en Linux o Android). Puede modificar o destruir cualquier cosa, por lo que conlleva una gran responsabilidad."
+  },
+  {
+    "termino": "Overclocking",
+    "definicion": "Forzar a un componente de hardware (como el procesador o la tarjeta de video) para que funcione más rápido de lo que especificó el fabricante. Da más rendimiento, pero genera más calor."
+  },
+  {
+    "termino": "VPN",
+    "definicion": "(Virtual Private Network) Crea un túnel privado y cifrado en internet. Oculta tu ubicación real y protege tus datos para que nadie espíe lo que haces, útil para redes públicas o saltar bloqueos de región."
+  },
+  {
+    "termino": "DDoS",
+    "definicion": "(Ataque de Denegación de Servicio Distribuido) Un ataque donde miles de computadoras zombis envían peticiones a un servidor al mismo tiempo hasta saturarlo y botar la página web."
+  },
+  {
+    "termino": "Algoritmo",
+    "definicion": "Un conjunto de instrucciones o pasos lógicos para resolver un problema o realizar una tarea. Desde una receta de cocina hasta el sistema de recomendaciones de YouTube, todo se basa en algoritmos."
+  },
+  {
+    "termino": "Cookies",
+    "definicion": "Pequeños archivos de texto que los sitios web guardan en tu navegador. Sirven para recordar quién eres, tus preferencias o qué tienes en el carrito de compras."
+  },
+  {
+    "termino": "Proxy",
+    "definicion": "Un servidor informático que actúa como intermediario entre tu computadora e internet. Tú le pides algo al proxy, y el proxy se lo pide a internet por ti, ocultando tu identidad directa."
+  },
+  {
+    "termino": "Malware",
+    "definicion": "(Software malicioso) Cualquier tipo de programa diseñado para infiltrarse o dañar una computadora sin tu consentimiento. Incluye virus, troyanos, ransomware, etc."
+  },
+  {
+    "termino": "Bot",
+    "definicion": "Un programa informático que efectúa tareas repetitivas de forma automática a través de internet. ¡Exactamente como yo, que estoy aquí para ayudarte!"
   }
 ]
