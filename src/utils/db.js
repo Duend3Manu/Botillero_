@@ -106,4 +106,39 @@ process.on('SIGINT', () => {
     process.exit(0);
 });
 
-module.exports = { storeMessage, getOriginalMessage, getApiUsage, updateApiUsage };
+// Tabla para cumpleaños
+db.prepare(`
+    CREATE TABLE IF NOT EXISTS birthdays (
+        userId TEXT PRIMARY KEY,
+        day INTEGER,
+        month INTEGER,
+        year INTEGER,
+        groupId TEXT
+    )
+`).run();
+
+const saveBirthdayStmt = db.prepare(`
+    INSERT OR REPLACE INTO birthdays (userId, day, month, year, groupId)
+    VALUES (?, ?, ?, ?, ?)
+`);
+
+const getBirthdaysStmt = db.prepare(`
+    SELECT * FROM birthdays WHERE day = ? AND month = ?
+`);
+
+function saveBirthday(userId, day, month, year, groupId) {
+    saveBirthdayStmt.run(userId, day, month, year, groupId);
+}
+
+function getBirthdaysForDate(day, month) {
+    return getBirthdaysStmt.all(day, month);
+}
+
+module.exports = { 
+    storeMessage, 
+    getOriginalMessage, 
+    getApiUsage, 
+    updateApiUsage,
+    saveBirthday,
+    getBirthdaysForDate
+};

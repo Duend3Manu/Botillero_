@@ -27,6 +27,7 @@ const services = {
     get fap() { return require('./fap.handler'); },
     get group() { return require('./group.handler'); },
     get admin() { return require('./admin.handler'); },
+    get birthday() { return require('./birthday.handler'); },
     get counter() { return require('./counter.handler'); }
 };
 
@@ -223,6 +224,12 @@ const commandMap = {
     'agregar': (client, msg) => {
         const args = msg.body.trim().split(' ').slice(1);
         return services.admin.handleAgregar(client, msg, args);
+    },
+    
+    // Cumpleaños
+    'cumpleaños': (client, msg) => {
+        const args = msg.body.trim().split(' ').slice(1);
+        return services.birthday.handleCumpleanos(client, msg, args);
     },
     
     // ID del chat
