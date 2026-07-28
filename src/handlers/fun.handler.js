@@ -54,11 +54,61 @@ async function getVideoDuration(filePath) {
     });
 }
 
+// --- Helper de reintento para llamadas Puppeteer intermitentes ---
+async function retryPuppeteer(fn, { retries = 2, delayMs = 500, label = 'operación' } = {}) {
+    for (let attempt = 1; attempt <= retries; attempt++) {
+        try {
+            return await fn();
+        } catch (err) {
+            if (attempt < retries) {
+                console.warn(`(Retry) -> ${label} falló intento ${attempt}/${retries}: ${err.message || err}`);
+                await new Promise(r => setTimeout(r, delayMs));
+            } else {
+                throw err;
+            }
+        }
+    }
+}
+
+// --- Workaround bug LID julio 2026: descarga directa sin Msg.get() ---
+async function directDownloadMedia(client, message) {
+    const msgData = message._data || message;
+    if (!msgData.directPath || !msgData.mediaKey) return null;
+    try {
+        const result = await client.pupPage.evaluate(async (directPath, encFilehash, filehash, mediaKey, mediaKeyTimestamp, type) => {
+            try {
+                const mockQpl = { addAnnotations: function() { return this; }, addPoint: function() { return this; } };
+                let downloadFn;
+                try { downloadFn = window.require('WAWebDownloadManager').downloadManager.downloadAndMaybeDecrypt; } catch (_) {}
+                if (!downloadFn && window.Store && window.Store.DownloadManager) {
+                    downloadFn = window.Store.DownloadManager.downloadAndMaybeDecrypt.bind(window.Store.DownloadManager);
+                }
+                if (!downloadFn) return null;
+                const decryptedMedia = await downloadFn({ directPath, encFilehash, filehash, mediaKey, mediaKeyTimestamp, type, signal: (new AbortController()).signal, downloadQpl: mockQpl });
+                const blob = new Blob([decryptedMedia], { type: 'application/octet-stream' });
+                return await new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.onloadend = () => resolve(reader.result.split(',')[1]);
+                    reader.onerror = reject;
+                    reader.readAsDataURL(blob);
+                });
+            } catch (e) { return null; }
+        }, msgData.directPath, msgData.encFilehash, msgData.filehash, msgData.mediaKey, msgData.mediaKeyTimestamp, msgData.type || message.type);
+
+        if (!result) return null;
+        return { data: result, mimetype: msgData.mimetype || message.mimetype, filename: msgData.filename || message.filename, filesize: msgData.size || message.size };
+    } catch (e) {
+        console.warn('(Sticker) -> directDownloadMedia falló:', e.message || e);
+        return null;
+    }
+}
+
 // --- Lógica para Stickers ---
 async function handleSticker(client, message) {
     try {
         // Feedback visual inmediato
         try { await message.react('⏳'); } catch (e) { }
+        try { await message.reply('⏳ Creando sticker, por favor espere...'); } catch (e) { }
 
         let mediaMessage = message;
         let media = null;
@@ -67,41 +117,56 @@ async function handleSticker(client, message) {
         // si no tiene media, revisa si responde a una
         if (!message.hasMedia && message.hasQuotedMsg) {
             try {
-                const quoted = await message.getQuotedMessage();
+                let quoted = null;
+                try {
+                    quoted = await retryPuppeteer(
+                        () => message.getQuotedMessage(),
+                        { retries: 2, delayMs: 800, label: 'getQuotedMessage' }
+                    );
+                } catch (_) {}
                 if (quoted && quoted.hasMedia) {
                     mediaMessage = quoted;
                     downloadSource = 'quoted';
                     console.log(`(Sticker) -> Usando mensaje citado de tipo: ${quoted.type}`);
                 }
             } catch (quotedErr) {
-                console.error('(Sticker) -> Error al obtener mensaje citado:', quotedErr);
+                console.warn('(Sticker) -> No se pudo obtener mensaje citado:', quotedErr.message || quotedErr);
             }
         }
 
         // Intentar descargar media
         if (mediaMessage.hasMedia) {
-            try {
-                console.log(`(Sticker) -> Descargando desde ${downloadSource}...`);
-                media = await mediaMessage.downloadMedia();
+            console.log(`(Sticker) -> Descargando desde ${downloadSource}...`);
 
-                if (!media) {
-                    console.log('(Sticker) -> downloadMedia() retornó null, intentando con caché...');
-                }
-            } catch (downloadErr) {
-                console.error('(Sticker) -> Error en downloadMedia():', downloadErr.message);
-                console.log('(Sticker) -> Buscando en caché de medias recientes...');
+            // 1. Intentar downloadMedia() estándar
+            try {
+                media = await retryPuppeteer(
+                    () => mediaMessage.downloadMedia(),
+                    { retries: 2, delayMs: 1000, label: 'downloadMedia' }
+                );
+            } catch (_) {}
+
+            // 2. Si falla, usar descarga directa (workaround bug LID)
+            if (!media) {
+                console.log('(Sticker) -> downloadMedia() falló, probando descarga directa (workaround LID)...');
+                media = await directDownloadMedia(client, mediaMessage);
+                if (media) downloadSource += '+directo';
+            }
+
+            if (media) {
+                addToMediaCache(mediaMessage.id._serialized || mediaMessage.id, media, media.mimetype, message.from);
             }
         }
 
-        // Si falla la descarga directa, buscar en caché
+        // Si todo falla, buscar en caché
         if (!media && mediaCache.length > 0) {
             console.log(`(Sticker) -> Usando media del caché (${mediaCache.length} disponibles)`);
-            const cached = mediaCache[0]; // Más reciente
+            const cached = mediaCache[0];
             media = cached.media;
             downloadSource = 'cache';
         }
 
-        // Si aún no hay media, error
+        // Sin media: error
         if (!media) {
             return message.reply('❌ Responde a una imagen, gif o video con `!s` o envía media directamente.');
         }

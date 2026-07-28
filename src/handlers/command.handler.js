@@ -26,8 +26,6 @@ const services = {
     get network() { return require('./network.handler'); },
     get fap() { return require('./fap.handler'); },
     get group() { return require('./group.handler'); },
-    get poringa() { return require('./poringa.handler'); },
-    get ppost() { return require('./ppost.handler'); },
     get counter() { return require('./counter.handler'); }
 };
 
@@ -97,6 +95,8 @@ async function handleStickerToImage(client, message) {
     }
 
     try {
+        try { await message.react('🖼️'); } catch (e) { }
+        try { await message.reply('🖼️ Convirtiendo sticker a imagen, por favor espere...'); } catch (e) { }
         const stickerMedia = await quotedMsg.downloadMedia();
 
         // Convertir WebP a PNG usando sharp para que llegue como imagen visible
@@ -135,7 +135,6 @@ const commandAliases = {
     'secrm': 'sec',
     'dato': 'random',
     'curiosidad': 'random',
-    'pase': 'tne',
     'precio': 'oferta',
     'desc': 'oferta',
     'producto': 'oferta'
@@ -211,7 +210,6 @@ const commandMap = {
     
     // Búsquedas personales
     'num': (client, msg) => services.personalSearch.handlePhoneSearch(client, msg),
-    'tne': (_, msg) => services.personalSearch.handleTneSearch(msg),
     
     // Red
     'whois': (_, msg) => services.network.handleNetworkQuery(msg),
@@ -220,9 +218,7 @@ const commandMap = {
     // FAP y grupos
     'fap': (client, msg) => services.fap.handleFapSearch(client, msg),
     
-    // Poringa / Scraper de imágenes
-    'poringa': (client, msg) => services.poringa.handlePoringaSearch(client, msg),
-    'ppost':   (client, msg) => services.ppost.handlePpostSearch(client, msg),
+
     
     // ID del chat
     'id': (_, msg) => {
@@ -259,16 +255,11 @@ const commandRegex = new RegExp(
 async function commandHandler(client, message) {
     const body = message.body.trim();
     
-    // Detectar comando usando regex optimizada (solo al inicio del mensaje)
-    let command = null;
-    const match = body.match(commandRegex);
+    // Detectar si el mensaje inicia con ! o / seguido de un comando
+    const match = body.match(/^\s*([!/])([a-zA-Z0-9_áéíóúñÁÉÍÓÚÑ18]+)/i);
 
-    if (match) {
-        command = match[2].toLowerCase();
-    }
-
-    // Easter eggs (menciones al bot)
-    if (!command) {
+    if (!match) {
+        // Easter eggs (menciones al bot sin prefijo de comando)
         const lowerBody = body.toLowerCase();
         if (/\b(bot|boot|bott|bbot)\b/.test(lowerBody)) {
             return services.fun.handleBotMention(client, message);
@@ -279,9 +270,29 @@ async function commandHandler(client, message) {
         return;
     }
 
-    // Comandos de sonido (tienen su propia lógica de reacción)
+    const prefix = match[1];
+    const command = match[2].toLowerCase();
+
+    // Si el comando NO está en la lista de comandos válidos, sugerir !menu al usuario
+    if (!validCommands.has(command)) {
+        console.log(`(Handler) -> Comando no reconocido: "${prefix}${command}"`);
+        const senderId = message.author || message.from;
+        const userNumber = senderId.replace(/\D/g, '');
+        try {
+            await message.reply(
+                `⚠️ Hola @${userNumber}, el comando *${prefix}${command}* no existe o no se reconoce.\n📌 Escribe *!menu* para ver la lista de comandos disponibles.`,
+                undefined,
+                { mentions: [senderId] }
+            );
+        } catch (err) {
+            console.error('Error al responder comando no válido:', err.message);
+        }
+        return;
+    }
+
+    // Comandos de sonido
     if (soundCommands.includes(command)) {
-        console.log(`(Handler) -> Comando de sonido recibido: "${command}"`);
+        console.log(`(Handler) -> Comando de sonido recibido: "${prefix}${command}"`);
         return services.fun.handleSound(client, message, command);
     }
 
@@ -301,13 +312,13 @@ async function commandHandler(client, message) {
     );
 
     if (isDisabled) {
-        console.log(`(Handler) -> Comando bloqueado (deshabilitado): "${command}"`);
+        console.log(`(Handler) -> Comando bloqueado (deshabilitado): "${prefix}${command}"`);
         return;
     }
 
     try {
         await handleReaction(message, (async () => {
-            console.log(`(Handler) -> Comando recibido: "${command}"`);
+            console.log(`(Handler) -> Comando recibido: "${prefix}${command}"`);
 
             const handler = commandMap[resolvedCommand];
             
@@ -319,15 +330,13 @@ async function commandHandler(client, message) {
             const replyMessage = await handler(client, message);
             
             // Solo hacer reply si el handler retornó un STRING.
-            // Si retornó null/undefined → ya envió el mensaje directamente.
-            // Si retornó un objeto (Message de Telegram) → también ya lo envió, ignorar.
             if (replyMessage && typeof replyMessage === 'string') {
                 await message.reply(replyMessage);
             }
         })());
     } catch (error) {
-        console.error(`Error al procesar el comando "${command}":`, error);
-        await message.reply(`Hubo un error al procesar el comando \`!${command}\`.`);
+        console.error(`Error al procesar el comando "${prefix}${command}":`, error);
+        await message.reply(`Hubo un error al procesar el comando \`${prefix}${command}\`.`);
     }
 }
 

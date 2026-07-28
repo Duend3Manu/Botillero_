@@ -80,12 +80,7 @@ async function handlePatenteSearch(message) {
     }
 }
 
-async function handleTneSearch(message) {
-    return message.reply("⚠️ La consulta de TNE se encuentra en mantenimiento.");
-}
-
 module.exports = {
     handlePhoneSearch,
-    handlePatenteSearch,
-    handleTneSearch
+    handlePatenteSearch
 };

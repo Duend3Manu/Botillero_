@@ -16,6 +16,7 @@ const { Client, LocalAuth } = require('whatsapp-web.js');
 const qrcode = require('qrcode-terminal');
 const { handleMessageCreate, handleMessageRevoke, handleMessageUpdate } = require('./src/handlers/events.handler');
 const commandHandler = require('./src/handlers/command.handler');
+const { addToMediaCache } = require('./src/handlers/fun.handler');
 const { incrementStats } = require('./src/handlers/system.handler');
 const messageBuffer = require('./src/services/message-buffer.service');
 const messageCounter = require('./src/services/message-counter.service');
@@ -72,8 +73,8 @@ client.on('message_create', async (message) => {
     // Si no tiene ni texto ni media, ignorar (mensajes de sistema, etc.)
     if (!hasBody && !hasMedia) return;
 
-    // Evitar auto-respuestas infinitas a frases normales, pero permitir probar comandos (!)
-    if (message.fromMe && !(hasBody && message.body.startsWith('!'))) return;
+    // Evitar auto-respuestas infinitas a frases normales, pero permitir probar comandos (! o /)
+    if (message.fromMe && !(hasBody && (message.body.startsWith('!') || message.body.startsWith('/')))) return;
 
     // Ejecutar handleMessageCreate para logging/analytics (solo mensajes con texto)
     if (hasBody) {
@@ -82,14 +83,23 @@ client.on('message_create', async (message) => {
         });
     }
 
-    // Procesar mensajes (incluyendo los del bot para pruebas si empieza con !)
+    // Procesar mensajes (incluyendo los del bot para pruebas si empieza con ! o /)
     incrementStats('message', message.from);
 
     // Registrar en buffer (!recap) y en contador de mensajes (!contador / !actividad)
-    const isCommand = hasBody && message.body.startsWith('!');
+    const isCommand = hasBody && (message.body.startsWith('!') || message.body.startsWith('/'));
     if (!isCommand) {
         // El registro en buffer y contador ya se maneja dentro de handleMessageCreate
         // para evitar duplicidad y asegurar limpieza de IDs.
+    }
+
+    // Pre-cachear media de mensajes entrantes para fallback de !s
+    if (hasMedia && !isCommand) {
+        message.downloadMedia().then(media => {
+            if (media) {
+                addToMediaCache(message.id._serialized || message.id, media, media.mimetype, message.from);
+            }
+        }).catch(() => { /* silencioso, solo es pre-caché */ });
     }
 
     // Procesar comandos y frases (solo si tiene texto)
