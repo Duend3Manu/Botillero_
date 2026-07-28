@@ -225,6 +225,10 @@ const commandMap = {
         const args = msg.body.trim().split(' ').slice(1);
         return services.admin.handleAgregar(client, msg, args);
     },
+    'ban': (client, msg) => {
+        const args = msg.body.trim().split(' ').slice(1);
+        return services.admin.handleBanTemporal(client, msg, args);
+    },
     
     // Cumpleaños
     'cumpleaños': (client, msg) => {

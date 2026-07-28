@@ -104,16 +104,34 @@ async function handleGroupJoin(client, notification) {
     if (notification.action !== 'add' && notification.action !== 'invite') return;
 
     try {
-        const chat = await client.getChatById(notification.chatId);
-        if (!chat.isGroup) return;
+        // Obtenemos los datos saltando getChatById para evitar error r: r
+        const { isGroup, name, description } = await client.pupPage.evaluate(async (groupId) => {
+            try {
+                const groupWid = window.require('WAWebWidFactory').createWid(groupId);
+                const chatModel = window.require('WAWebCollections').Chat.get(groupWid) || (await window.require('WAWebCollections').Chat.find(groupWid));
+                
+                if (!chatModel || !chatModel.isGroup) return { isGroup: false };
 
-        const description = chat.description || "Bienvenido(a) a nuestro grupo.";
+                return {
+                    isGroup: true,
+                    name: chatModel.name || chatModel.formattedTitle || "el grupo",
+                    description: chatModel.groupMetadata && chatModel.groupMetadata.desc ? chatModel.groupMetadata.desc.toString() : null
+                };
+            } catch (e) {
+                return { isGroup: false };
+            }
+        }, notification.chatId);
+
+        if (!isGroup) return;
+
+        const descText = description || "Bienvenido(a) a nuestro grupo.";
 
         for (const participant of notification.recipientIds) {
             const mention = `@${participant.split('@')[0]}`;
-            const welcomeMsg = `¡Hola ${mention}, bienvenido al grupo *${chat.name}*! 👋\n\n📖 *Información / Reglas:*\n${description}`;
+            const welcomeMsg = `¡Hola ${mention}, bienvenido al grupo *${name}*! 👋\n\n📖 *Información / Reglas:*\n${descText}`;
             
-            await chat.sendMessage(welcomeMsg, {
+            // Usamos client.sendMessage en vez de chat.sendMessage
+            await client.sendMessage(notification.chatId, welcomeMsg, {
                 mentions: [participant]
             });
         }

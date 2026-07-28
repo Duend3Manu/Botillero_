@@ -75,6 +75,8 @@ def procesar_partidos(week, check_auto_advance=True):
     todos_finalizados = True
     partidos_por_fecha = {}
     
+    max_date = None
+
     for m in matches:
         home = fix_encoding(m['home_team']['name'])
         away = fix_encoding(m['away_team']['name'])
@@ -89,6 +91,10 @@ def procesar_partidos(week, check_auto_advance=True):
             # extraemos yyyy-mm-dd
             dt = datetime.strptime(date_str[:10], '%Y-%m-%d')
             fecha_key = f"{DIAS_SEMANA[dt.weekday()]} {dt.strftime('%d/%m')}"
+            
+            # Guardamos la fecha máxima para saber cuándo termina la jornada
+            if max_date is None or dt.date() > max_date:
+                max_date = dt.date()
         except:
             fecha_key = "Por confirmar"
         
@@ -96,15 +102,18 @@ def procesar_partidos(week, check_auto_advance=True):
         if mode == 'HOUR' or not mode:
             status = f"_{hora}_"
             todos_finalizados = False
-        elif mode in ['FT', 'PEN', 'AET', 'FINISHED']:
-            status = f"*{score_home} - {score_away}*"
+        elif mode in ['FT', 'PEN', 'AET', 'FINISHED', 'FINAL']:
+            if mode == 'FINAL':
+                status = f"*{score_home} - {score_away}* (FINAL)"
+            else:
+                status = f"*{score_home} - {score_away}*"
         elif mode in ['LIVE', 'MIN', 'HT']:
             minuto = m.get('minute', '')
             status = f"🔴 {score_home} - {score_away} ({minuto}')"
             todos_finalizados = False
         else:
             status = f"*{score_home} - {score_away}* ({mode})"
-            if mode not in ['POST', 'CANC']: 
+            if mode not in ['POST', 'CANC', 'INFO']: 
                 todos_finalizados = False
                 
         if fecha_key not in partidos_por_fecha:
@@ -118,11 +127,14 @@ def procesar_partidos(week, check_auto_advance=True):
             print(p)
         print("")
         
-    # Avance automático
-    if check_auto_advance and matches and todos_finalizados:
+    # Avance automático: Solo si todos están finalizados Y ya pasó el último día de la fecha
+    today = datetime.now().date()
+    paso_el_dia = (max_date is not None and today > max_date)
+
+    if check_auto_advance and matches and todos_finalizados and paso_el_dia:
         next_week = week + 1
         save_week(next_week)
-        print("⏳ _Todos los partidos han finalizado. Mostrando la siguiente fecha..._")
+        print("⏳ _La fecha ha finalizado. Mostrando la siguiente jornada..._")
         print("-" * 30 + "\n")
         procesar_partidos(next_week, check_auto_advance=False)
 
