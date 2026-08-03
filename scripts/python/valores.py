@@ -75,6 +75,7 @@ async def obtener_valor_google(session, url, semaphore):
                     elemento_valor = (
                         soup.select_one('.YMlKec.fxKbKc') or 
                         soup.find(class_='YMlKec') or
+                        soup.find(class_='N6SYTe') or
                         soup.find(class_=re.compile(r'YMlKec'))
                     )
 
@@ -97,10 +98,7 @@ def obtener_indicadores_finclaro():
         soup = BeautifulSoup(driver.page_source, 'html.parser')
         indicadores = {}
         
-        for card in soup.find_all("div", class_="glass-card"):
-            titulo_elem = card.find("h3")
-            if not titulo_elem: continue
-            
+        for titulo_elem in soup.find_all("h3"):
             label = titulo_elem.get_text(strip=True).lower()
             
             # EXTRAER FECHA (el span hermano del h3)
@@ -108,7 +106,14 @@ def obtener_indicadores_finclaro():
             fecha = fecha_tag.get_text(strip=True) if fecha_tag else ""
             
             # EXTRAER VALOR
-            val_tag = card.find("span", class_=lambda c: c and ("text-2xl" in c or "text-3xl" in c))
+            val_tag = None
+            parent = titulo_elem.parent
+            for _ in range(4):
+                if parent:
+                    val_tag = parent.find("span", class_=lambda c: c and ("text-2xl" in c or "text-3xl" in c))
+                    if val_tag:
+                        break
+                    parent = parent.parent
             if not val_tag: continue
             val_raw = val_tag.get_text(strip=True)
             

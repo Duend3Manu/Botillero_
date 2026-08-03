@@ -88,7 +88,10 @@ client.on('message_create', async (message) => {
     incrementStats('message', message.from);
 
     // Registrar en buffer (!recap) y en contador de mensajes (!contador / !actividad)
-    const isCommand = hasBody && (message.body.startsWith('!') || message.body.startsWith('/'));
+    const isCommand = hasBody && (
+        /^\s*[!/][a-zA-Z0-9_]+/.test(message.body) ||   // Comando al inicio
+        /\s![a-zA-Z0-9_]+/.test(message.body)            // !comando dentro de frase
+    );
     if (!isCommand) {
         // El registro en buffer y contador ya se maneja dentro de handleMessageCreate
         // para evitar duplicidad y asegurar limpieza de IDs.

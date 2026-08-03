@@ -28,12 +28,40 @@ const services = {
     get group() { return require('./group.handler'); },
     get admin() { return require('./admin.handler'); },
     get birthday() { return require('./birthday.handler'); },
-    get counter() { return require('./counter.handler'); }
+    get counter() { return require('./counter.handler'); },
+    get kast() { return require('./kast.handler'); }
 };
 
 // --- Cooldowns para comandos específicos ---
 let lastTransbankRequestTimestamp = 0;
 const TRANSBANK_COOLDOWN_SECONDS = 30;
+
+// --- Anti-spam: detectar comandos repetidos por usuario ---
+const spamTracker = new Map(); // userId -> { command, count, lastTime }
+const SPAM_THRESHOLD = 3;       // 3 veces seguidas = spam
+const SPAM_WINDOW_MS = 60000;   // Ventana de 60 segundos
+
+function checkSpam(userId, command) {
+    const now = Date.now();
+    const tracker = spamTracker.get(userId);
+
+    if (!tracker || tracker.command !== command || (now - tracker.lastTime) > SPAM_WINDOW_MS) {
+        // Comando diferente o ventana expirada: resetear
+        spamTracker.set(userId, { command, count: 1, lastTime: now });
+        return false;
+    }
+
+    // Mismo comando dentro de la ventana
+    tracker.count++;
+    tracker.lastTime = now;
+
+    if (tracker.count >= SPAM_THRESHOLD) {
+        tracker.count = 0; // Resetear para que pueda volver a usar después
+        return true; // ¡Es spam!
+    }
+
+    return false;
+}
 
 // --- Helpers para comandos con lógica repetida ---
 async function handleHoroscopeCommand(client, message, serviceMethod) {
@@ -88,23 +116,67 @@ async function handleStickerToImage(client, message) {
         return 'Debes responder a un sticker para convertirlo en imagen.';
     }
 
-    const quotedMsg = await message.getQuotedMessage();
-    if (!quotedMsg || !quotedMsg.hasMedia) {
+    // Obtener la data del sticker directamente desde message._data.quotedMsg
+    // para evitar el bug "r: r" de whatsapp-web.js con page.evaluate()
+    const quotedData = message._data.quotedMsg;
+    if (!quotedData || !quotedData.directPath) {
         return 'El mensaje al que respondiste no tiene media.';
     }
-    if (quotedMsg.type !== 'sticker') {
+    if (quotedData.type !== 'sticker') {
         return 'El mensaje al que respondiste no es un sticker.';
     }
 
     try {
         try { await message.react('🖼️'); } catch (e) { }
-        try { await message.reply('🖼️ Convirtiendo sticker a imagen, por favor espere...'); } catch (e) { }
-        const stickerMedia = await quotedMsg.downloadMedia();
 
-        // Convertir WebP a PNG usando sharp para que llegue como imagen visible
+        const crypto = require('crypto');
+        const axios = require('axios');
         const sharp = require('sharp');
-        const webpBuffer = Buffer.from(stickerMedia.data, 'base64');
-        const pngBuffer = await sharp(webpBuffer).png().toBuffer();
+
+        // 1. Descargar el media encriptado desde el CDN de WhatsApp
+        const mediaUrl = quotedData.deprecatedMms3Url || `https://mmg.whatsapp.net${quotedData.directPath}`;
+        const response = await axios.get(mediaUrl, { responseType: 'arraybuffer' });
+        const encBuffer = Buffer.from(response.data);
+
+        // 2. Desencriptar el media usando el mediaKey (HKDF + AES-256-CBC)
+        const mediaKeyBuffer = Buffer.from(quotedData.mediaKey, 'base64');
+
+        // HKDF expand: los stickers usan el mismo info que las imágenes
+        const hkdfInfoMap = {
+            'sticker': 'WhatsApp Image Keys',
+            'image': 'WhatsApp Image Keys',
+            'video': 'WhatsApp Video Keys',
+            'audio': 'WhatsApp Audio Keys',
+            'document': 'WhatsApp Document Keys',
+        };
+        const info = hkdfInfoMap[quotedData.type] || 'WhatsApp Image Keys';
+
+        // HKDF-SHA256 extract and expand
+        const salt = Buffer.alloc(32, 0);
+        const prk = crypto.createHmac('sha256', salt).update(mediaKeyBuffer).digest();
+        let prev = Buffer.alloc(0);
+        let okm = Buffer.alloc(0);
+        for (let i = 1; okm.length < 112; i++) {
+            const hmac = crypto.createHmac('sha256', prk);
+            hmac.update(Buffer.concat([prev, Buffer.from(info), Buffer.from([i])]));
+            prev = hmac.digest();
+            okm = Buffer.concat([okm, prev]);
+        }
+        okm = okm.slice(0, 112);
+
+        const iv = okm.slice(0, 16);
+        const cipherKey = okm.slice(16, 48);
+        // macKey = okm.slice(48, 80) — no lo verificamos para simplificar
+
+        // Separar ciphertext (todo menos los últimos 10 bytes de MAC)
+        const ciphertext = encBuffer.slice(0, encBuffer.length - 10);
+
+        // Desencriptar con AES-256-CBC
+        const decipher = crypto.createDecipheriv('aes-256-cbc', cipherKey, iv);
+        const decrypted = Buffer.concat([decipher.update(ciphertext), decipher.final()]);
+
+        // 3. Convertir WebP a PNG usando sharp
+        const pngBuffer = await sharp(decrypted).png().toBuffer();
         const pngBase64 = pngBuffer.toString('base64');
 
         const imageMedia = new MessageMedia('image/png', pngBase64, 'sticker.png');
@@ -245,7 +317,10 @@ const commandMap = {
 
     // Contador de mensajes y actividad
     'contador': (client, msg) => services.counter.handleContador(client, msg),
-    'actividad': (client, msg) => services.counter.handleActividad(client, msg)
+    'actividad': (client, msg) => services.counter.handleActividad(client, msg),
+    
+    // Kast
+    'kast': (_, msg) => services.kast.handleKast(msg)
 };
 
 // --- Lista de comandos válidos ---
@@ -260,8 +335,8 @@ const validCommands = new Set([
 ]);
 
 // --- Regex Pre-compilada ---
-// IMPORTANTE: Usamos ^ para que solo matchee al INICIO del mensaje.
-// Esto evita falsos positivos con URLs que contengan palabras como /noticias, /tabla, etc.
+// Para / usamos ^ (solo al inicio) para evitar falsos positivos con URLs.
+// Para ! permitimos detección en cualquier parte de la frase.
 const commandRegex = new RegExp(
     `^\\s*([!/])(${[...validCommands].sort((a, b) => b.length - a.length).join('|')})\\b`, 
     'i'
@@ -271,8 +346,20 @@ const commandRegex = new RegExp(
 async function commandHandler(client, message) {
     const body = message.body.trim();
     
-    // Detectar si el mensaje inicia con ! o / seguido de un comando
-    const match = body.match(/^\s*([!/])([a-zA-Z0-9_áéíóúñÁÉÍÓÚÑ18]+)/i);
+    // 1. Intentar match al inicio del mensaje (forma normal con ! o /)
+    let match = body.match(/^\s*([!/])([a-zA-Z0-9_áéíóúñÁÉÍÓÚÑ18]+)/i);
+    let isInPhrase = false;
+
+    // 2. Si no hay match al inicio, buscar !comando dentro de la frase
+    //    Solo con prefijo ! (no con / para evitar falsos positivos con URLs)
+    if (!match) {
+        match = body.match(/(?:^|\s)(!)(([a-zA-Z0-9_áéíóúñÁÉÍÓÚÑ18]+))/i);
+        if (match) {
+            // Ajustar los grupos de captura (el grupo 2 tiene el comando)
+            match = [match[0], match[1], match[2]];
+            isInPhrase = true;
+        }
+    }
 
     if (!match) {
         // Easter eggs (menciones al bot sin prefijo de comando)
@@ -304,6 +391,19 @@ async function commandHandler(client, message) {
             console.error('Error al responder comando no válido:', err.message);
         }
         return;
+    }
+
+    // --- Anti-spam: detectar repeticiones (solo para comandos explícitos, no en frases) ---
+    if (!isInPhrase) {
+        const senderId = message.author || message.from;
+        if (checkSpam(senderId, command)) {
+            console.log(`(Handler) -> Spam detectado: "${prefix}${command}" por ${senderId}`);
+            try {
+                await message.react('🤡');
+                await message.reply(`Oye calmate weon, te pican los dedos que pide tanto *${prefix}${command}* 🤡`);
+            } catch (e) { }
+            return;
+        }
     }
 
     // Comandos de sonido
@@ -352,7 +452,7 @@ async function commandHandler(client, message) {
         })());
     } catch (error) {
         console.error(`Error al procesar el comando "${prefix}${command}":`, error);
-        await message.reply(`Hubo un error al procesar el comando \`${prefix}${command}\`.`);
+        await message.reply(`Pta algo paso, no anda ese comando ahora 😔`);
     }
 }
 

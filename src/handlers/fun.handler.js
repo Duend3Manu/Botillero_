@@ -103,6 +103,64 @@ async function directDownloadMedia(client, message) {
     }
 }
 
+// --- Workaround "r: r": descarga y desencripta media 100% en Node.js ---
+async function decryptWhatsAppMedia(msgData) {
+    if (!msgData || !msgData.directPath || !msgData.mediaKey) return null;
+    try {
+        const crypto = require('crypto');
+        const axios = require('axios');
+
+        // 1. Descargar media encriptada del CDN de WhatsApp
+        const mediaUrl = msgData.deprecatedMms3Url || `https://mmg.whatsapp.net${msgData.directPath}`;
+        const response = await axios.get(mediaUrl, { responseType: 'arraybuffer', timeout: 15000 });
+        const encBuffer = Buffer.from(response.data);
+
+        // 2. Derivar claves con HKDF-SHA256
+        const mediaKeyBuffer = Buffer.from(msgData.mediaKey, 'base64');
+        const hkdfInfoMap = {
+            'sticker': 'WhatsApp Image Keys',
+            'image': 'WhatsApp Image Keys',
+            'video': 'WhatsApp Video Keys',
+            'audio': 'WhatsApp Audio Keys',
+            'ptt': 'WhatsApp Audio Keys',
+            'document': 'WhatsApp Document Keys',
+        };
+        const info = hkdfInfoMap[msgData.type] || 'WhatsApp Image Keys';
+
+        const salt = Buffer.alloc(32, 0);
+        const prk = crypto.createHmac('sha256', salt).update(mediaKeyBuffer).digest();
+        let prev = Buffer.alloc(0);
+        let okm = Buffer.alloc(0);
+        for (let i = 1; okm.length < 112; i++) {
+            const hmac = crypto.createHmac('sha256', prk);
+            hmac.update(Buffer.concat([prev, Buffer.from(info), Buffer.from([i])]));
+            prev = hmac.digest();
+            okm = Buffer.concat([okm, prev]);
+        }
+        okm = okm.slice(0, 112);
+
+        const iv = okm.slice(0, 16);
+        const cipherKey = okm.slice(16, 48);
+
+        // 3. Separar ciphertext (sin los 10 bytes de MAC al final)
+        const ciphertext = encBuffer.slice(0, encBuffer.length - 10);
+
+        // 4. Desencriptar con AES-256-CBC
+        const decipher = crypto.createDecipheriv('aes-256-cbc', cipherKey, iv);
+        const decrypted = Buffer.concat([decipher.update(ciphertext), decipher.final()]);
+
+        return {
+            data: decrypted.toString('base64'),
+            mimetype: msgData.mimetype || 'application/octet-stream',
+            filename: msgData.filename || null,
+            filesize: msgData.size || decrypted.length
+        };
+    } catch (e) {
+        console.warn('(decryptWhatsAppMedia) -> falló:', e.message || e);
+        return null;
+    }
+}
+
 // --- Lógica para Stickers ---
 async function handleSticker(client, message) {
     try {
@@ -128,14 +186,27 @@ async function handleSticker(client, message) {
                     mediaMessage = quoted;
                     downloadSource = 'quoted';
                     console.log(`(Sticker) -> Usando mensaje citado de tipo: ${quoted.type}`);
+                } else if (message._data.quotedMsg && message._data.quotedMsg.directPath) {
+                    // Fallback: getQuotedMessage falló (bug "r: r"), descargar directo desde _data.quotedMsg
+                    console.log('(Sticker) -> getQuotedMessage falló, usando descarga directa desde _data.quotedMsg...');
+                    media = await decryptWhatsAppMedia(message._data.quotedMsg);
+                    if (media) {
+                        downloadSource = 'quotedMsg-decrypt';
+                        console.log(`(Sticker) -> Media desencriptada desde quotedMsg, tipo: ${media.mimetype}`);
+                    }
                 }
             } catch (quotedErr) {
                 console.warn('(Sticker) -> No se pudo obtener mensaje citado:', quotedErr.message || quotedErr);
+                // Último intento: desencriptar desde _data.quotedMsg
+                if (!media && message._data.quotedMsg && message._data.quotedMsg.directPath) {
+                    media = await decryptWhatsAppMedia(message._data.quotedMsg);
+                    if (media) downloadSource = 'quotedMsg-decrypt';
+                }
             }
         }
 
         // Intentar descargar media
-        if (mediaMessage.hasMedia) {
+        if (!media && mediaMessage.hasMedia) {
             console.log(`(Sticker) -> Descargando desde ${downloadSource}...`);
 
             // 1. Intentar downloadMedia() estándar
@@ -151,6 +222,14 @@ async function handleSticker(client, message) {
                 console.log('(Sticker) -> downloadMedia() falló, probando descarga directa (workaround LID)...');
                 media = await directDownloadMedia(client, mediaMessage);
                 if (media) downloadSource += '+directo';
+            }
+
+            // 3. Si todo falla, desencriptar media en Node.js puro
+            if (!media) {
+                console.log('(Sticker) -> directDownloadMedia falló, probando desencriptación Node.js pura...');
+                const rawData = mediaMessage._data || mediaMessage;
+                media = await decryptWhatsAppMedia(rawData);
+                if (media) downloadSource += '+nodejs-decrypt';
             }
 
             if (media) {
@@ -252,7 +331,11 @@ async function handleSticker(client, message) {
         }
 
         const webpMedia = MessageMedia.fromFilePath(outputFilePath);
-        await message.reply(webpMedia, undefined, { sendMediaAsSticker: true });
+        await message.reply(webpMedia, undefined, {
+            sendMediaAsSticker: true,
+            stickerAuthor: 'BoTillero',
+            stickerName: 'Creado por BoTillero'
+        });
 
         try { await message.react('✅'); } catch (e) { }
 
@@ -277,6 +360,7 @@ const soundMap = {
     'aweonao': { file: 'aweonao.mp3', reaction: '😂' },
     'caballo': { file: 'caballo.mp3', reaction: '🏳️‍🌈' },
     'callate': { file: 'callate.mp3', reaction: '😂' },
+    'cancion': { file: 'botillero.mp3', reaction: '🎵' },
     'callense': { file: 'callense.mp3', reaction: '😂' },
     'cell': { file: 'cell.mp3', reaction: '😂' },
     'chao': { file: 'chao.mp3', reaction: '😂' },
