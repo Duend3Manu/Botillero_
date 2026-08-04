@@ -19,7 +19,11 @@ async function tryReact(message, reaction) {
 
 /**
  * Maneja el ciclo de vida de las reacciones para un comando.
+ */
 async function handleReaction(message, actionFn, successReaction = '✅') {
+    // Pequeña pausa de 300ms antes de la primera reacción.
+    await new Promise(r => setTimeout(r, 300));
+    
     // Reaccionamos con reloj de arena
     await tryReact(message, '⏳');
 
