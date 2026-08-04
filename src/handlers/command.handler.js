@@ -380,6 +380,7 @@ async function commandHandler(client, message) {
     if (!validCommands.has(command)) {
         console.log(`(Handler) -> Comando no reconocido: "${prefix}${command}"`);
         try {
+            await new Promise(r => setTimeout(r, 300));
             await message.react('❌');
         } catch (e) { }
         try {

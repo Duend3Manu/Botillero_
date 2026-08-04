@@ -7,8 +7,10 @@
  * @param {string} reaction El emoji para reaccionar.
  */
 async function tryReact(message, reaction) {
+    console.log(`(MessagingService) -> Intentando reaccionar con: ${reaction}`);
     try {
         await message.react(reaction);
+        console.log(`(MessagingService) -> Reacción ${reaction} enviada con éxito.`);
     } catch (error) {
         // Ignora el error de reacción, pero lo registra como advertencia.
         console.warn(`(MessagingService) -> No se pudo reaccionar con ${reaction}: ${error.message}`);
@@ -21,7 +23,12 @@ async function tryReact(message, reaction) {
  * @param {Promise<any>} commandPromise La promesa que representa la ejecución del comando.
  */
 async function handleReaction(message, commandPromise, successReaction = '✅') {
-    // Reaccionamos inmediatamente con reloj de arena
+    // Pequeña pausa de 300ms antes de la primera reacción.
+    // WhatsApp Web suele ignorar o fallar silenciosamente si intentamos
+    // reaccionar en el mismo milisegundo en que se recibe el mensaje.
+    await new Promise(r => setTimeout(r, 300));
+    
+    // Reaccionamos con reloj de arena
     await tryReact(message, '⏳');
 
     const startTime = Date.now();
