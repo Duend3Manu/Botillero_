@@ -376,16 +376,15 @@ async function commandHandler(client, message) {
     const prefix = match[1];
     const command = match[2].toLowerCase();
 
-    // Si el comando NO está en la lista de comandos válidos, sugerir !menu al usuario
+    // Si el comando NO está en la lista de comandos válidos, reaccionar ❌ y responder
     if (!validCommands.has(command)) {
         console.log(`(Handler) -> Comando no reconocido: "${prefix}${command}"`);
-        const senderId = message.author || message.from;
-        const userNumber = senderId.replace(/\D/g, '');
+        try {
+            await message.react('❌');
+        } catch (e) { }
         try {
             await message.reply(
-                `⚠️ Hola @${userNumber}, el comando *${prefix}${command}* no existe o no se reconoce.\n📌 Escribe *!menu* para ver la lista de comandos disponibles.`,
-                undefined,
-                { mentions: [senderId] }
+                `pta madre, algo pasó con el comando, o no existe o tengo dramas para ejecutarlo ahora, ve bien si está bien escrito tonto weon 🤦`
             );
         } catch (err) {
             console.error('Error al responder comando no válido:', err.message);
@@ -409,13 +408,15 @@ async function commandHandler(client, message) {
     // Comandos de sonido
     if (soundCommands.includes(command)) {
         console.log(`(Handler) -> Comando de sonido recibido: "${prefix}${command}"`);
-        return services.fun.handleSound(client, message, command);
+        return handleReaction(message, services.fun.handleSound(client, message, command));
     }
 
     // Comandos de countdown
     if (countdownCommands.includes(command)) {
-        const replyMessage = services.fun.handleCountdown(command);
-        return message.reply(replyMessage);
+        return handleReaction(message, (async () => {
+            const replyMessage = services.fun.handleCountdown(command);
+            await message.reply(replyMessage);
+        })());
     }
 
     const resolvedCommand = commandAliases[command] || command;
@@ -452,7 +453,9 @@ async function commandHandler(client, message) {
         })());
     } catch (error) {
         console.error(`Error al procesar el comando "${prefix}${command}":`, error);
-        await message.reply(`Pta algo paso, no anda ese comando ahora 😔`);
+        try {
+            await message.reply(`pta madre, algo pasó con el comando, o no existe o tengo dramas para ejecutarlo ahora, ve bien si está bien escrito tonto weon 🤦`);
+        } catch (e) { }
     }
 }
 
