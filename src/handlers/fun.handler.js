@@ -448,13 +448,6 @@ async function handleSound(client, message, command) {
 
     const files = Array.isArray(soundInfo.file) ? soundInfo.file : [soundInfo.file];
 
-    try {
-        await new Promise(resolve => setTimeout(resolve, 500)); // Pausa de 0.5s
-        await message.react(soundInfo.reaction);
-    } catch (reactionError) {
-        // Ignoramos el error cosmético
-    }
-
     for (const file of files) {
         const audioPath = path.join(__dirname, '..', '..', 'mp3', file);
         try {
@@ -474,6 +467,11 @@ async function handleSound(client, message, command) {
 
 function getSoundCommands() {
     return soundList;
+}
+
+function getSoundReaction(command) {
+    const soundInfo = soundMap[command];
+    return soundInfo ? soundInfo.reaction : '✅';
 }
 
 async function handleJoke(client, message) {
@@ -678,5 +676,6 @@ module.exports = {
     handleBotMention,
     handleOnce,
     addToMediaCache,
-    handleUrlAnalysis
+    handleUrlAnalysis,
+    getSoundReaction
 };

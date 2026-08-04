@@ -408,7 +408,8 @@ async function commandHandler(client, message) {
     // Comandos de sonido
     if (soundCommands.includes(command)) {
         console.log(`(Handler) -> Comando de sonido recibido: "${prefix}${command}"`);
-        return handleReaction(message, services.fun.handleSound(client, message, command));
+        const successReaction = services.fun.getSoundReaction(command);
+        return handleReaction(message, services.fun.handleSound(client, message, command), successReaction);
     }
 
     // Comandos de countdown
