@@ -320,16 +320,7 @@ const commandMap = {
     'actividad': (client, msg) => services.counter.handleActividad(client, msg),
     
     // Kast
-    'kast': (_, msg) => services.kast.handleKast(msg),
-
-    // Debug
-    'testreact': async (client, msg) => {
-        console.log("Probando reacción cruda...");
-        await new Promise(r => setTimeout(r, 500));
-        await msg.react('🔥');
-        console.log("Reacción cruda enviada.");
-        return "Prueba de reacción terminada.";
-    }
+    'kast': (_, msg) => services.kast.handleKast(msg)
 };
 
 // --- Lista de comandos válidos ---
