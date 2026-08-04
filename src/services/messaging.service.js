@@ -19,25 +19,16 @@ async function tryReact(message, reaction) {
 
 /**
  * Maneja el ciclo de vida de las reacciones para un comando.
- * @param {import('whatsapp-web.js').Message} message El objeto del mensaje.
- * @param {Promise<any>} commandPromise La promesa que representa la ejecución del comando.
- */
-async function handleReaction(message, commandPromise, successReaction = '✅') {
-    // Pequeña pausa de 300ms antes de la primera reacción.
-    // WhatsApp Web suele ignorar o fallar silenciosamente si intentamos
-    // reaccionar en el mismo milisegundo en que se recibe el mensaje.
-    await new Promise(r => setTimeout(r, 300));
-    
+async function handleReaction(message, actionFn, successReaction = '✅') {
     // Reaccionamos con reloj de arena
     await tryReact(message, '⏳');
 
     const startTime = Date.now();
 
     try {
-        await commandPromise;
+        // Ejecutamos el comando DESPUÉS de poner el reloj de arena
+        await actionFn();
         
-        // Esperamos un mínimo de 1.5s para que WhatsApp alcance a procesar el ⏳
-        // y para evitar un error de rate-limit al cambiar la reacción muy rápido
         const elapsed = Date.now() - startTime;
         if (elapsed < 1500) {
             await new Promise(r => setTimeout(r, 1500 - elapsed));

@@ -410,15 +410,17 @@ async function commandHandler(client, message) {
     if (soundCommands.includes(command)) {
         console.log(`(Handler) -> Comando de sonido recibido: "${prefix}${command}"`);
         const successReaction = services.fun.getSoundReaction(command);
-        return handleReaction(message, services.fun.handleSound(client, message, command), successReaction);
+        return handleReaction(message, async () => {
+            return services.fun.handleSound(client, message, command);
+        }, successReaction);
     }
 
     // Comandos de countdown
     if (countdownCommands.includes(command)) {
-        return handleReaction(message, (async () => {
+        return handleReaction(message, async () => {
             const replyMessage = services.fun.handleCountdown(command);
             await message.reply(replyMessage);
-        })());
+        });
     }
 
     const resolvedCommand = commandAliases[command] || command;
@@ -436,7 +438,7 @@ async function commandHandler(client, message) {
     }
 
     try {
-        await handleReaction(message, (async () => {
+        await handleReaction(message, async () => {
             console.log(`(Handler) -> Comando recibido: "${prefix}${command}"`);
 
             const handler = commandMap[resolvedCommand];
@@ -452,7 +454,7 @@ async function commandHandler(client, message) {
             if (replyMessage && typeof replyMessage === 'string') {
                 await message.reply(replyMessage);
             }
-        })());
+        });
     } catch (error) {
         console.error(`Error al procesar el comando "${prefix}${command}":`, error);
         try {
