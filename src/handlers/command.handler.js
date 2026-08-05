@@ -211,7 +211,9 @@ const commandAliases = {
     'curiosidad': 'random',
     'precio': 'oferta',
     'desc': 'oferta',
-    'producto': 'oferta'
+    'producto': 'oferta',
+    'expulsar': 'ban',
+    'eliminar': 'kick'
 };
 
 // --- Command Map (Reemplaza el switch gigante) ---
@@ -300,6 +302,10 @@ const commandMap = {
     'ban': (client, msg) => {
         const args = msg.body.trim().split(' ').slice(1);
         return services.admin.handleBanTemporal(client, msg, args);
+    },
+    'kick': (client, msg) => {
+        const args = msg.body.trim().split(' ').slice(1);
+        return services.admin.handleKick(client, msg, args);
     },
     
     // Cumpleaños

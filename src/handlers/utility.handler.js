@@ -204,7 +204,8 @@ async function handleRecap(message) {
         const messages = messageBuffer.getMessages(groupId);
         
         if (messages.length < 5) {
-            return `⚠️ Necesito al menos 5 mensajes para hacer un resumen. Por ahora solo tengo ${messages.length}.`;
+            const faltantes = 5 - messages.length;
+            return `⚠️ Necesito al menos 5 mensajes para hacer un resumen.\n\nActualmente tengo *${messages.length}* mensaje${messages.length !== 1 ? 's' : ''} en el buffer. Faltan *${faltantes}* más.\n\n_Nota: los comandos (! o /) no se cuentan._`;
         }
         
         // Cooldown propio para recap (no compartido con !ia)

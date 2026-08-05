@@ -437,9 +437,14 @@ const soundMap = {
 const soundList = Object.keys(soundMap);
 
 function handleAudioList() {
-    const header = "🎵 **Comandos de Audio Disponibles** 🎵\n\n";
-    const commandList = soundList.map(cmd => `!${cmd}`).join('\n');
-    return header + commandList;
+    const lines = [];
+    const cmds = soundList;
+    for (let i = 0; i < cmds.length; i += 2) {
+        const left = `${soundMap[cmds[i]].reaction} \`!${cmds[i]}\``;
+        const right = cmds[i + 1] ? `${soundMap[cmds[i + 1]].reaction} \`!${cmds[i + 1]}\`` : '';
+        lines.push(right ? `${left.padEnd(22)}${right}` : left);
+    }
+    return `🎵 *Audios disponibles (${cmds.length}):*\n\n${lines.join('\n')}`;
 }
 
 async function handleSound(client, message, command) {
@@ -450,18 +455,18 @@ async function handleSound(client, message, command) {
 
     for (const file of files) {
         const audioPath = path.join(__dirname, '..', '..', 'mp3', file);
+
+        // Verificar que el archivo existe; si no, lanzar error para que handleReaction muestre ❌
         try {
             await fs.promises.access(audioPath);
-            const media = MessageMedia.fromFilePath(audioPath);
-            await message.reply(media);
-        } catch (error) {
-            if (error.code === 'ENOENT') {
-                message.reply(`No se encontró el archivo de audio para "!${command}".`);
-                console.error(`Archivo no encontrado: ${audioPath}`);
-            } else {
-                console.error(`Error en handleSound:`, error);
-            }
+        } catch (e) {
+            console.error(`(Audio) -> Archivo no encontrado: ${audioPath}`);
+            throw new Error(`Archivo de audio "${file}" no encontrado.`);
         }
+
+        const media = MessageMedia.fromFilePath(audioPath);
+        // sendAudioAsVoice: true → llega como nota de voz en lugar de documento adjunto
+        await message.reply(media, undefined, { sendAudioAsVoice: true });
     }
 }
 

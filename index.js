@@ -89,8 +89,8 @@ client.on('message_create', async (message) => {
 
     // Registrar en buffer (!recap) y en contador de mensajes (!contador / !actividad)
     const isCommand = hasBody && (
-        /^\s*[!/][a-zA-Z0-9_]+/.test(message.body) ||   // Comando al inicio
-        /\s![a-zA-Z0-9_]+/.test(message.body)            // !comando dentro de frase
+        /^\s*[!/][a-zA-Z0-9_áéíóúñÁÉÍÓÚÑ18]+/.test(message.body) ||   // Comando al inicio
+        /\s![a-zA-Z0-9_áéíóúñÁÉÍÓÚÑ18]+/.test(message.body)            // !comando dentro de frase
     );
     if (!isCommand) {
         // El registro en buffer y contador ya se maneja dentro de handleMessageCreate
