@@ -266,7 +266,6 @@ async function handlePing(message) {
     const cpuUsage = cache.cpu || { usage: null, model: os.cpus()[0] ? os.cpus()[0].model : 'unknown' };
     const diskUsage = cache.disk || null;
     const osInfo = cache.osInfo || 'Desconocido';
-    const temperature = cache.temperature;
 
     // Obtener latencia de la API de WhatsApp mediante una reacción
     const waStart = Date.now();
@@ -275,34 +274,14 @@ async function handlePing(message) {
     } catch (e) { }
     const waLatency = Date.now() - waStart;
 
-    // Calcular latencia real del mensaje vs latencia de ejecución
-    const executeLag = Date.now() - startCommandTime;
-    // (removido messageLag del código, usaremos waLatency)
-
-    const systemUptime = formatUptime(os.uptime());
     const botUptime = formatUptime((Date.now() - BOT_STATS.startTime) / 1000);
-    const nodeVersion = process.version;
     const botVersion = packageInfo.version;
 
     // Helpers
     const safe = (v, fallback = 'N/A') => (v === null || v === undefined ? fallback : v);
-    const safeNumber = (n, decimals = 2, fallback = 'N/A') => {
-        if (n === null || n === undefined) return fallback;
-        if (typeof n === 'number' && Number.isFinite(n)) return n.toFixed(decimals);
-        const parsed = Number(n);
-        return Number.isFinite(parsed) ? parsed.toFixed(decimals) : fallback;
-    };
 
     // Servicios check
     const internetStatus = services.internet ? 'conectado ✅' : 'sin conexión ❌';
-    const pythonStatus = services.python ? 'disponible ✅' : 'no detectado ⚠️';
-
-    // Temperatura
-    const tempInfo = temperature ?
-        (temperature > 80 ? `🔥 ${temperature}°C (Alta)` :
-            temperature > 60 ? `🟡 ${temperature}°C (Normal)` :
-                `🟢 ${temperature}°C (Óptima)`) :
-        'desconocida 🤷';
 
     // Broma (1% de probabilidad)
     if (Math.random() < 0.01) {
@@ -342,30 +321,28 @@ async function handlePing(message) {
     ];
     const pensamiento = pensamientos[Math.floor(Math.random() * pensamientos.length)];
 
-    const response = `¡Hola! Soy Botillero 🤖 y este es mi estado actual:
+    const response = `¡Hola! Soy Botillero 🤖
 
-🎭 *Mi estado de ánimo:* ${moodString}
-🔋 *Energía:* ${cansancioInfo}
+🎭 ${moodString}
+🔋 ${cansancioInfo}
 
-*Rendimiento:*
-🧠 Estoy usando ${safe(ramUsage.used)} MB de mis ${safe(ramUsage.total)} MB de RAM.
-⚡ Mi cerebro (CPU) está al ${safeNumber(cpuUsage.usage, 1)}% de su capacidad.
-💽 En mi disco tengo ocupado ${diskUsage ? `${safe(diskUsage.used)} GB de ${safe(diskUsage.total)} GB` : 'N/A'}.
-🌡️ Mi temperatura es ${tempInfo}.
+💻 *Rendimiento:*
+🧠 RAM:  ${createProgressBar(ramPercent, 8)} (${safe(ramUsage.used)}MB)
+⚡ CPU:  ${createProgressBar(cpuPercent, 8)}
+💽 Disco: ${diskUsage ? createProgressBar(diskUsage.percentage, 8) : 'N/A'}
 
-*Conexión y Velocidad:*
+🌐 *Conexión:*
 📡 Internet: ${internetStatus}
-🏓 Mi ping a Google es de ${pingTime ? (pingTime / 1000).toFixed(3) + ' s' : 'N/A'}
-⏳ Tardo unos ${(waLatency / 1000).toFixed(3)} s en responder a WhatsApp.
+🏓 Ping Google: ${pingTime ? (pingTime / 1000).toFixed(3) + 's' : 'N/A'}
+⏳ Latencia WA: ${(waLatency / 1000).toFixed(3)}s
 
-*Mis Estadísticas:*
-⏰ Llevo despierto ${botUptime} (y mi servidor ${systemUptime}).
-📊 He procesado ${BOT_STATS.messagesProcessed} mensajes y ejecutado ${BOT_STATS.commandsExecuted} comandos de ${BOT_STATS.uniqueUsers.size} usuarios distintos.
-🐍 Entorno: Python ${pythonStatus} | Node ${nodeVersion} | Versión v${botVersion}
-🖥️ SO: ${osInfo}
+📈 *Estadísticas:*
+⏰ Despierto: ${botUptime}
+📊 Tráfico: ${BOT_STATS.messagesProcessed} msgs | ${BOT_STATS.commandsExecuted} cmds
+👥 Usuarios: ${BOT_STATS.uniqueUsers.size}
+⚙️ OS: ${osInfo} | v${botVersion}
 
-💭 *Pensamiento del momento:*
-_"${pensamiento}"_`.trim();
+💭 _"${pensamiento}"_`.trim();
 
     return response;
 }
