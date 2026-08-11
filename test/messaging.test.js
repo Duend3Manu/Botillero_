@@ -21,3 +21,17 @@ test("una reacción reporta fallo si nunca encuentra el mensaje", async () => {
   };
   assert.equal(await tryReact(message, "✅"), false);
 });
+
+test("una reacción puede usar un ID interno sin _serialized", async () => {
+  let received;
+  const message = {
+    id: { id: "internal-id" },
+    from: "group@g.us",
+    client: { pupPage: { evaluate: async (...args) => {
+      received = args.slice(1);
+      return { ok: true };
+    } } }
+  };
+  assert.equal(await tryReact(message, "✅"), true);
+  assert.deepEqual(received.slice(0, 3), [null, "internal-id", "group@g.us"]);
+});

@@ -5,8 +5,14 @@ const fs = require('fs');
 const path = require('path');
 const moment = require('moment-timezone');
 const ffmpeg = require('fluent-ffmpeg');
-ffmpeg.setFfmpegPath('C:\\FFmpeg\\bin\\ffmpeg.exe');
-ffmpeg.setFfprobePath('C:\\FFmpeg\\bin\\ffprobe.exe');
+const defaultFfmpegPath = 'C:\\FFmpeg\\bin\\ffmpeg.exe';
+const defaultFfprobePath = 'C:\\FFmpeg\\bin\\ffprobe.exe';
+const ffmpegPath = process.env.FFMPEG_PATH && fs.existsSync(process.env.FFMPEG_PATH)
+    ? process.env.FFMPEG_PATH : defaultFfmpegPath;
+const ffprobePath = process.env.FFPROBE_PATH && fs.existsSync(process.env.FFPROBE_PATH)
+    ? process.env.FFPROBE_PATH : defaultFfprobePath;
+ffmpeg.setFfmpegPath(ffmpegPath);
+ffmpeg.setFfprobePath(ffprobePath);
 const { MessageMedia } = require('whatsapp-web.js');
 const securityService = require('../utils/securityService');
 
@@ -435,6 +441,31 @@ const soundMap = {
 };
 
 const soundList = Object.keys(soundMap);
+const voiceCacheDir = path.join(__dirname, '..', '..', 'temp', 'voice');
+
+async function createVoiceMedia(audioPath) {
+    await fs.promises.mkdir(voiceCacheDir, { recursive: true });
+    const stat = await fs.promises.stat(audioPath);
+    const sourceName = path.basename(audioPath, path.extname(audioPath));
+    const outputPath = path.join(voiceCacheDir, `${sourceName}-${stat.mtimeMs}.ogg`);
+
+    if (!fs.existsSync(outputPath)) {
+        await new Promise((resolve, reject) => {
+            ffmpeg(audioPath)
+                .noVideo()
+                .audioCodec('libopus')
+                .audioBitrate('48k')
+                .audioChannels(1)
+                .audioFrequency(48000)
+                .format('ogg')
+                .on('error', reject)
+                .on('end', resolve)
+                .save(outputPath);
+        });
+    }
+
+    return new MessageMedia('audio/ogg; codecs=opus', await fs.promises.readFile(outputPath, { encoding: 'base64' }), `${sourceName}.ogg`);
+}
 
 function handleAudioList() {
     const lines = [];
@@ -464,9 +495,18 @@ async function handleSound(client, message, command) {
             throw new Error(`Archivo de audio "${file}" no encontrado.`);
         }
 
-        const media = MessageMedia.fromFilePath(audioPath);
+        let media;
+        try {
+            media = await createVoiceMedia(audioPath);
+        } catch (error) {
+            console.warn(
+                `(Audio) -> No se pudo convertir ${file} a nota de voz con ${ffmpegPath} ` +
+                `(existe: ${fs.existsSync(ffmpegPath)}): ${error.message}`
+            );
+            media = MessageMedia.fromFilePath(audioPath);
+        }
         // sendAudioAsVoice: true → llega como nota de voz en lugar de documento adjunto
-        await message.reply(media, undefined, { sendAudioAsVoice: true });
+        await client.sendMessage(message.from, media, { sendAudioAsVoice: true });
     }
 }
 
