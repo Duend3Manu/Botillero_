@@ -3,7 +3,7 @@
 
 const { MessageMedia } = require('../adapters/wwebjs-adapter');
 const { handleReaction } = require('../services/messaging.service');
-const featureFlags = require('../services/feature-flags.service');
+const botConfig = require('../../config/bot.config');
 const { getCommandHelp } = require('../config/command-catalog');
 
 // --- Lazy Loading de Servicios ---
@@ -69,7 +69,8 @@ async function handleHoroscopeCommand(client, message, serviceMethod) {
     }
     
     const result = await serviceMethod(signo);
-    await message.reply(result.text);
+    const text = result?.text?.trim() || 'Hoy el horóscopo se quedó mudo 😵‍💫. Intenta de nuevo más tarde.';
+    await client.sendMessage(message.from, text);
     
     if (result.imagePath) {
         const media = MessageMedia.fromFilePath(result.imagePath);
@@ -309,7 +310,6 @@ const commandMap = {
         const args = msg.body.trim().split(' ').slice(1);
         return services.admin.handleKick(client, msg, args);
     },
-    'mantenimiento': (client, msg) => services.admin.handleMaintenance(client, msg, Object.keys(commandMap)),
     
     // Cumpleaños
     'cumpleaños': (client, msg) => {
@@ -391,11 +391,11 @@ async function commandHandler(client, message) {
         console.log(`(Handler) -> Comando no reconocido: "${prefix}${command}"`);
         try {
             await new Promise(r => setTimeout(r, 300));
-            await message.react('❌');
+            await tryReact(message, '❌');
         } catch (e) { }
         try {
             await message.reply(
-                `pta madre, algo pasó con el comando, o no existe o tengo dramas para ejecutarlo ahora, ve bien si está bien escrito tonto weon 🤦`
+                `Weon, ese comando no existe po 🤦‍♂️\n\nMira \`!menu\` antes de inventar weás, si tampoco soy adivino.`
             );
         } catch (err) {
             console.error('Error al responder comando no válido:', err.message);
@@ -436,9 +436,11 @@ async function commandHandler(client, message) {
     const resolvedCommand = commandAliases[command] || command;
 
     // Verificar si la característica está deshabilitada en la configuración
-    const isDisabled = featureFlags.isDisabled(resolvedCommand) ||
-        featureFlags.isDisabled(command) ||
-        (command === 'audios' && featureFlags.isDisabled('sonidos'));
+    const isDisabled = botConfig.disabledFeatures && (
+        botConfig.disabledFeatures.includes(resolvedCommand) ||
+        botConfig.disabledFeatures.includes(command) ||
+        (command === 'audios' && botConfig.disabledFeatures.includes('sonidos'))
+    );
 
     if (isDisabled) {
         console.log(`(Handler) -> Comando bloqueado (deshabilitado): "${prefix}${command}"`);

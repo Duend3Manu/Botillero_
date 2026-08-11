@@ -2,10 +2,16 @@
 
 const { spawn } = require('child_process');
 const path = require('path');
+const fs = require('fs');
 const taskQueue = require('./task-queue.service');
 
 // Detectar el comando Python correcto automáticamente
-const PYTHON_COMMAND = process.env.PYTHON || (process.platform === 'win32' ? 'python' : 'python3');
+const projectRoot = path.join(__dirname, '..', '..');
+const localVenvPython = process.platform === 'win32'
+    ? path.join(projectRoot, '.venv', 'Scripts', 'python.exe')
+    : path.join(projectRoot, '.venv', 'bin', 'python');
+const PYTHON_COMMAND = process.env.PYTHON ||
+    (fs.existsSync(localVenvPython) ? localVenvPython : (process.platform === 'win32' ? 'python' : 'python3'));
 
 /**
  * Ejecuta un script Python y devuelve una Promise con { stdout, stderr, code, json }.

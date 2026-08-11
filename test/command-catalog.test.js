@@ -9,7 +9,8 @@ test("el catálogo ofrece ayuda para comandos conocidos", () => {
   assert.equal(getCommandHelp("no-existe"), null);
 });
 
-test("el menú refleja comandos en mantenimiento", () => {
-  const menu = getMenu(new Set(["clima"]));
-  assert.match(menu, /!clima \[ciudad\].*en mantenimiento/);
+test("el menú incluye emojis y oculta comandos privados", () => {
+  const menu = getMenu();
+  assert.match(menu, /🌤️/);
+  assert.doesNotMatch(menu, /!mantenimiento|!ban|!kick|!ia|!oferta/);
 });

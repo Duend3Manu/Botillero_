@@ -25,11 +25,9 @@ Bot de WhatsApp para un grupo privado. Incluye utilidades chilenas, entretenimie
 
 El bot también crea un respaldo diario a las 03:00 y conserva los 14 últimos en `backups/`.
 
-## Menú y mantenimiento
+## Menú
 
-`!menu` se genera desde el catálogo de comandos. Usa `!ayuda <comando>` para ver el uso de una función.
-
-Los administradores del grupo pueden desactivar temporalmente una función con `!mantenimiento <comando> off` y reactivarla con `!mantenimiento <comando> on`. La configuración se guarda localmente y sobrevive reinicios.
+`!menu` se genera desde el catálogo de comandos. Usa `!ayuda <comando>` para ver el uso de una función. Algunos comandos de administración y uso privado no se muestran en el menú.
 
 ## Panel local
 

@@ -1,53 +1,69 @@
-// src/services/messaging.service.js
 "use strict";
 
-/**
- * Intenta reaccionar a un mensaje, ignorando errores si falla.
- * @param {import('whatsapp-web.js').Message} message El objeto del mensaje.
- * @param {string} reaction El emoji para reaccionar.
- */
-async function tryReact(message, reaction) {
-    console.log(`(MessagingService) -> Intentando reaccionar con: ${reaction}`);
-    try {
-        await message.react(reaction);
-        console.log(`(MessagingService) -> Reacción ${reaction} enviada con éxito.`);
-    } catch (error) {
-        // Ignora el error de reacción, pero lo registra como advertencia.
-        console.warn(`(MessagingService) -> No se pudo reaccionar con ${reaction}: ${error.message}`);
+const REACTION_ATTEMPTS = 3;
+const RETRY_DELAY_MS = 500;
+const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
+
+async function sendVerifiedReaction(message, reaction) {
+    const messageId = message?.id?._serialized || message?._data?.id?._serialized ||
+        (typeof message?.id === 'string' ? message.id : null);
+    const client = message?.client || message?._client;
+    if (!messageId) {
+        throw new Error('El mensaje no tiene un ID serializado para reaccionar');
     }
+    if (!client?.pupPage) {
+        throw new Error('El mensaje no tiene cliente de WhatsApp asociado');
+    }
+
+    return client.pupPage.evaluate(async (id, emoji) => {
+        try {
+            const collections = window.require('WAWebCollections');
+            const msg = collections.Msg.get(id) ||
+                (await collections.Msg.getMessagesById([id]))?.messages?.[0];
+            if (!msg) return { ok: false, reason: 'message_not_found' };
+            await window.require('WAWebSendReactionMsgAction').sendReactionToMsg(msg, emoji);
+            return { ok: true };
+        } catch (error) {
+            return { ok: false, reason: error.message || 'reaction_error' };
+        }
+    }, messageId, reaction);
 }
 
-/**
- * Maneja el ciclo de vida de las reacciones para un comando.
- */
-async function handleReaction(message, actionFn, successReaction = '✅') {
-    // Pequeña pausa de 300ms antes de la primera reacción.
-    await new Promise(r => setTimeout(r, 300));
-    
-    // Reaccionamos con reloj de arena
-    await tryReact(message, '⏳');
-
-    const startTime = Date.now();
-
-    try {
-        // Ejecutamos el comando DESPUÉS de poner el reloj de arena
-        await actionFn();
-        
-        const elapsed = Date.now() - startTime;
-        if (elapsed < 1500) {
-            await new Promise(r => setTimeout(r, 1500 - elapsed));
+async function tryReact(message, reaction) {
+    console.log(`(MessagingService) -> Intentando reaccionar con: ${reaction}`);
+    let lastReason = 'unknown';
+    for (let attempt = 1; attempt <= REACTION_ATTEMPTS; attempt++) {
+        try {
+            const result = await sendVerifiedReaction(message, reaction);
+            if (result?.ok) {
+                console.log(`(MessagingService) -> Reacción ${reaction} enviada (intento ${attempt}).`);
+                return true;
+            }
+            lastReason = result?.reason || lastReason;
+        } catch (error) {
+            lastReason = error.message;
         }
+        if (attempt < REACTION_ATTEMPTS) await delay(RETRY_DELAY_MS);
+    }
+    console.warn(`(MessagingService) -> No se pudo reaccionar con ${reaction}: ${lastReason}`);
+    return false;
+}
 
+async function handleReaction(message, actionFn, successReaction = '✅') {
+    await delay(300);
+    await tryReact(message, '⏳');
+    const startTime = Date.now();
+    try {
+        await actionFn();
+        const elapsed = Date.now() - startTime;
+        if (elapsed < 1500) await delay(1500 - elapsed);
         await tryReact(message, successReaction);
     } catch (error) {
         const elapsed = Date.now() - startTime;
-        if (elapsed < 1500) {
-            await new Promise(r => setTimeout(r, 1500 - elapsed));
-        }
+        if (elapsed < 1500) await delay(1500 - elapsed);
         await tryReact(message, '❌');
-        // El error se relanza para que el manejador principal lo capture y envíe el mensaje de error.
         throw error;
     }
 }
 
-module.exports = { handleReaction, tryReact };
+module.exports = { handleReaction, tryReact, sendVerifiedReaction };

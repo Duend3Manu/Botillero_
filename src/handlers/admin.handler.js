@@ -2,7 +2,6 @@
 "use strict";
 
 const { scheduleTask } = require('../utils/db');
-const featureFlags = require('../services/feature-flags.service');
 
 // --- Helper reutilizable: verificar si el autor es admin del grupo ---
 async function checkIsAdmin(client, chatId, authorId) {
@@ -34,29 +33,6 @@ async function checkIsAdmin(client, chatId, authorId) {
             return { isAdmin: false };
         }
     }, chatId, authorId);
-}
-
-async function handleMaintenance(client, message, availableCommands) {
-    const chatId = message.from;
-    if (!chatId.endsWith('@g.us')) return message.reply('Este comando solo puede usarse en grupos.');
-    const authorId = message.author || message.from;
-    const { isAdmin } = await checkIsAdmin(client, chatId, authorId);
-    if (!isAdmin) return message.reply('Solo los administradores pueden cambiar el modo mantenimiento.');
-
-    const [, command, action] = message.body.trim().split(/\s+/);
-    if (!command || !action) {
-        const disabled = [...featureFlags.getDisabled()];
-        return `Uso: !mantenimiento <comando> on|off\n\nComandos en mantenimiento: ${disabled.length ? disabled.join(', ') : 'ninguno'}`;
-    }
-    const normalized = command.toLowerCase().replace(/^[!/]/, '');
-    if (!availableCommands.includes(normalized) || normalized === 'mantenimiento') {
-        return 'Ese comando no existe o no puede desactivarse desde aquí.';
-    }
-    const enabled = action.toLowerCase() === 'on';
-    const disabled = action.toLowerCase() === 'off';
-    if (!enabled && !disabled) return 'Usa on para activar u off para poner en mantenimiento.';
-    featureFlags.setDisabled(normalized, disabled);
-    return `✅ !${normalized} quedó ${disabled ? 'en mantenimiento' : 'activo'}.`;
 }
 
 // --- Helper reutilizable: obtener el target del comando (mención o cita) ---
@@ -307,6 +283,5 @@ module.exports = {
     handleAgregar,
     handleBanTemporal,
     handleKick,
-    handleMaintenance,
     checkIsAdmin
 };

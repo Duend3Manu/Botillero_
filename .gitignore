@@ -36,6 +36,5 @@ subir_a_github.py
 src/data/message_counters.json
 logs/
 backups/
-config/runtime-features.json
 bot.log
 bot.log.old

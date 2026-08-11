@@ -31,6 +31,16 @@ function findImagePath(signo) {
     return null;
 }
 
+function normalizeHoroscopeText(text, label) {
+    const value = (text || '').trim();
+    if (!value) return `${label} no devolvió información hoy 😵‍💫. Intenta de nuevo más tarde.`;
+    if (/^(error|signo no encontrado)/i.test(value)) {
+        console.warn(`Fuente de ${label} respondió: ${value}`);
+        return `${label} está con dramas para responder ahora 😵‍💫. Prueba de nuevo más tarde.`;
+    }
+    return value;
+}
+
 async function getHoroscope(signo) {
     const signoLimpio = limpiarSigno(signo);
     let scriptName = '';
@@ -49,9 +59,13 @@ async function getHoroscope(signo) {
         if (result.code !== 0) {
             throw new Error(result.stderr || 'Error al ejecutar script de horóscopo');
         }
+        const text = normalizeHoroscopeText(result.stdout, 'El horóscopo');
+        if (text.startsWith('El horóscopo está con dramas') || text.startsWith('El horóscopo no devolvió')) {
+            return { text, imagePath: null };
+        }
         const imagePath = findImagePath(signoLimpio);
         
-        return { text: result.stdout, imagePath: imagePath };
+        return { text, imagePath: imagePath };
 
     } catch (error) {
         console.error(`Error en getHoroscope para ${signo}:`, error.message);
@@ -72,9 +86,13 @@ async function getChineseHoroscope(signo) {
         if (result.code !== 0) {
             throw new Error(result.stderr || 'Error al ejecutar script de horóscopo chino');
         }
+        const text = normalizeHoroscopeText(result.stdout, 'El horóscopo chino');
+        if (text.startsWith('El horóscopo chino está con dramas') || text.startsWith('El horóscopo chino no devolvió')) {
+            return { text, imagePath: null };
+        }
         const imagePath = findImagePath(signoLimpio);
         
-        return { text: result.stdout, imagePath: imagePath };
+        return { text, imagePath: imagePath };
 
     } catch (error) {
         console.error(`Error en getChineseHoroscope para ${signo}:`, error.message);
