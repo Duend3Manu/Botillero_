@@ -2,6 +2,7 @@
 
 const { spawn } = require('child_process');
 const path = require('path');
+const taskQueue = require('./task-queue.service');
 
 // Detectar el comando Python correcto automáticamente
 const PYTHON_COMMAND = process.env.PYTHON || (process.platform === 'win32' ? 'python' : 'python3');
@@ -14,7 +15,10 @@ const PYTHON_COMMAND = process.env.PYTHON || (process.platform === 'win32' ? 'py
  * @returns {Promise<{code, stdout, stderr, json}>}
  */
 function executeScript(scriptName, args = [], opts = {}) {
-    return new Promise((resolve, reject) => {
+    if (!/^[a-zA-Z0-9_.-]+\.py$/.test(scriptName)) {
+        return Promise.reject(new Error('Nombre de script Python no válido'));
+    }
+    return taskQueue.enqueue(() => new Promise((resolve, reject) => {
         const pythonExec = opts.pythonExec || PYTHON_COMMAND;
         const scriptPath = path.join(__dirname, '..', '..', 'scripts', 'python', scriptName);
         
@@ -58,7 +62,7 @@ function executeScript(scriptName, args = [], opts = {}) {
                 json: parsed
             });
         });
-    });
+    }), `python:${scriptName}`);
 }
 
 module.exports = { executeScript };

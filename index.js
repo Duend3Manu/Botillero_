@@ -13,6 +13,8 @@ process.on('uncaughtException', (error) => {
 });
 
 const { Client, LocalAuth } = require('whatsapp-web.js');
+const axios = require('axios');
+const sourceHealth = require('./src/services/source-health.service');
 const qrcode = require('qrcode-terminal');
 const { handleMessageCreate, handleMessageRevoke, handleMessageUpdate, handleGroupJoin } = require('./src/handlers/events.handler');
 const commandHandler = require('./src/handlers/command.handler');
@@ -21,6 +23,16 @@ const { incrementStats } = require('./src/handlers/system.handler');
 const messageBuffer = require('./src/services/message-buffer.service');
 const messageCounter = require('./src/services/message-counter.service');
 const botConfig = require('./config/bot.config');
+const logger = require('./src/utils/logger');
+require('./src/api/admin-server').startAdminServer();
+
+// Valor por defecto para integraciones externas; cada servicio puede definir uno menor.
+axios.defaults.timeout = Number(process.env.HTTP_TIMEOUT_MS || 15000);
+axios.defaults.maxContentLength = 15 * 1024 * 1024;
+axios.interceptors.response.use(
+    response => { sourceHealth.recordSuccess(response.config.url); return response; },
+    error => { sourceHealth.recordFailure(error.config?.url, error).catch(() => {}); return Promise.reject(error); }
+);
 
 console.log("🚀 Iniciando Botillero v2.0...");
 
@@ -32,7 +44,7 @@ const client = new Client({
     }),
     puppeteer: botConfig.puppeteer,
     webVersionCache: botConfig.webVersionCache,
-    ffmpegPath: 'C:\\FFmpeg\\bin\\ffmpeg.exe'
+    ffmpegPath: process.env.FFMPEG_PATH || undefined
 });
 
 // --- EVENTOS DE CONEXIÓN ---
@@ -46,17 +58,23 @@ client.on('ready', () => {
     const { startLunesVideoScheduler, startBirthdayScheduler } = require('./src/services/schedule.service');
     startLunesVideoScheduler(client);
     startBirthdayScheduler(client);
+    require('./src/services/scheduled-tasks.service').startScheduledTaskRunner(client);
+    require('./src/services/backup.service').startBackupScheduler();
+    sourceHealth.configureNotifier(client, botConfig.notificationGroupId || process.env.NOTIFICATION_GROUP_ID);
 });
 
 client.on('auth_failure', msg => {
     console.error('❌ Error de autenticación:', msg);
 });
 
+let reconnectTimer = null;
 client.on('disconnected', (reason) => {
     console.log('⚠️  Bot desconectado:', reason);
     console.log('🔄 Intentando reconectar en 10 segundos...');
     
-    setTimeout(() => {
+    if (reconnectTimer) return;
+    reconnectTimer = setTimeout(() => {
+        reconnectTimer = null;
         console.log('🔄 Reiniciando cliente...');
         client.initialize().catch(err => {
             console.error('❌ Error al reconectar:', err);
@@ -129,7 +147,13 @@ client.on('message_update', message => handleMessageUpdate(client, message));
 client.on('group_join', notification => handleGroupJoin(client, notification));
 
 // --- CIERRE ELEGANTE ---
-process.on('SIGINT', async () => {
+let isShuttingDown = false;
+async function shutdown(signal) {
+    if (isShuttingDown) return;
+    isShuttingDown = true;
+    logger.info('Cerrando bot', { signal });
+    require('./src/services/message-counter.service').flushCounters();
+    process.emit('botillero:shutdown');
     console.log('\n🛑 Cerrando bot...');
     try {
         await client.destroy();
@@ -138,7 +162,9 @@ process.on('SIGINT', async () => {
         console.error('❌ Error al cerrar cliente:', e);
     }
     process.exit(0);
-});
+}
+process.on('SIGINT', () => shutdown('SIGINT'));
+process.on('SIGTERM', () => shutdown('SIGTERM'));
 
 // --- INICIAR CLIENTE ---
 client.initialize();

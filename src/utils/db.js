@@ -2,6 +2,7 @@
 "use strict";
 
 const path = require('path');
+const fs = require('fs');
 const Database = require('better-sqlite3');  // CAMBIO: mejor-sqlite3 en lugar de sqlite3
 const DB_PATH = path.join(__dirname, '../../messages.db');
 
@@ -90,20 +91,20 @@ function cleanupOldMessages() {
 }
 
 // Iniciar la limpieza periódica cada 2 minutos (más frecuente para evitar acumulación)
-setInterval(cleanupOldMessages, 2 * 60 * 1000);
+const cleanupTimer = setInterval(cleanupOldMessages, 2 * 60 * 1000);
+cleanupTimer.unref?.();
 
 // Limpieza inicial al inicio
 setTimeout(cleanupOldMessages, 10000); // 10 segundos después de iniciar
 
 // Manejo de cierre seguro para evitar corrupción de datos
-process.on('SIGINT', () => {
+process.on('botillero:shutdown', () => {
     try {
         db.close();
         console.log('Base de datos cerrada correctamente.');
     } catch (err) {
         console.error('Error al cerrar la base de datos:', err.message);
     }
-    process.exit(0);
 });
 
 // Tabla para cumpleaños
@@ -116,6 +117,17 @@ db.prepare(`
         groupId TEXT
     )
 `).run();
+
+db.prepare(`
+    CREATE TABLE IF NOT EXISTS scheduled_tasks (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        type TEXT NOT NULL,
+        payload TEXT NOT NULL,
+        run_at INTEGER NOT NULL,
+        created_at INTEGER NOT NULL
+    )
+`).run();
+db.prepare('CREATE INDEX IF NOT EXISTS idx_scheduled_tasks_run_at ON scheduled_tasks(run_at)').run();
 
 const saveBirthdayStmt = db.prepare(`
     INSERT OR REPLACE INTO birthdays (userId, day, month, year, groupId)
@@ -134,11 +146,46 @@ function getBirthdaysForDate(day, month) {
     return getBirthdaysStmt.all(day, month);
 }
 
+const insertTaskStmt = db.prepare('INSERT INTO scheduled_tasks (type, payload, run_at, created_at) VALUES (?, ?, ?, ?)');
+const dueTasksStmt = db.prepare('SELECT * FROM scheduled_tasks WHERE run_at <= ? ORDER BY run_at ASC LIMIT ?');
+const deleteTaskStmt = db.prepare('DELETE FROM scheduled_tasks WHERE id = ?');
+
+function scheduleTask(type, payload, runAt) {
+    return insertTaskStmt.run(type, JSON.stringify(payload), runAt, Date.now()).lastInsertRowid;
+}
+
+function getDueTasks(limit = 20) {
+    return dueTasksStmt.all(Date.now(), limit).map(task => ({ ...task, payload: JSON.parse(task.payload) }));
+}
+
+const pendingTasksStmt = db.prepare('SELECT * FROM scheduled_tasks ORDER BY run_at ASC LIMIT ?');
+function getScheduledTasks(limit = 50) {
+    return pendingTasksStmt.all(limit).map(task => ({ ...task, payload: JSON.parse(task.payload) }));
+}
+
+function completeTask(id) {
+    deleteTaskStmt.run(id);
+}
+
+function createBackup(destinationDir) {
+    fs.mkdirSync(destinationDir, { recursive: true });
+    db.pragma('wal_checkpoint(TRUNCATE)');
+    const stamp = new Date().toISOString().replace(/[:.]/g, '-');
+    const destination = path.join(destinationDir, `messages-${stamp}.db`);
+    fs.copyFileSync(DB_PATH, destination);
+    return destination;
+}
+
 module.exports = { 
     storeMessage, 
     getOriginalMessage, 
     getApiUsage, 
     updateApiUsage,
     saveBirthday,
-    getBirthdaysForDate
+    getBirthdaysForDate,
+    scheduleTask,
+    getDueTasks,
+    getScheduledTasks,
+    completeTask,
+    createBackup
 };

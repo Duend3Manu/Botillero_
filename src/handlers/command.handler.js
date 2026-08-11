@@ -2,10 +2,9 @@
 "use strict";
 
 const { MessageMedia } = require('../adapters/wwebjs-adapter');
-const rateLimiter = require('../services/rate-limiter.service');
 const { handleReaction } = require('../services/messaging.service');
-
-const botConfig = require('../../config/bot.config');
+const featureFlags = require('../services/feature-flags.service');
+const { getCommandHelp } = require('../config/command-catalog');
 
 // --- Lazy Loading de Servicios ---
 // Los servicios solo se cargan cuando realmente se necesitan
@@ -24,7 +23,6 @@ const services = {
     get ai() { return require('./ai.handler'); },
     get personalSearch() { return require('./personalsearch.handler'); },
     get network() { return require('./network.handler'); },
-    get fap() { return require('./fap.handler'); },
     get group() { return require('./group.handler'); },
     get admin() { return require('./admin.handler'); },
     get birthday() { return require('./birthday.handler'); },
@@ -281,7 +279,14 @@ const commandMap = {
     'caso': (_, msg) => services.stateful.handleCaso(msg),
     
     // IA y ayuda
-    'ayuda': (_, msg) => services.ai.handleAiHelp(msg),
+    'ayuda': (_, msg) => {
+        const requested = msg.body.trim().split(/\s+/)[1];
+        if (!requested) return services.ai.handleAiHelp(msg);
+        const help = getCommandHelp(requested.replace(/^[!/]/, ''));
+        return help
+            ? `* !${help.name}${help.args ? ` ${help.args}` : ''}*\n${help.description}`
+            : `No encontré ayuda para *${requested}*. Usa !menu para ver los comandos.`;
+    },
     'ia': (_, msg) => services.ai.handleLocalIA(msg),
     
     // Búsquedas personales
@@ -290,9 +295,6 @@ const commandMap = {
     // Red
     'whois': (_, msg) => services.network.handleNetworkQuery(msg),
     'nic': (_, msg) => services.network.handleNicClSearch(msg),
-    
-    // FAP y grupos
-    'fap': (client, msg) => services.fap.handleFapSearch(client, msg),
     
     // Admin
     'agregar': (client, msg) => {
@@ -307,6 +309,7 @@ const commandMap = {
         const args = msg.body.trim().split(' ').slice(1);
         return services.admin.handleKick(client, msg, args);
     },
+    'mantenimiento': (client, msg) => services.admin.handleMaintenance(client, msg, Object.keys(commandMap)),
     
     // Cumpleaños
     'cumpleaños': (client, msg) => {
@@ -326,7 +329,8 @@ const commandMap = {
     'actividad': (client, msg) => services.counter.handleActividad(client, msg),
     
     // Kast
-    'kast': (_, msg) => services.kast.handleKast(msg)
+    'kast': (_, msg) => services.kast.handleKast(msg),
+    'todos': (client, msg) => services.group.handleTagAll(client, msg)
 };
 
 // --- Lista de comandos válidos ---
@@ -432,11 +436,9 @@ async function commandHandler(client, message) {
     const resolvedCommand = commandAliases[command] || command;
 
     // Verificar si la característica está deshabilitada en la configuración
-    const isDisabled = botConfig.disabledFeatures && (
-        botConfig.disabledFeatures.includes(resolvedCommand) ||
-        botConfig.disabledFeatures.includes(command) ||
-        (command === 'audios' && botConfig.disabledFeatures.includes('sonidos'))
-    );
+    const isDisabled = featureFlags.isDisabled(resolvedCommand) ||
+        featureFlags.isDisabled(command) ||
+        (command === 'audios' && featureFlags.isDisabled('sonidos'));
 
     if (isDisabled) {
         console.log(`(Handler) -> Comando bloqueado (deshabilitado): "${prefix}${command}"`);

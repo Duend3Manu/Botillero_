@@ -16,6 +16,8 @@ const MAX_LOG_SIZE = 5 * 1024 * 1024; // 5MB
 
 // Contador para optimizar las verificaciones de disco
 let writeCounter = 0;
+const recentEntries = [];
+const MAX_RECENT_ENTRIES = 100;
 
 function formatMessage(level, message, ...args) {
     const timestamp = new Date().toISOString();
@@ -58,6 +60,8 @@ function writeToFile(message) {
 }
 
 function log(level, message, ...args) {
+    recentEntries.push({ timestamp: new Date().toISOString(), level, message });
+    if (recentEntries.length > MAX_RECENT_ENTRIES) recentEntries.shift();
     const formattedMessage = formatMessage(level, message, ...args);
     
     // Escribir en consola
@@ -81,4 +85,5 @@ module.exports = {
     warn: (message, ...args) => log(LOG_LEVELS.WARN, message, ...args),
     info: (message, ...args) => log(LOG_LEVELS.INFO, message, ...args),
     debug: (message, ...args) => log(LOG_LEVELS.DEBUG, message, ...args)
+    ,recent: (level) => recentEntries.filter(entry => !level || entry.level === level)
 };

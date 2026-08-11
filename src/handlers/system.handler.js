@@ -6,6 +6,7 @@ const si = require('systeminformation');
 const axios = require('axios');
 const ping = require('ping');
 const packageInfo = require('../../package.json');
+const taskQueue = require('../services/task-queue.service');
 
 // --- Contadores globales de estadísticas del bot ---
 const BOT_STATS = {
@@ -20,6 +21,17 @@ function incrementStats(type, userId = null) {
     if (type === 'message') BOT_STATS.messagesProcessed++;
     if (type === 'command') BOT_STATS.commandsExecuted++;
     if (userId) BOT_STATS.uniqueUsers.add(userId);
+}
+
+function getRuntimeStats() {
+    return {
+        uptimeSeconds: Math.floor((Date.now() - BOT_STATS.startTime) / 1000),
+        messagesProcessed: BOT_STATS.messagesProcessed,
+        commandsExecuted: BOT_STATS.commandsExecuted,
+        uniqueUsers: BOT_STATS.uniqueUsers.size,
+        queue: taskQueue.getStats(),
+        version: packageInfo.version
+    };
 }
 
 // --- Funciones auxiliares para obtener métricas del sistema ---
@@ -347,4 +359,4 @@ async function handlePing(message) {
     return response;
 }
 
-module.exports = { handlePing, incrementStats };
+module.exports = { handlePing, incrementStats, getRuntimeStats };

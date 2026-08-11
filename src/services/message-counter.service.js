@@ -33,6 +33,24 @@ function saveCounters(data) {
 
 // Cache en memoria para no leer disco en cada mensaje
 let countersCache = loadCounters();
+let dirty = false;
+let flushTimer = null;
+
+function flushCounters() {
+    if (!dirty) return;
+    dirty = false;
+    saveCounters(countersCache);
+}
+
+function scheduleFlush() {
+    dirty = true;
+    if (flushTimer) return;
+    flushTimer = setTimeout(() => {
+        flushTimer = null;
+        flushCounters();
+    }, 5000);
+    flushTimer.unref?.();
+}
 
 // -----------------------------------------------------------------------
 // API pública
@@ -64,7 +82,7 @@ function recordMessage(groupId, userId, userName, msgType = 'chat') {
     group[userId].count++;
     group[userId].lastSeen = Date.now();
 
-    saveCounters(countersCache);
+    scheduleFlush();
 }
 
 /**
@@ -106,7 +124,7 @@ function getAllGroups() {
 function resetGroup(groupId) {
     if (countersCache[groupId]) {
         delete countersCache[groupId];
-        saveCounters(countersCache);
+        flushCounters();
         return true;
     }
     return false;
@@ -117,5 +135,6 @@ module.exports = {
     getCounters,
     getLastSeen,
     getAllGroups,
-    resetGroup
+    resetGroup,
+    flushCounters
 };

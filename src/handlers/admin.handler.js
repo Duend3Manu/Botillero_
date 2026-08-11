@@ -1,6 +1,9 @@
 // src/handlers/admin.handler.js
 "use strict";
 
+const { scheduleTask } = require('../utils/db');
+const featureFlags = require('../services/feature-flags.service');
+
 // --- Helper reutilizable: verificar si el autor es admin del grupo ---
 async function checkIsAdmin(client, chatId, authorId) {
     return client.pupPage.evaluate(async (groupId, authorId) => {
@@ -31,6 +34,29 @@ async function checkIsAdmin(client, chatId, authorId) {
             return { isAdmin: false };
         }
     }, chatId, authorId);
+}
+
+async function handleMaintenance(client, message, availableCommands) {
+    const chatId = message.from;
+    if (!chatId.endsWith('@g.us')) return message.reply('Este comando solo puede usarse en grupos.');
+    const authorId = message.author || message.from;
+    const { isAdmin } = await checkIsAdmin(client, chatId, authorId);
+    if (!isAdmin) return message.reply('Solo los administradores pueden cambiar el modo mantenimiento.');
+
+    const [, command, action] = message.body.trim().split(/\s+/);
+    if (!command || !action) {
+        const disabled = [...featureFlags.getDisabled()];
+        return `Uso: !mantenimiento <comando> on|off\n\nComandos en mantenimiento: ${disabled.length ? disabled.join(', ') : 'ninguno'}`;
+    }
+    const normalized = command.toLowerCase().replace(/^[!/]/, '');
+    if (!availableCommands.includes(normalized) || normalized === 'mantenimiento') {
+        return 'Ese comando no existe o no puede desactivarse desde aquí.';
+    }
+    const enabled = action.toLowerCase() === 'on';
+    const disabled = action.toLowerCase() === 'off';
+    if (!enabled && !disabled) return 'Usa on para activar u off para poner en mantenimiento.';
+    featureFlags.setDisabled(normalized, disabled);
+    return `✅ !${normalized} quedó ${disabled ? 'en mantenimiento' : 'activo'}.`;
 }
 
 // --- Helper reutilizable: obtener el target del comando (mención o cita) ---
@@ -197,6 +223,9 @@ async function handleBanTemporal(client, message, args) {
 
         // Re-agregar automáticamente si hay tiempo
         if (minutes && minutes > 0) {
+            scheduleTask('unban', { chatId, participantId: targetParticipant, executorId: authorId, reason }, Date.now() + minutes * 60 * 1000);
+            return;
+            /* Legacy in-memory timer retained only for migration reference.
             setTimeout(async () => {
                 try {
                     try {
@@ -208,7 +237,7 @@ async function handleBanTemporal(client, message, args) {
                 } catch (err) {
                     console.error("(AdminHandler) -> Error re-agregando tras ban:", err);
                 }
-            }, minutes * 60 * 1000);
+            }, minutes * 60 * 1000); */
         }
 
     } catch (err) {
@@ -277,5 +306,7 @@ async function handleKick(client, message, args) {
 module.exports = {
     handleAgregar,
     handleBanTemporal,
-    handleKick
+    handleKick,
+    handleMaintenance,
+    checkIsAdmin
 };
