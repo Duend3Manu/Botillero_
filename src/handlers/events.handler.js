@@ -35,7 +35,7 @@ async function handleMessageCreate(client, message) {
         messageCounter.recordMessage(groupId, userId, pushname, msgType);
 
         // Guardar en el buffer para el resumen (!recap)
-        if (body && body.trim().length > 0) {
+        if (body && body.trim().length > 0 && !/^[!/]/.test(body.trim())) {
             // Limpiamos el ID del remitente para que Gemini reciba solo el número (sin @c.us ni signos)
             const numeroLimpio = userId.replace(/\D/g, '');
 

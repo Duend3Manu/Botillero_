@@ -1,6 +1,6 @@
 "use strict";
 
-const { spawn } = require('child_process');
+const { spawn, spawnSync } = require('child_process');
 const path = require('path');
 const fs = require('fs');
 const taskQueue = require('./task-queue.service');
@@ -10,8 +10,96 @@ const projectRoot = path.join(__dirname, '..', '..');
 const localVenvPython = process.platform === 'win32'
     ? path.join(projectRoot, '.venv', 'Scripts', 'python.exe')
     : path.join(projectRoot, '.venv', 'bin', 'python');
-const PYTHON_COMMAND = process.env.PYTHON ||
-    (fs.existsSync(localVenvPython) ? localVenvPython : (process.platform === 'win32' ? 'python' : 'python3'));
+
+function findCommandInPath(command) {
+    const result = spawnSync('where', [command], { windowsHide: true, stdio: ['ignore', 'pipe', 'ignore'] });
+    if (result.status === 0) {
+        const output = result.stdout.toString().trim().split(/\r?\n/);
+        for (const line of output) {
+            if (line && !line.toLowerCase().includes('windowsapps')) {
+                return line;
+            }
+        }
+        if (output.length > 0 && output[0]) {
+            return output[0];
+        }
+    }
+    return null;
+}
+
+function resolvePyLauncher() {
+    const result = spawnSync('py', ['-0p'], { windowsHide: true, stdio: ['ignore', 'pipe', 'ignore'] });
+    if (result.status !== 0) {
+        return null;
+    }
+
+    const output = result.stdout.toString().trim().split(/\r?\n/);
+    for (const line of output) {
+        const match = line.match(/([A-Z]:\\.+?python\.exe)$/i);
+        if (match) {
+            const candidate = match[1].trim();
+            if (fs.existsSync(candidate)) {
+                return candidate;
+            }
+        }
+    }
+    return null;
+}
+
+function isExecutablePython(candidate) {
+    if (!candidate) {
+        return false;
+    }
+    if (path.isAbsolute(candidate) && !fs.existsSync(candidate)) {
+        return false;
+    }
+    const result = spawnSync(candidate, ['--version'], { windowsHide: true, stdio: 'ignore' });
+    return result.status === 0;
+}
+
+function findPythonCommand() {
+    if (process.env.PYTHON && isExecutablePython(process.env.PYTHON)) {
+        return process.env.PYTHON;
+    }
+    if (process.platform !== 'win32' && fs.existsSync(localVenvPython) && isExecutablePython(localVenvPython)) {
+        return localVenvPython;
+    }
+
+    if (process.platform === 'win32') {
+        const resolvedPython = findCommandInPath('python');
+        if (resolvedPython && isExecutablePython(resolvedPython)) {
+            return resolvedPython;
+        }
+
+        const resolvedPyLauncher = resolvePyLauncher();
+        if (resolvedPyLauncher && isExecutablePython(resolvedPyLauncher)) {
+            return resolvedPyLauncher;
+        }
+
+        const resolvedPy = findCommandInPath('py');
+        if (resolvedPy && isExecutablePython(resolvedPy)) {
+            return resolvedPy;
+        }
+
+        const possibleLauncher = 'C:\\Windows\\py.exe';
+        if (fs.existsSync(possibleLauncher) && isExecutablePython(possibleLauncher)) {
+            return possibleLauncher;
+        }
+
+        return 'python';
+    }
+
+    const candidates = ['python3', 'python'];
+    for (const candidate of candidates) {
+        if (isExecutablePython(candidate)) {
+            return candidate;
+        }
+    }
+
+    return 'python3';
+}
+
+const PYTHON_COMMAND = findPythonCommand();
 
 /**
  * Ejecuta un script Python y devuelve una Promise con { stdout, stderr, code, json }.

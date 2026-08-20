@@ -1,7 +1,7 @@
 "use strict";
 
 const buffers = {};
-const MAX_MESSAGES = 100;
+const MAX_MESSAGES = 20;
 
 module.exports = {
     /**

@@ -287,6 +287,7 @@ async function handlePing(message) {
     const waLatency = Date.now() - waStart;
 
     const botUptime = formatUptime((Date.now() - BOT_STATS.startTime) / 1000);
+    const pcUptime = formatUptime(os.uptime());
     const botVersion = packageInfo.version;
 
     // Helpers
@@ -350,6 +351,7 @@ async function handlePing(message) {
 
 📈 *Estadísticas:*
 ⏰ Despierto: ${botUptime}
+🖥️ PC encendido: ${pcUptime}
 📊 Tráfico: ${BOT_STATS.messagesProcessed} msgs | ${BOT_STATS.commandsExecuted} cmds
 👥 Usuarios: ${BOT_STATS.uniqueUsers.size}
 ⚙️ OS: ${osInfo} | v${botVersion}

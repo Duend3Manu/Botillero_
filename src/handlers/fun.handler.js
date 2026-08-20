@@ -442,17 +442,19 @@ const soundMap = {
 
 const soundList = Object.keys(soundMap);
 const voiceCacheDir = path.join(__dirname, '..', '..', 'temp', 'voice');
+const VOICE_FORMAT_VERSION = 'v2';
 
 async function createVoiceMedia(audioPath) {
     await fs.promises.mkdir(voiceCacheDir, { recursive: true });
     const stat = await fs.promises.stat(audioPath);
     const sourceName = path.basename(audioPath, path.extname(audioPath));
-    const outputPath = path.join(voiceCacheDir, `${sourceName}-${stat.mtimeMs}.ogg`);
+    const outputPath = path.join(voiceCacheDir, `${sourceName}-${VOICE_FORMAT_VERSION}-${stat.mtimeMs}.ogg`);
 
     if (!fs.existsSync(outputPath)) {
         await new Promise((resolve, reject) => {
             ffmpeg(audioPath)
                 .noVideo()
+                .outputOptions(['-map_metadata -1', '-application voip'])
                 .audioCodec('libopus')
                 .audioBitrate('48k')
                 .audioChannels(1)
@@ -506,7 +508,7 @@ async function handleSound(client, message, command) {
             media = MessageMedia.fromFilePath(audioPath);
         }
         // sendAudioAsVoice: true → llega como nota de voz en lugar de documento adjunto
-        await client.sendMessage(message.from, media, { sendAudioAsVoice: true });
+        await client.sendMessage(message.from, media, { sendAudioAsVoice: media.mimetype === 'audio/ogg; codecs=opus' });
     }
 }
 

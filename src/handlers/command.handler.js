@@ -61,6 +61,23 @@ function checkSpam(userId, command) {
     return false;
 }
 
+async function sendCommandAcknowledgement(message, command) {
+    const requesterId = message.author || (
+        message.from && message.from.endsWith('@c.us') ? message.from : null
+    );
+    const requesterTag = requesterId ? `@${requesterId.split('@')[0]}` : 'compa';
+
+    try {
+        await message.reply(
+            `Ya calmao ${requesterTag}, voy al tiro con *!${command}*... 🫡`,
+            undefined,
+            requesterId ? { mentions: [requesterId] } : undefined
+        );
+    } catch (error) {
+        console.warn('(Handler) -> No se pudo enviar confirmación del comando:', error.message || error);
+    }
+}
+
 // --- Helpers para comandos con lógica repetida ---
 async function handleHoroscopeCommand(client, message, serviceMethod) {
     const signo = message.body.split(' ')[1];
@@ -446,6 +463,8 @@ async function commandHandler(client, message) {
         console.log(`(Handler) -> Comando bloqueado (deshabilitado): "${prefix}${command}"`);
         return;
     }
+
+    await sendCommandAcknowledgement(message, command);
 
     try {
         await handleReaction(message, async () => {
