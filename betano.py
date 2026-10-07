@@ -6,13 +6,15 @@ import re
 from datetime import datetime
 import time
 import sys
+import argparse
 
 sys.stdout.reconfigure(encoding='utf-8')
 
 
 class BetanoChileScraper:
-    def __init__(self, headless=False):
+    def __init__(self, headless=False, output_file=None):
         self.url = "https://www.betanosports.com/sport/futbol/chile/liga-de-primera/16932/?bt=matchresult"
+        self.output_file = output_file
         
         self.options = Options()
         if headless:
@@ -185,8 +187,7 @@ class BetanoChileScraper:
             print(f"\nTotal partidos únicos: {len(partidos)}")
             
             if partidos:
-                timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-                archivo = f"partidos_chile_{timestamp}.json"
+                archivo = self.output_file if self.output_file else f"partidos_chile_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
                 with open(archivo, "w", encoding="utf-8") as f:
                     json.dump(partidos, f, indent=2, ensure_ascii=False)
                 print(f"✓ Guardado en: {archivo}")
@@ -221,7 +222,13 @@ class BetanoChileScraper:
 
 
 if __name__ == "__main__":
-    scraper = BetanoChileScraper(headless=False)
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--headless", action="store_true", help="Run in headless mode")
+    parser.add_argument("--output", type=str, help="Output JSON file path")
+    args = parser.parse_args()
+    
+    scraper = BetanoChileScraper(headless=args.headless, output_file=args.output)
     partidos = scraper.extraer()
-    scraper.mostrar(partidos)
+    if not args.output:
+        scraper.mostrar(partidos)
     print("\n✓ LISTO!")

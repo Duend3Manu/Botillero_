@@ -6,6 +6,7 @@ import re
 from datetime import datetime
 import time
 import sys
+import argparse
 
 sys.stdout.reconfigure(encoding='utf-8')
 
@@ -13,9 +14,10 @@ sys.stdout.reconfigure(encoding='utf-8')
 class BetanoEnVivo:
     """Scraper para TODOS los partidos EN VIVO"""
     
-    def __init__(self, headless=False, filtrar_competiciones=None):
+    def __init__(self, headless=False, filtrar_competiciones=None, output_file=None):
         # URL de la sección EN VIVO de Betano
         self.url = "https://www.betanosports.com/"
+        self.output_file = output_file
         
         self.options = Options()
         if headless:
@@ -262,8 +264,7 @@ class BetanoEnVivo:
             print(f"\nTotal partidos EN VIVO: {len(partidos_vivo)}")
             
             if partidos_vivo:
-                timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-                archivo = f"en_vivo_{timestamp}.json"
+                archivo = self.output_file if self.output_file else f"en_vivo_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
                 
                 with open(archivo, "w", encoding="utf-8") as f:
                     json.dump(partidos_vivo, f, indent=2, ensure_ascii=False)
@@ -305,19 +306,14 @@ class BetanoEnVivo:
 
 
 if __name__ == "__main__":
-    # Opción 1: TODOS los partidos EN VIVO (sin filtro)
-    scraper = BetanoEnVivo(headless=False)
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--headless", action="store_true", help="Run in headless mode")
+    parser.add_argument("--output", type=str, help="Output JSON file path")
+    args = parser.parse_args()
     
-    # Opción 2: Solo competiciones específicas (descomentar para usar)
-    # scraper = BetanoEnVivo(
-    #     headless=False,
-    #     filtrar_competiciones=[
-    #         'Liga de Primera',
-    #         'Amistosos',
-    #         'Nations League'
-    #     ]
-    # )
+    scraper = BetanoEnVivo(headless=args.headless, output_file=args.output)
     
     partidos = scraper.extraer_en_vivo()
-    scraper.mostrar(partidos)
+    if not args.output:
+        scraper.mostrar(partidos)
     print("\n✓ LISTO!")

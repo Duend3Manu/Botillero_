@@ -27,7 +27,8 @@ const services = {
     get admin() { return require('./admin.handler'); },
     get birthday() { return require('./birthday.handler'); },
     get counter() { return require('./counter.handler'); },
-    get kast() { return require('./kast.handler'); }
+    get kast() { return require('./kast.handler'); },
+    get betano() { return require('../services/betano.service'); }
 };
 
 // --- Cooldowns para comandos específicos ---
@@ -254,6 +255,16 @@ const commandMap = {
     'cliga': async (client, msg) => {
         await msg.reply('📊 Buscando la tabla de posiciones en la ANFP, dame un segundo...');
         return services.league.getCopaLigaGroups();
+    },
+    'par': async (client, msg) => {
+        const args = msg.body.trim().split(/\s+/).slice(1);
+        if (args[0] && args[0].toLowerCase() === 'vivo') {
+            await msg.reply('🔴 Buscando partidos en vivo en Betano, dame unos segundos...');
+            return services.betano.getPartidosEnVivo();
+        } else {
+            await msg.reply('⚽ Buscando partidos de la liga chilena en Betano, dame unos segundos...');
+            return services.betano.getPartidos();
+        }
     },
     
     // Servicios públicos
